@@ -1700,7 +1700,7 @@ Aşağıdaki HTML bölümleriyle KISA bir iş planı yaz:
 Net ve özlü yaz. Kilit rakamları <strong> ile vurgula. Toplam ~400 kelime. Giriş yok, direkt başla.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/plan', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
