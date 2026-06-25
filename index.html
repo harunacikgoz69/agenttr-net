@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentTR — AI Agent Rehberi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ───────────────────────────── TOKENS ───────────────────────────── */
+:root {
+  --ink:     #0c0f1a;
+  --ink2:    #1a2035;
+  --slate:   #2a3450;
+  --mid:     #4a5980;
+  --muted:   #7a8aaa;
+  --ghost:   #b0bdd4;
+  --edge:    #e2e8f2;
+  --paper:   #f7f9fc;
+  --white:   #ffffff;
+
+  --blue:    #2563eb;
+  --blue-l:  #3b82f6;
+  --blue-xl: #93c5fd;
+  --cyan:    #06b6d4;
+  --violet:  #7c3aed;
+  --emerald: #059669;
+  --amber:   #d97706;
+  --rose:    #e11d48;
+
+  --sans:  'Inter', sans-serif;
+  --display: 'Syne', sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+}
+
+/* ───────────────────────────── RESET ───────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--white); color: var(--ink); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+ul { list-style: none; }
+img { max-width: 100%; }
+
+/* ───────────────────────────── LANG TOGGLE ───────────────────────────── */
+.tr-only { display: inline !important; }
+.en-only { display: none !important; }
+body.lang-en .tr-only { display: none !important; }
+body.lang-en .en-only { display: inline !important; }
+/* block-level lang containers */
+div.tr-only { display: block !important; }
+div.en-only { display: none !important; }
+body.lang-en div.tr-only { display: none !important; }
+body.lang-en div.en-only { display: block !important; }
+
+/* ───────────────────────────── NAV ───────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--edge);
+  padding: 0 40px;
+  display: flex; align-items: center; height: 64px;
+  gap: 32px;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-weight: 800; font-size: 20px;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.nav-logo sup {
+  font-size: 10px; font-weight: 500;
+  color: var(--blue);
+  letter-spacing: 1px;
+  vertical-align: super;
+  margin-left: 2px;
+}
+.nav-links {
+  display: flex; gap: 4px; flex: 1;
+}
+.nav-link {
+  font-size: 14px; font-weight: 500;
+  color: var(--mid);
+  padding: 6px 14px;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+.nav-link:hover { color: var(--ink); background: var(--paper); }
+.nav-link.active { color: var(--blue); }
+.nav-right { display: flex; gap: 10px; align-items: center; margin-left: auto; }
+.lang-btn {
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--edge);
+  color: var(--mid);
+  background: var(--paper);
+  transition: all 0.15s;
+}
+.lang-btn:hover, .lang-btn.active { border-color: var(--blue); color: var(--blue); background: #eff6ff; }
+.nav-cta {
+  font-size: 13px; font-weight: 600;
+  padding: 8px 20px;
+  background: var(--blue);
+  color: var(--white);
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+.nav-cta:hover { background: #1d4ed8; }
+
+/* ───────────────────────────── HERO ───────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 88vh;
+  display: flex; align-items: center;
+  overflow: hidden;
+  background: var(--ink);
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 50%, rgba(37,99,235,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(124,58,237,0.12) 0%, transparent 60%),
+    linear-gradient(160deg, #0c0f1a 0%, #111827 100%);
+}
+
+/* Grid overlay — signature element */
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* Floating agent bubbles */
+.hero-bubbles {
+  position: absolute; right: 80px; top: 50%;
+  transform: translateY(-50%);
+  width: 420px; height: 420px;
+  display: none;
+}
+@media(min-width:1100px){ .hero-bubbles { display: block; } }
+
+.bubble {
+  position: absolute;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 16px 20px;
+  backdrop-filter: blur(8px);
+  animation: float 6s ease-in-out infinite;
+}
+.bubble:nth-child(2) { animation-delay: -2s; }
+.bubble:nth-child(3) { animation-delay: -4s; }
+.bubble-icon { font-size: 22px; margin-bottom: 6px; }
+.bubble-label { font-size: 12px; color: rgba(255,255,255,0.5); font-family: var(--mono); }
+.bubble-val { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.9); margin-top: 2px; }
+.bubble-dot {
+  display: inline-block; width: 6px; height: 6px;
+  background: #22c55e; border-radius: 50%;
+  margin-right: 5px;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+.hero-content {
+  position: relative; z-index: 2;
+  max-width: 1200px; margin: 0 auto;
+  padding: 80px 40px;
+  width: 100%;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  color: var(--cyan);
+  letter-spacing: 1.5px; text-transform: uppercase;
+  background: rgba(6,182,212,0.1);
+  border: 1px solid rgba(6,182,212,0.25);
+  padding: 6px 14px; border-radius: 100px;
+  margin-bottom: 28px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(6,182,212,0.4); }
+  50%      { opacity: 0.8; box-shadow: 0 0 0 6px rgba(6,182,212,0); }
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 68px);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.05;
+  letter-spacing: -2px;
+  max-width: 680px;
+  margin-bottom: 24px;
+}
+.hero-title .hl {
+  background: linear-gradient(135deg, var(--blue-l), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 18px; font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+  max-width: 520px;
+  margin-bottom: 40px;
+}
+
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary {
+  font-size: 15px; font-weight: 600;
+  padding: 14px 28px;
+  background: var(--blue);
+  color: var(--white);
+  border-radius: var(--r-md);
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(37,99,235,0.4); }
+.btn-ghost {
+  font-size: 15px; font-weight: 500;
+  padding: 14px 28px;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+  border-radius: var(--r-md);
+  transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.35); color: var(--white); background: rgba(255,255,255,0.05); }
+
+.hero-stats {
+  display: flex; gap: 40px;
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-wrap: wrap;
+}
+.stat-item {}
+.stat-val {
+  font-family: var(--display);
+  font-size: 28px; font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+/* ───────────────────────────── SECTION SHELL ───────────────────────────── */
+.section { padding: 96px 40px; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.eyebrow {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--blue); letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(26px, 3.5vw, 42px);
+  font-weight: 800; letter-spacing: -1px;
+  line-height: 1.1; color: var(--ink);
+  margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 17px; color: var(--muted);
+  line-height: 1.65; max-width: 560px;
+}
+
+/* ───────────────────────────── WHAT IS AGENT ───────────────────────────── */
+.what-section { background: var(--paper); }
+
+.what-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px; align-items: start;
+  margin-top: 56px;
+}
+@media(max-width:800px){ .what-grid { grid-template-columns: 1fr; } }
+
+.what-visual {
+  background: var(--ink);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.what-visual-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 80% 20%, rgba(37,99,235,0.2) 0%, transparent 70%);
+}
+.chat-demo { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; }
+.chat-msg {
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.chat-msg.agent { flex-direction: row-reverse; }
+.chat-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.chat-avatar.user-av { background: rgba(255,255,255,0.08); }
+.chat-avatar.agent-av { background: var(--blue); }
+.chat-bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px; line-height: 1.5;
+}
+.chat-msg:not(.agent) .chat-bubble {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.8);
+  border-radius: 4px 12px 12px 12px;
+}
+.chat-msg.agent .chat-bubble {
+  background: var(--blue);
+  color: var(--white);
+  border-radius: 12px 4px 12px 12px;
+}
+.chat-action {
+  display: flex; gap: 8px; margin-top: 4px; justify-content: flex-end;
+}
+.chat-pill {
+  font-size: 11px; font-family: var(--mono);
+  background: rgba(34,197,94,0.15); color: #4ade80;
+  border: 1px solid rgba(34,197,94,0.2);
+  padding: 3px 9px; border-radius: 100px;
+}
+.chat-typing {
+  display: flex; gap: 4px; align-items: center; padding: 10px 14px;
+  background: rgba(255,255,255,0.06); border-radius: 4px 12px 12px 12px;
+  width: fit-content;
+}
+.typing-dot {
+  width: 6px; height: 6px; background: var(--muted); border-radius: 50%;
+  animation: typingBounce 1.2s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+  0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+.what-points { display: flex; flex-direction: column; gap: 28px; }
+.what-point { display: flex; gap: 18px; align-items: flex-start; }
+.wp-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.wp-title { font-family: var(--display); font-size: 17px; font-weight: 700; margin-bottom: 5px; color: var(--ink); }
+.wp-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* ───────────────────────────── HOW IT WORKS ───────────────────────────── */
+.how-section { background: var(--white); }
+.steps-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 56px;
+  position: relative;
+}
+@media(max-width:900px){ .steps-row { grid-template-columns: 1fr 1fr; gap: 24px; } }
+@media(max-width:500px){ .steps-row { grid-template-columns: 1fr; } }
+
+.steps-row::before {
+  content: '';
+  position: absolute;
+  top: 28px; left: 12%; right: 12%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blue-xl), var(--cyan), var(--blue-xl), transparent);
+  z-index: 0;
+}
+@media(max-width:900px){ .steps-row::before { display: none; } }
+
+.step-card {
+  position: relative; z-index: 1;
+  padding: 0 24px;
+  text-align: center;
+}
+.step-num {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--edge);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-size: 20px; font-weight: 800;
+  color: var(--blue);
+  margin: 0 auto 20px;
+  transition: all 0.2s;
+}
+.step-card:hover .step-num {
+  background: var(--blue); color: var(--white); border-color: var(--blue);
+  box-shadow: 0 0 0 8px rgba(37,99,235,0.1);
+}
+.step-title { font-family: var(--display); font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.step-desc { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+/* ───────────────────────────── USE CASES ───────────────────────────── */
+.cases-section { background: var(--paper); }
+.cases-filter {
+  display: flex; gap: 8px; flex-wrap: wrap; margin: 40px 0 32px;
+}
+.filter-btn {
+  font-size: 13px; font-weight: 500;
+  padding: 7px 16px; border-radius: 100px;
+  border: 1px solid var(--edge);
+  color: var(--mid); background: var(--white);
+  transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--blue-l); color: var(--blue); }
+.filter-btn.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.case-card {
+  background: var(--white);
+  border: 1px solid var(--edge);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  transition: all 0.2s;
+  cursor: default;
+}
+.case-card:hover {
+  border-color: var(--blue-l);
+  box-shadow: 0 4px 24px rgba(37,99,235,0.08);
+  transform: translateY(-2px);
+}
+.case-card.hidden { display: none; }
+.case-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.case-emoji {
+  width: 46px; height: 46px; border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.case-sector {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 1px; color: var(--muted); margin-bottom: 3px;
+}
+.case-name { font-weight: 600; font-size: 15px; color: var(--ink); }
+.case-desc { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+.case-metrics { display: flex; gap: 14px; flex-wrap: wrap; }
+.case-metric {
+  font-family: var(--mono); font-size: 12px;
+  background: var(--paper); padding: 4px 10px;
+  border-radius: 6px; color: var(--slate);
+  border: 1px solid var(--edge);
+}
+.case-metric strong { color: var(--blue); }
+
+/* ───────────────────────────── WIZARD ───────────────────────────── */
+.wizard-section {
+  background: linear-gradient(160deg, var(--ink) 0%, #111827 100%);
+  position: relative; overflow: hidden;
+}
+.wizard-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 50% 80% at 100% 50%, rgba(37,99,235,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 0% 20%, rgba(124,58,237,0.1) 0%, transparent 60%);
+}
+.wizard-inner { position: relative; z-index: 1; }
+.wizard-shell {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  margin-top: 48px;
+}
+.wizard-header {
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 24px 32px;
+  display: flex; align-items: center; gap: 16px;
+}
+.wizard-step-indicators { display: flex; gap: 8px; flex: 1; }
+.wsi {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.3);
+}
+.wsi.done { color: var(--cyan); }
+.wsi.active { color: var(--white); }
+.wsi-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.3);
+}
+.wsi.done .wsi-dot { background: var(--cyan); border-color: var(--cyan); color: var(--ink); }
+.wsi.active .wsi-dot { background: var(--blue); border-color: var(--blue); color: var(--white); }
+.wsi-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+.wsi.done .wsi-line { background: var(--cyan); }
+
+.wizard-body { padding: 40px 32px 32px; min-height: 320px; }
+.wz-step { display: none; }
+.wz-step.active { display: block; }
+.wz-q {
+  font-family: var(--display); font-size: 22px; font-weight: 700;
+  color: var(--white); margin-bottom: 8px;
+}
+.wz-hint { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 28px; }
+
+.wz-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.wz-opt {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  text-align: left; color: var(--white);
+  transition: all 0.15s;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.wz-opt:hover { border-color: var(--blue-l); background: rgba(37,99,235,0.1); }
+.wz-opt.selected { border-color: var(--cyan); background: rgba(6,182,212,0.1); }
+.wz-opt-icon { font-size: 26px; }
+.wz-opt-label { font-weight: 600; font-size: 14px; }
+.wz-opt-sub { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.4; }
+
+.wizard-footer {
+  padding: 20px 32px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.wz-back {
+  font-size: 14px; color: rgba(255,255,255,0.4);
+  padding: 10px 20px; border-radius: var(--r-sm);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.15s;
+}
+.wz-back:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+.wz-next {
+  font-size: 14px; font-weight: 600;
+  padding: 10px 28px; border-radius: var(--r-sm);
+  background: var(--blue); color: var(--white);
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.wz-next:hover { background: #1d4ed8; }
+.wz-next:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Result card */
+.wz-result { display: none; }
+.wz-result.active { display: block; }
+
+/* Text input step */
+.wz-text-input {
+  width: 100%; padding: 16px 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: var(--r-md);
+  color: var(--white); font-family: var(--sans); font-size: 16px;
+  outline: none; transition: border-color 0.15s;
+  margin-top: 4px;
+}
+.wz-text-input:focus { border-color: var(--cyan); background: rgba(6,182,212,0.06); }
+.wz-text-input::placeholder { color: rgba(255,255,255,0.25); }
+
+/* ── PLAN RESULT SHELL ── */
+.plan-result-shell { display: flex; flex-direction: column; gap: 0; }
+
+/* Top meta bar */
+.plan-meta-bar {
+  display: flex; align-items: center; gap: 16px;
+  background: rgba(6,182,212,0.08);
+  border: 1px solid rgba(6,182,212,0.2);
+  border-radius: var(--r-md) var(--r-md) 0 0;
+  padding: 14px 20px;
+}
+.plan-meta-chip {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--cyan); letter-spacing: 0.5px;
+  background: rgba(6,182,212,0.12);
+  border: 1px solid rgba(6,182,212,0.25);
+  padding: 3px 10px; border-radius: 100px;
+}
+.plan-meta-title {
+  font-family: var(--display); font-size: 15px; font-weight: 700;
+  color: var(--white); flex: 1;
+}
+.plan-meta-badge {
+  font-family: var(--mono); font-size: 10px;
+  background: rgba(16,185,129,0.15); color: #6ee7b7;
+  border: 1px solid rgba(16,185,129,0.25);
+  padding: 3px 10px; border-radius: 100px;
+}
+
+/* Free content section */
+.plan-free-section {
+  background: rgba(255,255,255,0.03);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  border-right: 1px solid rgba(255,255,255,0.08);
+  padding: 28px 28px 20px;
+  color: rgba(255,255,255,0.82);
+  font-size: 14px; line-height: 1.8;
+}
+.plan-free-section h3 {
+  font-family: var(--display); font-size: 13px; font-weight: 700;
+  color: var(--cyan); letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 10px; margin-top: 22px;
+  display: flex; align-items: center; gap: 8px;
+}
+.plan-free-section h3:first-child { margin-top: 0; }
+.plan-free-section strong { color: var(--white); font-weight: 600; }
+.plan-free-section p { margin-bottom: 10px; }
+.plan-free-section ul { padding-left: 0; margin-bottom: 10px; list-style: none; }
+.plan-free-section li {
+  padding: 5px 0 5px 18px; position: relative; color: rgba(255,255,255,0.7);
+}
+.plan-free-section li::before { content:'→'; position:absolute; left:0; color:var(--cyan); font-size:11px; top:7px; }
+
+/* Stat highlight row */
+.plan-stat-row {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+  margin: 18px 0;
+}
+.plan-stat {
+  background: rgba(37,99,235,0.1);
+  border: 1px solid rgba(37,99,235,0.2);
+  border-radius: var(--r-sm);
+  padding: 14px 16px; text-align: center;
+}
+.plan-stat-val {
+  font-family: var(--display); font-size: 22px; font-weight: 800;
+  color: var(--blue-xl); line-height: 1; margin-bottom: 4px;
+}
+.plan-stat-label { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.3; }
+
+/* Locked wrapper */
+.plan-locked-wrapper { position: relative; }
+.plan-locked-blur {
+  padding: 20px 28px;
+  color: rgba(255,255,255,0.6);
+  font-size: 14px; line-height: 1.75;
+  filter: blur(6px); user-select: none; pointer-events: none;
+  background: rgba(255,255,255,0.02);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  max-height: 160px; overflow: hidden;
+}
+.plan-locked-blur h3 { font-size: 13px; font-weight: 700; color: var(--cyan); margin-bottom: 8px; text-transform:uppercase; letter-spacing:1px; }
+
+/* ── PAYWALL ── */
+.plan-paywall-outer {
+  background: linear-gradient(180deg, rgba(10,13,26,0.0) 0%, rgba(10,13,26,1) 28%);
+  padding: 0 0 0;
+  position: relative;
+  margin-top: -60px;
+}
+.plan-paywall-card {
+  background: rgba(15,20,40,0.98);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-top: 2px solid var(--cyan);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  padding: 32px 28px 28px;
+}
+
+/* Social proof row */
+.pw-social {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  margin-bottom: 24px; align-items: center;
+}
+.pw-social-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.45); }
+.pw-social-item strong { color: var(--white); }
+.pw-stars { color: #fbbf24; font-size: 12px; letter-spacing: 1px; }
+
+.pw-headline {
+  font-family: var(--display); font-size: 20px; font-weight: 800;
+  color: var(--white); margin-bottom: 6px; line-height: 1.2;
+}
+.pw-sub { font-size: 13px; color: rgba(255,255,255,0.45); margin-bottom: 24px; line-height: 1.6; }
+
+/* What you get list */
+.pw-gets {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  margin-bottom: 24px;
+}
+@media(max-width:600px){ .pw-gets { grid-template-columns: 1fr; } }
+.pw-get-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 10px 12px;
+}
+.pw-get-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.pw-get-text strong { display: block; color: var(--white); font-size: 12px; margin-bottom: 1px; }
+.pw-get-text span { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+/* Pricing cards */
+.pw-pricing { display: grid; grid-template-columns: 1fr 1.6fr; gap: 12px; margin-bottom: 16px; }
+@media(max-width:600px){ .pw-pricing { grid-template-columns: 1fr; } }
+
+.pw-plan {
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-md); padding: 20px 18px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; flex-direction: column; gap: 6px;
+  background: rgba(255,255,255,0.03);
+  position: relative;
+}
+.pw-plan:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
+.pw-plan.featured {
+  border-color: var(--cyan);
+  background: linear-gradient(160deg, rgba(6,182,212,0.08) 0%, rgba(37,99,235,0.06) 100%);
+  box-shadow: 0 0 0 1px rgba(6,182,212,0.15), 0 8px 32px rgba(6,182,212,0.1);
+}
+
+.pw-plan-tag {
+  position: absolute; top: -11px; left: 18px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue-l));
+  color: var(--ink); font-family: var(--mono); font-size: 10px; font-weight: 700;
+  padding: 2px 12px; border-radius: 100px; letter-spacing: 0.5px;
+}
+.pw-plan-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6); }
+.pw-plan-price {
+  font-family: var(--display); font-size: 30px; font-weight: 800;
+  color: var(--white); line-height: 1; margin: 4px 0;
+}
+.pw-plan-price sub { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.4); vertical-align: baseline; }
+.pw-plan-includes { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.5; margin-bottom: 6px; }
+.pw-plan-includes li { padding: 2px 0 2px 14px; position: relative; }
+.pw-plan-includes li::before { content:'✓'; position:absolute; left:0; color:var(--emerald); font-size:10px; top:4px; }
+
+.pw-plan-btn {
+  display: block; text-align: center;
+  font-size: 13px; font-weight: 700;
+  padding: 10px; border-radius: 8px;
+  transition: all 0.15s; margin-top: auto;
+}
+.pw-plan:not(.featured) .pw-plan-btn {
+  border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6);
+}
+.pw-plan:not(.featured):hover .pw-plan-btn { border-color: rgba(255,255,255,0.3); color: var(--white); }
+.pw-plan.featured .pw-plan-btn {
+  background: linear-gradient(90deg, var(--cyan), var(--blue-l));
+  color: var(--ink); box-shadow: 0 4px 16px rgba(6,182,212,0.3);
+}
+.pw-plan.featured:hover .pw-plan-btn { box-shadow: 0 6px 24px rgba(6,182,212,0.5); }
+
+/* Guarantee strip */
+.pw-guarantee {
+  display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+  padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.07);
+}
+.pw-g-item { font-size: 11px; color: rgba(255,255,255,0.3); display:flex; align-items:center; gap:5px; }
+
+/* Post-payment confirmation */
+.pw-confirm {
+  text-align: center; padding: 32px 20px;
+  background: rgba(16,185,129,0.05);
+  border: 1px solid rgba(16,185,129,0.15);
+  border-radius: var(--r-md);
+}
+.pw-confirm-icon { font-size: 44px; margin-bottom: 14px; }
+.pw-confirm-title { font-family:var(--display); font-size:20px; font-weight:800; color:var(--white); margin-bottom:8px; }
+.pw-confirm-sub { font-size:14px; color:rgba(255,255,255,0.5); margin-bottom:22px; line-height:1.6; }
+.pw-confirm-link {
+  display:inline-flex; align-items:center; gap:8px;
+  background: #10b981; color: var(--white);
+  font-weight:700; padding:13px 28px; border-radius:10px; font-size:14px;
+  transition: all 0.15s;
+}
+.pw-confirm-link:hover { background:#059669; }
+.result-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 20px;
+}
+.result-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.result-title { font-family: var(--display); font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.result-sub { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+.result-products {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px;
+  margin-bottom: 28px;
+}
+.result-prod {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  display: flex; flex-direction: column; gap: 8px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.result-prod:hover { border-color: var(--cyan); background: rgba(6,182,212,0.08); }
+.rp-top { display: flex; align-items: center; gap: 10px; }
+.rp-icon { font-size: 22px; }
+.rp-name { font-weight: 600; font-size: 14px; color: var(--white); }
+.rp-match {
+  font-family: var(--mono); font-size: 10px;
+  margin-left: auto; padding: 2px 8px; border-radius: 4px;
+  background: rgba(6,182,212,0.15); color: var(--cyan);
+  border: 1px solid rgba(6,182,212,0.25);
+}
+.rp-desc { font-size: 12.5px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+.rp-price { font-family: var(--mono); font-size: 13px; color: var(--cyan); margin-top: 4px; }
+
+.result-cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.result-cta-primary {
+  font-size: 15px; font-weight: 600;
+  padding: 13px 28px; border-radius: var(--r-md);
+  background: var(--blue); color: var(--white);
+  transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px;
+}
+.result-cta-primary:hover { background: #1d4ed8; }
+.result-cta-ghost {
+  font-size: 15px; font-weight: 500;
+  padding: 13px 24px; border-radius: var(--r-md);
+  border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.7);
+  transition: all 0.15s;
+}
+.result-cta-ghost:hover { border-color: rgba(255,255,255,0.35); color: var(--white); }
+
+/* ───────────────────────────── PRODUCTS ───────────────────────────── */
+.products-section { background: var(--white); }
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px; margin-top: 48px;
+}
+.prod-card {
+  border: 1px solid var(--edge);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.prod-card:hover {
+  border-color: transparent;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+}
+.prod-card-top {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--edge);
+  background: var(--paper);
+}
+.prod-card-icon { font-size: 32px; margin-bottom: 14px; }
+.prod-card-name {
+  font-family: var(--display); font-size: 18px; font-weight: 700;
+  color: var(--ink); margin-bottom: 6px;
+}
+.prod-card-sector {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 1px;
+  color: var(--muted); margin-bottom: 10px;
+}
+.prod-card-desc { font-size: 13.5px; color: var(--mid); line-height: 1.6; }
+.prod-card-body { padding: 20px 24px; }
+.prod-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.pf-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--slate);
+}
+.pf-item::before {
+  content: '';
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #dcfce7; flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2316a34a'%3E%3Cpath d='M6.5 11.5L3 8l1.5-1.5 2 2 5-5L13 5l-6.5 6.5z'/%3E%3C/svg%3E");
+  background-size: contain;
+}
+.prod-price-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.prod-price {
+  font-family: var(--display); font-size: 20px; font-weight: 800; color: var(--ink);
+}
+.prod-price span { font-size: 13px; font-weight: 400; color: var(--muted); font-family: var(--sans); }
+.prod-btn {
+  font-size: 13px; font-weight: 600;
+  padding: 9px 20px; border-radius: var(--r-sm);
+  background: var(--blue); color: var(--white);
+  transition: all 0.15s;
+}
+.prod-btn:hover { background: #1d4ed8; }
+
+/* ───────────────────────────── FAQ ───────────────────────────── */
+.faq-section { background: var(--paper); }
+.faq-list { max-width: 760px; margin: 48px auto 0; display: flex; flex-direction: column; gap: 12px; }
+.faq-item {
+  background: var(--white);
+  border: 1px solid var(--edge);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 24px; cursor: pointer;
+  font-weight: 600; font-size: 15px; color: var(--ink);
+  transition: all 0.15s;
+  gap: 16px;
+}
+.faq-q:hover { background: var(--paper); }
+.faq-q .faq-arr {
+  flex-shrink: 0; width: 20px; height: 20px;
+  border-radius: 50%; background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; transition: transform 0.25s; color: var(--blue);
+  border: 1px solid var(--edge);
+}
+.faq-item.open .faq-arr { transform: rotate(180deg); background: var(--blue); color: var(--white); border-color: var(--blue); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.25s;
+  font-size: 14px; color: var(--mid); line-height: 1.7;
+  padding: 0 24px;
+}
+.faq-item.open .faq-a { max-height: 300px; padding: 0 24px 20px; }
+
+/* ───────────────────────────── CTA FOOTER ───────────────────────────── */
+.cta-section {
+  background: linear-gradient(135deg, var(--blue) 0%, #1d4ed8 50%, var(--violet) 100%);
+  padding: 96px 40px; text-align: center;
+}
+.cta-inner { max-width: 600px; margin: 0 auto; }
+.cta-title {
+  font-family: var(--display); font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800; color: var(--white); letter-spacing: -1px;
+  margin-bottom: 18px;
+}
+.cta-sub { font-size: 17px; color: rgba(255,255,255,0.7); margin-bottom: 36px; line-height: 1.6; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.cta-white {
+  font-size: 15px; font-weight: 600;
+  padding: 14px 32px; border-radius: var(--r-md);
+  background: var(--white); color: var(--blue);
+  transition: all 0.15s;
+}
+.cta-white:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.2); transform: translateY(-1px); }
+.cta-outline {
+  font-size: 15px; font-weight: 500;
+  padding: 14px 28px; border-radius: var(--r-md);
+  border: 1.5px solid rgba(255,255,255,0.4); color: var(--white);
+  transition: all 0.15s;
+}
+.cta-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+/* ───────────────────────────── FOOTER ───────────────────────────── */
+footer {
+  background: var(--ink); color: rgba(255,255,255,0.45);
+  padding: 48px 40px 32px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  flex-wrap: wrap; gap: 24px;
+}
+.footer-brand { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+.footer-tagline { font-size: 13px; }
+.footer-links { display: flex; gap: 24px; font-size: 13px; }
+.footer-links a:hover { color: var(--white); }
+
+/* ───────────────────────────── SCROLL REVEAL ───────────────────────────── */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav>
+  <div class="nav-logo">AgentTR<sup>AI</sup></div>
+  <div class="nav-links">
+    <a href="javascript:void(0)" onclick="navTo('nedir')" class="nav-link"><span class="tr-only">Agent Nedir</span><span class="en-only">What Is Agent</span></a>
+    <a href="javascript:void(0)" onclick="navTo('nasil')" class="nav-link"><span class="tr-only">Nasıl Çalışır</span><span class="en-only">How It Works</span></a>
+    <a href="javascript:void(0)" onclick="navTo('ornekler')" class="nav-link"><span class="tr-only">Örnekler</span><span class="en-only">Use Cases</span></a>
+    <a href="javascript:void(0)" onclick="navTo('wizard')" class="nav-link"><span class="tr-only">Sizi Tanıyalım</span><span class="en-only">Find Your Agent</span></a>
+    <a href="javascript:void(0)" onclick="navTo('urunler')" class="nav-link"><span class="tr-only">Ürünler</span><span class="en-only">Products</span></a>
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn active" id="btnTR" onclick="setLang('tr')">TR</button>
+    <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+    <a href="javascript:void(0)" onclick="navTo('wizard')" class="nav-cta">
+      <span class="tr-only">Agent Bul →</span>
+      <span class="en-only">Find Agent →</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-bubbles">
+    <div class="bubble" style="top:10%;left:60%;width:180px">
+      <div class="bubble-icon">📅</div>
+      <div class="bubble-label">Randevu Agent</div>
+      <div class="bubble-val"><span class="bubble-dot"></span>Aktif · 47 randevu/gün</div>
+    </div>
+    <div class="bubble" style="top:42%;left:10%;width:200px">
+      <div class="bubble-icon">📧</div>
+      <div class="bubble-label">E-Posta Asistanı</div>
+      <div class="bubble-val"><span class="bubble-dot"></span>3 sn → yanıt hazır</div>
+    </div>
+    <div class="bubble" style="top:70%;left:55%;width:185px">
+      <div class="bubble-icon">⚖️</div>
+      <div class="bubble-label">Dava Takip Agent</div>
+      <div class="bubble-val"><span class="bubble-dot"></span>128 dosya izleniyor</div>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="tr-only">Türkiye'nin AI Agent Platformu</span>
+      <span class="en-only">Turkey's AI Agent Platform</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="tr-only">İşiniz için <span class="hl">çalışan AI</span> — saat 03:00'te de.</span>
+      <span class="en-only">AI that <span class="hl">works for you</span> — at 3 AM too.</span>
+    </h1>
+    <p class="hero-sub">
+      <span class="tr-only">AI agent, işinizi anlayan, karar veren ve uçtan uca yürüten dijital bir çalışandır. Chatbot değil — gerçek otomasyon.</span>
+      <span class="en-only">An AI agent is a digital worker that understands your business, makes decisions, and runs processes end-to-end. Not a chatbot — real automation.</span>
+    </p>
+    <div class="hero-actions">
+      <a href="javascript:void(0)" onclick="navTo('wizard')" class="btn-primary">
+        <span class="tr-only">İşletmem için agent bul</span>
+        <span class="en-only">Find my agent</span>
+        →
+      </a>
+      <a href="javascript:void(0)" onclick="navTo('nedir')" class="btn-ghost">
+        <span class="tr-only">Agent nedir öğren</span>
+        <span class="en-only">Learn what agents are</span>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-val">6</div>
+        <div class="stat-label"><span class="tr-only">Sektör çözümü</span><span class="en-only">Vertical solutions</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">7/24</div>
+        <div class="stat-label"><span class="tr-only">Kesintisiz çalışma</span><span class="en-only">Always-on</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">₺35</div>
+        <div class="stat-label"><span class="tr-only">İşlem başı ödeme</span><span class="en-only">Per-outcome pricing</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">4 hf</div>
+        <div class="stat-label"><span class="tr-only">Canlıya alma süresi</span><span class="en-only">Time to live</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WHAT IS ═══════════ -->
+<section class="section what-section" id="nedir">
+  <div class="section-inner">
+    <div class="eyebrow"><span class="tr-only">TEMEL KAVRAM</span><span class="en-only">FUNDAMENTALS</span></div>
+    <h2 class="section-title"><span class="tr-only">AI Agent tam olarak nedir?</span><span class="en-only">What exactly is an AI Agent?</span></h2>
+    <p class="section-sub"><span class="tr-only">Chatbot size cevap verir. Agent sizin yerinize iş yapar. Fark bu kadar basit — ama etkisi çok büyük.</span><span class="en-only">A chatbot answers you. An agent works for you. The difference is simple — but the impact is enormous.</span></p>
+
+    <div class="what-grid">
+      <!-- Animated chat demo -->
+      <div class="what-visual reveal">
+        <div class="what-visual-bg"></div>
+        <div class="chat-demo" id="chatDemo"></div>
+      </div>
+
+      <!-- Points -->
+      <div class="what-points reveal">
+        <div class="what-point">
+          <div class="wp-icon" style="background:#eff6ff">🧠</div>
+          <div>
+            <div class="wp-title"><span class="tr-only">Anlıyor</span><span class="en-only">Understands</span></div>
+            <div class="wp-desc"><span class="tr-only">Müşteri mesajını, belgeyi veya formu okur ve ne istendiğini anlar. Anahtar kelime eşleştirmesi değil, gerçek dil anlama.</span><span class="en-only">Reads a message, document or form and understands what's needed — real language comprehension, not keyword matching.</span></div>
+          </div>
+        </div>
+        <div class="what-point">
+          <div class="wp-icon" style="background:#f0fdf4">⚡</div>
+          <div>
+            <div class="wp-title"><span class="tr-only">Karar Veriyor</span><span class="en-only">Decides</span></div>
+            <div class="wp-desc"><span class="tr-only">Kural setine göre seçim yapar: bu randevu mümkün mü, hangi doktora yönlendir, ne zaman insan devralsın?</span><span class="en-only">Makes rule-based choices: is this slot available, which doctor to route to, when should a human take over?</span></div>
+          </div>
+        </div>
+        <div class="what-point">
+          <div class="wp-icon" style="background:#fdf4ff">🔗</div>
+          <div>
+            <div class="wp-title"><span class="tr-only">Sistemlere Bağlanıyor</span><span class="en-only">Connects to Systems</span></div>
+            <div class="wp-desc"><span class="tr-only">Takvim açar, UYAP'a bakar, e-fatura okur, WhatsApp mesajı gönderir. Tek bir görev değil — zincir.</span><span class="en-only">Opens a calendar, checks UYAP, reads e-invoices, sends WhatsApp messages. Not a single task — a chain.</span></div>
+          </div>
+        </div>
+        <div class="what-point">
+          <div class="wp-icon" style="background:#fff7ed">📊</div>
+          <div>
+            <div class="wp-title"><span class="tr-only">Raporluyor</span><span class="en-only">Reports</span></div>
+            <div class="wp-desc"><span class="tr-only">Her etkileşim kaydedilir, başarı/başarısızlık izlenir. Siz sonuçlara bakarsınız, işi agent yürütür.</span><span class="en-only">Every interaction is logged, success/failure tracked. You review outcomes — the agent handles execution.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chatbot vs Agent karşılaştırması -->
+    <div class="reveal" style="margin-top:48px; display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div style="background:var(--paper); border:1px solid var(--edge); border-radius:var(--r-md); padding:24px;">
+        <div style="font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:1px; margin-bottom:14px;">
+          <span class="tr-only">CHATBOT</span><span class="en-only">CHATBOT</span>
+        </div>
+        <ul style="display:flex; flex-direction:column; gap:10px;">
+          <li style="font-size:14px; color:var(--mid); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--rose); flex-shrink:0">✗</span> <span class="tr-only">Yanıt verir, iş yapmaz</span><span class="en-only">Answers, doesn't act</span></li>
+          <li style="font-size:14px; color:var(--mid); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--rose); flex-shrink:0">✗</span> <span class="tr-only">Sistemlere erişemez</span><span class="en-only">Can't access systems</span></li>
+          <li style="font-size:14px; color:var(--mid); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--rose); flex-shrink:0">✗</span> <span class="tr-only">Her adım için insan gerekir</span><span class="en-only">Needs human at every step</span></li>
+          <li style="font-size:14px; color:var(--mid); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--rose); flex-shrink:0">✗</span> <span class="tr-only">Tek seferlik etkileşim</span><span class="en-only">Single-turn interaction</span></li>
+        </ul>
+      </div>
+      <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:var(--r-md); padding:24px;">
+        <div style="font-family:var(--mono); font-size:11px; color:var(--blue); letter-spacing:1px; margin-bottom:14px;">
+          <span class="tr-only">AI AGENT</span><span class="en-only">AI AGENT</span>
+        </div>
+        <ul style="display:flex; flex-direction:column; gap:10px;">
+          <li style="font-size:14px; color:var(--slate); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--emerald); flex-shrink:0">✓</span> <span class="tr-only">Görevi başlatır ve tamamlar</span><span class="en-only">Initiates and completes tasks</span></li>
+          <li style="font-size:14px; color:var(--slate); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--emerald); flex-shrink:0">✓</span> <span class="tr-only">API, veritabanı, e-posta entegrasyonu</span><span class="en-only">API, database, email integration</span></li>
+          <li style="font-size:14px; color:var(--slate); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--emerald); flex-shrink:0">✓</span> <span class="tr-only">Otonom — sadece istisnalarda insan</span><span class="en-only">Autonomous — human only for exceptions</span></li>
+          <li style="font-size:14px; color:var(--slate); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--emerald); flex-shrink:0">✓</span> <span class="tr-only">Çok adımlı süreç yürütür</span><span class="en-only">Runs multi-step workflows</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS ═══════════ -->
+<section class="section how-section" id="nasil">
+  <div class="section-inner">
+    <div class="eyebrow"><span class="tr-only">ÇALIŞMA PRENSİBİ</span><span class="en-only">HOW IT WORKS</span></div>
+    <h2 class="section-title"><span class="tr-only">Bir agent görevi nasıl yürütür?</span><span class="en-only">How does an agent run a task?</span></h2>
+    <p class="section-sub"><span class="tr-only">Telefon açmaktan randevu onayına kadar 4 adım — tamamen otomatik.</span><span class="en-only">From incoming message to confirmed appointment — 4 steps, fully automated.</span></p>
+
+    <div class="steps-row reveal">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title"><span class="tr-only">Tetikleyici</span><span class="en-only">Trigger</span></div>
+        <div class="step-desc"><span class="tr-only">WhatsApp, e-posta, web formu veya zamanlama. Agent uyarılır ve bağlamı okur.</span><span class="en-only">WhatsApp, email, web form, or schedule. Agent wakes up and reads context.</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title"><span class="tr-only">Anlama</span><span class="en-only">Understand</span></div>
+        <div class="step-desc"><span class="tr-only">İsteği kategorize eder, eksik bilgi varsa sorar, aciliyeti belirler.</span><span class="en-only">Categorizes the request, asks for missing info if needed, determines urgency.</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title"><span class="tr-only">Eylem</span><span class="en-only">Act</span></div>
+        <div class="step-desc"><span class="tr-only">Takvim açar, form doldurur, belge oluşturur, sistem günceller — çok adımlı.</span><span class="en-only">Opens calendar, fills form, creates document, updates system — multi-step chain.</span></div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-title"><span class="tr-only">Teyit</span><span class="en-only">Confirm</span></div>
+        <div class="step-desc"><span class="tr-only">Müşteriye / ilgili tarafa sonuç iletilir. İstisna varsa insan uyarılır.</span><span class="en-only">Notifies customer and relevant parties. Escalates to human only on exceptions.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ USE CASES ═══════════ -->
+<section class="section cases-section" id="ornekler">
+  <div class="section-inner">
+    <div class="eyebrow"><span class="tr-only">ÖRNEK UYGULAMALAR</span><span class="en-only">EXAMPLE USE CASES</span></div>
+    <h2 class="section-title"><span class="tr-only">Gerçek iş sorunları, gerçek agent çözümleri</span><span class="en-only">Real business problems, real agent solutions</span></h2>
+    <p class="section-sub"><span class="tr-only">Her sektörden somut kullanım senaryoları. Filtreleyerek kendi alanınıza bakın.</span><span class="en-only">Concrete scenarios across industries. Filter to see your sector.</span></p>
+
+    <div class="cases-filter" id="caseFilter"></div>
+    <div class="cases-grid" id="casesGrid"></div>
+  </div>
+</section>
+
+<!-- ═══════════ WIZARD ═══════════ -->
+<section class="section wizard-section" id="wizard">
+  <div class="section-inner wizard-inner">
+    <div class="eyebrow" style="color:var(--cyan)"><span class="tr-only">KİŞİSEL REHBER</span><span class="en-only">PERSONAL GUIDE</span></div>
+    <h2 class="section-title" style="color:var(--white)"><span class="tr-only">Hangi agent size uygun?</span><span class="en-only">Which agent fits you?</span></h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.45);"><span class="tr-only">3 soruyu yanıtlayın — size özel ürün önerisi ve uygulama yolu sunalım.</span><span class="en-only">Answer 3 questions — we'll recommend the right product and path for you.</span></p>
+
+    <div class="wizard-shell">
+      <!-- Step indicators -->
+      <div class="wizard-header">
+        <div class="wizard-step-indicators" id="wsiRow"></div>
+      </div>
+
+      <!-- Steps -->
+      <div class="wizard-body" id="wizardBody"></div>
+
+      <!-- Footer -->
+      <div class="wizard-footer">
+        <button class="wz-back" id="wzBack" onclick="wzNav(-1)">
+          <span class="tr-only">← Geri</span><span class="en-only">← Back</span>
+        </button>
+        <button class="wz-next" id="wzNext" onclick="wzNav(1)" disabled>
+          <span class="tr-only">Devam</span><span class="en-only">Continue</span> →
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCTS ═══════════ -->
+<section class="section products-section" id="urunler">
+  <div class="section-inner">
+    <div class="eyebrow"><span class="tr-only">ÜRÜN KATALOGu</span><span class="en-only">PRODUCT CATALOG</span></div>
+    <h2 class="section-title"><span class="tr-only">AgentTR çözümleri</span><span class="en-only">AgentTR solutions</span></h2>
+    <p class="section-sub"><span class="tr-only">Sektörünüze özel, Salesforce Agentforce altyapısı üzerinde çalışan, Türk mevzuatına uyumlu AI agent'lar.</span><span class="en-only">Sector-specific AI agents built on Salesforce Agentforce infrastructure, compliant with Turkish regulations.</span></p>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<!-- ═══════════ FAQ ═══════════ -->
+<section class="section faq-section" id="sss">
+  <div class="section-inner">
+    <div class="eyebrow" style="text-align:center"><span class="tr-only">SIKÇA SORULAN</span><span class="en-only">FAQ</span></div>
+    <h2 class="section-title" style="text-align:center"><span class="tr-only">Aklınızdaki sorular</span><span class="en-only">Your questions answered</span></h2>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-title"><span class="tr-only">Başlamak için bir adım kaldı</span><span class="en-only">One step to get started</span></h2>
+    <p class="cta-sub"><span class="tr-only">İlk 30 dakika ücretsiz danışma — hangi agent, hangi süre, ne kadara. Net cevaplar, taahhütsüz.</span><span class="en-only">First 30-min consultation free — which agent, what timeline, what cost. Clear answers, no commitment.</span></p>
+    <div class="cta-btns">
+      <a href="javascript:void(0)" onclick="navTo('wizard')" class="cta-white"><span class="tr-only">Agent Sihirbazını Başlat</span><span class="en-only">Start Agent Wizard</span></a>
+      <a href="mailto:info@agenttr.org" class="cta-outline"><span class="tr-only">Doğrudan İletişim</span><span class="en-only">Contact Directly</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">AgentTR</div>
+    <div class="footer-tagline"><span class="tr-only">Türkiye'nin AI Agent Platformu — Salesforce Agentforce üzerinde</span><span class="en-only">Turkey's AI Agent Platform — built on Salesforce Agentforce</span></div>
+  </div>
+  <div class="footer-links">
+    <a href="javascript:void(0)" onclick="navTo('nedir')"><span class="tr-only">Agent Nedir</span><span class="en-only">What Is Agent</span></a>
+    <a href="javascript:void(0)" onclick="navTo('ornekler')"><span class="tr-only">Örnekler</span><span class="en-only">Use Cases</span></a>
+    <a href="javascript:void(0)" onclick="navTo('urunler')"><span class="tr-only">Ürünler</span><span class="en-only">Products</span></a>
+    <a href="mailto:info@agenttr.org">info@agenttr.org</a>
+  </div>
+</footer>
+
+<script>
+// ═══════════ DATA ═══════════
+
+const cases = [
+  { sector:'saglik', icon:'🏥', bg:'#eff6ff', name:{tr:'Randevu Otomasyonu',en:'Appointment Automation'}, desc:{tr:'Hasta WhatsApp\'tan randevu ister. Agent müsait saatleri gösterir, kaydeder, SMS ile teyit gönderir. Resepsiyonist artık telefon beklemez.',en:'Patient requests via WhatsApp. Agent shows available slots, books, sends SMS confirmation. Receptionist stops waiting by the phone.'}, metrics:[{tr:'47 randevu/gün',en:'47 appts/day'},{tr:'%92 otomasyon',en:'92% automation'}]},
+  { sector:'saglik', icon:'💊', bg:'#f0fdf4', name:{tr:'İlaç Hatırlatma',en:'Medication Reminders'}, desc:{tr:'Kronik hastalara günlük ilaç hatırlatması. İlaç alınmazsa doktor uyarısı. SGK uyumlu hasta takip formatı.',en:'Daily medication reminder for chronic patients. Doctor alert if missed. SGK-compliant patient tracking.'}, metrics:[{tr:'%40 uyum artışı',en:'40% adherence lift'},{tr:'Günlük otomatik',en:'Daily automatic'}]},
+  { sector:'hukuk', icon:'⚖️', bg:'#fdf4ff', name:{tr:'Dava Takip Agent',en:'Case Tracking Agent'}, desc:{tr:'UYAP\'tan duruşma tarihlerini çeker, avukata ve müvekkile hatırlatma gönderir. Süre kaçırma riski ortadan kalkar.',en:'Pulls hearing dates from UYAP, sends reminders to attorney and client. Eliminates deadline-miss risk.'}, metrics:[{tr:'128 dosya/avukat',en:'128 files/lawyer'},{tr:'Sıfır kaçırılan süre',en:'Zero missed deadlines'}]},
+  { sector:'hukuk', icon:'📝', bg:'#fff7ed', name:{tr:'Sözleşme Analiz',en:'Contract Analysis'}, desc:{tr:'PDF sözleşme yükle. Agent 3 dakikada riskli maddeleri, eksik hükümleri ve Türk Borçlar Kanunu uyumsuzluklarını listeler.',en:'Upload PDF contract. Agent lists risky clauses, missing provisions, and Turkish Law compliance issues in 3 minutes.'}, metrics:[{tr:'3 dak. analiz',en:'3-min analysis'},{tr:'TBK uyum kontrolü',en:'Civil Code check'}]},
+  { sector:'muhasebe', icon:'🧮', bg:'#eff6ff', name:{tr:'Beyanname Hatırlatma',en:'Declaration Reminders'}, desc:{tr:'Tüm müşteriler için KDV, muhtasar, kurumlar vergisi takvimi. Gecikme faizi hesabı ile erken uyarı sistemi.',en:'VAT, withholding, corporate tax calendar for all clients. Early warning with penalty interest calculation.'}, metrics:[{tr:'Sıfır gecikme cezası',en:'Zero late penalties'},{tr:'Çok müşteri yönetimi',en:'Multi-client mgmt'}]},
+  { sector:'muhasebe', icon:'🧾', bg:'#f0fdf4', name:{tr:'e-Fatura Analiz',en:'e-Invoice Analysis'}, desc:{tr:'GİB\'den gelen e-faturaları otomatik kategorize eder, gider analizi yapar, şüpheli fatura flagler.',en:'Auto-categorizes e-invoices from GİB, analyzes expenses, flags suspicious invoices.'}, metrics:[{tr:'GİB API entegre',en:'GİB API integrated'},{tr:'Anlık kategorizasyon',en:'Real-time category'}]},
+  { sector:'insaat', icon:'🏗️', bg:'#fff7ed', name:{tr:'Hakediş Takip',en:'Progress Payment Tracking'}, desc:{tr:'Alt yüklenici hakediş belgelerini izler, onay zincirini yönetir, gecikmelerde nakit akış uyarısı verir.',en:'Tracks subcontractor payment docs, manages approval chain, cash flow alert on delays.'}, metrics:[{tr:'Çok alt yüklenici',en:'Multi-subcontractor'},{tr:'Otomatik onay zinciri',en:'Auto approval chain'}]},
+  { sector:'lojistik', icon:'🚢', bg:'#eff6ff', name:{tr:'İhracat Belgesi Agent',en:'Export Document Agent'}, desc:{tr:'EUR.1, A.TR, GTİP kodu, gümrük beyannamesi ön kontrolü. BİLGE\'ye göndermeden önce eksik belgesi tespit eder.',en:'EUR.1, A.TR, GTİP code, customs pre-check. Flags missing documents before BİLGE submission.'}, metrics:[{tr:'BİLGE entegre',en:'BİLGE integrated'},{tr:'6 saat/belge tasarruf',en:'6 hrs/doc saved'}]},
+  { sector:'egitim', icon:'🎓', bg:'#fdf4ff', name:{tr:'Veli Bildirim Agent',en:'Parent Notification Agent'}, desc:{tr:'Sınav sonucu, yoklama, etkinlik bilgilendirmesi WhatsApp ile otomatik. Öğretmenin tek tek mesaj göndermesi tarih oldu.',en:'Exam results, attendance, events via WhatsApp automatically. Teachers stop sending individual messages.'}, metrics:[{tr:'5.500+ özel okul',en:'5,500+ private schools'},{tr:'Anlık bildirim',en:'Instant notification'}]},
+  { sector:'finans', icon:'📊', bg:'#f0fdf4', name:{tr:'Yönetim Raporu Agent',en:'Management Report Agent'}, desc:{tr:'ERP/Excel verilerinden haftalık yönetim raporu oluşturur. CFO\'ya her Pazartesi 08:00\'de inbox\'ta hazır.',en:'Generates weekly management report from ERP/Excel. In CFO\'s inbox every Monday at 08:00.'}, metrics:[{tr:'Her Pazartesi otomatik',en:'Auto every Monday'},{tr:'ERP entegre',en:'ERP integrated'}]},
+];
+
+const products = [
+  { icon:'🏥', name:{tr:'Klinik Agent',en:'Clinic Agent'}, sector:{tr:'ÖZEL SAĞLIK KLİNİKLERİ',en:'PRIVATE HEALTH CLINICS'}, desc:{tr:'Randevu, hasta hatırlatma, sigorta ön yetki ve memnuniyet takibini yöneten tam klinik asistanı.',en:'Full clinic assistant managing appointments, reminders, insurance pre-auth and satisfaction tracking.'}, features:[{tr:'WhatsApp randevu otomasyonu',en:'WhatsApp appointment automation'},{tr:'SGK/sigorta ön yetki',en:'SGK/insurance pre-auth'},{tr:'Hasta memnuniyet takibi',en:'Patient satisfaction tracking'},{tr:'KVKK uyumlu veri işleme',en:'KVKK-compliant data processing'}], price:'₺4.500', period:{tr:'/ay',en:'/mo'} },
+  { icon:'⚖️', name:{tr:'Hukuk Agent',en:'Legal Agent'}, sector:{tr:'HUKUK BÜROLARI',en:'LAW FIRMS'}, desc:{tr:'UYAP entegrasyonuyla dava takip, süre yönetimi, sözleşme analizi ve müvekkil iletişimi.',en:'Case tracking, deadline management, contract analysis and client communication with UYAP integration.'}, features:[{tr:'UYAP dava takibi',en:'UYAP case tracking'},{tr:'Sözleşme risk analizi',en:'Contract risk analysis'},{tr:'Müvekkil bilgi agent\'ı',en:'Client info agent'},{tr:'Zamanaşımı uyarı sistemi',en:'Statute of limitations alerts'}], price:'₺6.500', period:{tr:'/ay',en:'/mo'} },
+  { icon:'🧮', name:{tr:'Muhasebe Agent',en:'Accounting Agent'}, sector:{tr:'SMMM OFİSLERİ',en:'CPA OFFICES'}, desc:{tr:'GİB entegrasyonuyla beyanname takvimi, e-fatura analizi, vergi hatırlatma ve finansal sağlık raporu.',en:'Declaration calendar with GİB integration, e-invoice analysis, tax reminders and financial health reports.'}, features:[{tr:'GİB e-fatura entegrasyonu',en:'GİB e-invoice integration'},{tr:'Çok müşteri takvimi',en:'Multi-client calendar'},{tr:'Gecikme faizi uyarısı',en:'Penalty interest alerts'},{tr:'Finansal sağlık dashboard',en:'Financial health dashboard'}], price:'₺5.500', period:{tr:'/ay',en:'/mo'} },
+  { icon:'🏗️', name:{tr:'İnşaat Agent',en:'Construction Agent'}, sector:{tr:'İNŞAAT & PROJE',en:'CONSTRUCTION & PROJECT'}, desc:{tr:'Hakediş takip, İSG denetim, tedarikçi iletişimi ve nakit akış uyarı sistemi.',en:'Progress payment tracking, HSE audit, supplier communication and cash flow alert system.'}, features:[{tr:'Alt yüklenici hakediş izleme',en:'Subcontractor payment tracking'},{tr:'İSG denetim otomasyonu',en:'HSE audit automation'},{tr:'Malzeme sipariş takibi',en:'Material order tracking'},{tr:'Nakit akış uyarıları',en:'Cash flow alerts'}], price:'₺7.000', period:{tr:'/ay',en:'/mo'} },
+  { icon:'🚢', name:{tr:'İhracat Agent',en:'Export Agent'}, sector:{tr:'LOJİSTİK & GÜMRÜK',en:'LOGISTICS & CUSTOMS'}, desc:{tr:'GTİP kodu, gümrük belge kontrolü, BİLGE entegrasyonu ve navlun karşılaştırması.',en:'GTİP code, customs document check, BİLGE integration and freight rate comparison.'}, features:[{tr:'GTİP otomatik sınıflandırma',en:'Auto GTİP classification'},{tr:'BİLGE ön kontrol',en:'BİLGE pre-check'},{tr:'EUR.1 / A.TR hazırlama',en:'EUR.1 / A.TR preparation'},{tr:'Tedarikçi yaptırım kontrolü',en:'Supplier sanctions check'}], price:'₺8.500', period:{tr:'/ay',en:'/mo'} },
+  { icon:'🎓', name:{tr:'Eğitim Agent',en:'Education Agent'}, sector:{tr:'ÖZEL OKUL & DERSHANE',en:'PRIVATE SCHOOLS'}, desc:{tr:'Veli bildirimi, öğrenci takip, kayıt otomasyonu ve sınav hazırlık rehberliği.',en:'Parent notifications, student tracking, enrollment automation and exam prep guidance.'}, features:[{tr:'WhatsApp veli bildirimi',en:'WhatsApp parent alerts'},{tr:'Yoklama ve not takibi',en:'Attendance and grade tracking'},{tr:'Sınav hatırlatma sistemi',en:'Exam reminder system'},{tr:'MEB müfredat uyumlu',en:'MEB curriculum compliant'}], price:'₺3.500', period:{tr:'/ay',en:'/mo'} },
+  { icon:'🏨', name:{tr:'Otelcilik Agent',en:'Hospitality Agent'}, sector:{tr:'OTEL & KONAKLAMA',en:'HOTEL & HOSPITALITY'}, desc:{tr:'Rezervasyon yönetimi, misafir iletişimi, temizlik planlaması ve online yorumları otomatik yöneten agent.',en:'Reservation management, guest communication, housekeeping scheduling and review automation.'}, features:[{tr:'OTA kanalı rezervasyon senkronu',en:'OTA channel sync'},{tr:'Misafir WhatsApp iletişimi',en:'Guest WhatsApp communication'},{tr:'Check-in/out hatırlatmaları',en:'Check-in/out reminders'},{tr:'Yorum takip ve yanıtlama',en:'Review monitoring & replies'}], price:'₺5.000', period:{tr:'/ay',en:'/mo'} },
+  { icon:'🛒', name:{tr:'E-Ticaret Agent',en:'E-Commerce Agent'}, sector:{tr:'E-TİCARET & PERAKENDE',en:'E-COMMERCE & RETAIL'}, desc:{tr:'Sipariş takip, iade yönetimi, stok uyarısı ve müşteri destek otomasyonu.',en:'Order tracking, return management, stock alerts and customer support automation.'}, features:[{tr:'Trendyol/Hepsiburada entegrasyon',en:'Trendyol/Hepsiburada integration'},{tr:'Kargo takip otomasyonu',en:'Shipping tracking automation'},{tr:'İade süreci yönetimi',en:'Return process management'},{tr:'Stok kritik uyarısı',en:'Low stock alerts'}], price:'₺4.000', period:{tr:'/ay',en:'/mo'} },
+  { icon:'🏭', name:{tr:'Üretim Agent',en:'Manufacturing Agent'}, sector:{tr:'ÜRETİM & SANAYİ',en:'MANUFACTURING & INDUSTRY'}, desc:{tr:'OEE takibi, bakım planlaması, tedarikçi sipariş otomasyonu ve üretim raporu agent.',en:'OEE tracking, maintenance scheduling, supplier order automation and production reporting.'}, features:[{tr:'OEE metrik izleme',en:'OEE metric monitoring'},{tr:'Preventif bakım uyarısı',en:'Preventive maintenance alerts'},{tr:'Tedarikçi sipariş otomasyonu',en:'Supplier order automation'},{tr:'Shift raporu oluşturma',en:'Shift report generation'}], price:'₺9.000', period:{tr:'/ay',en:'/mo'} },
+  { icon:'🏦', name:{tr:'Finans & Sigorta Agent',en:'Finance & Insurance Agent'}, sector:{tr:'FİNANS & SİGORTA',en:'FINANCE & INSURANCE'}, desc:{tr:'Poliçe yenileme, hasar takip, müşteri bilgilendirme ve uyumluluk raporlama agent.',en:'Policy renewal, claims tracking, customer notifications and compliance reporting agent.'}, features:[{tr:'Poliçe yenileme otomasyonu',en:'Policy renewal automation'},{tr:'Hasar başvuru takibi',en:'Claims application tracking'},{tr:'BDDK/SPK uyumluluk uyarısı',en:'BDDK/SPK compliance alerts'},{tr:'Müşteri portföy özeti',en:'Customer portfolio summary'}], price:'₺8.000', period:{tr:'/ay',en:'/mo'} },
+];
+
+const faqs = [
+  { q:{tr:'AI agent chatbot\'tan ne farkı var?',en:'How is an AI agent different from a chatbot?'}, a:{tr:'Chatbot yalnızca yanıt verir — sayfanızda mesaj alışverişi yaparsınız. Agent ise sisteme bağlanır ve iş yapar: takvim açar, form doldurur, belge oluşturur, bildirim gönderir. Sonuç: çalışan yerini almaz, ama tekrar eden iş yükü tamamen otomatize olur.',en:'A chatbot only responds — you exchange messages on your page. An agent connects to systems and does work: opens calendars, fills forms, creates documents, sends notifications. The result: it doesn\'t replace your staff, but repetitive workload is fully automated.'} },
+  { q:{tr:'Salesforce Agentforce nedir, neden kullanıyorsunuz?',en:'What is Salesforce Agentforce and why do you use it?'}, a:{tr:'Agentforce, kurumsal düzeyde güvenliği ve entegrasyon altyapısını sunan dünyanın önde gelen agent platformudur. ISO 27001, GDPR uyumlu; veriler müşterinin kendi ortamında kalır. AgentTR bu altyapı üzerine Türkiye\'ye özel dikey çözümler inşa eder.',en:'Agentforce is the world\'s leading enterprise agent platform offering enterprise-grade security and integration infrastructure. ISO 27001, GDPR compliant; data stays in the client\'s environment. AgentTR builds Turkey-specific vertical solutions on this infrastructure.'} },
+  { q:{tr:'Kurulum ne kadar sürer?',en:'How long does setup take?'}, a:{tr:'Standart ürünlerimiz 2–4 haftada canlıya alınır. Özelleştirme gerektiren projeler 6–8 haftaya uzayabilir. İlk günden itibaren test ortamı size açık olur.',en:'Standard products go live in 2–4 weeks. Projects requiring customization can extend to 6–8 weeks. A test environment is available to you from day one.'} },
+  { q:{tr:'KVKK ve veri güvenliği?',en:'KVKK and data security?'}, a:{tr:'Tüm veriler Salesforce\'un AB ve Türkiye uyumlu altyapısında işlenir. Hasta, müvekkil veya müşteri verisi üçüncü tarafa iletilmez. İsteğe bağlı Türkiye lokasyon seçeneği mevcuttur.',en:'All data is processed on Salesforce\'s EU and Turkey-compliant infrastructure. Patient, client, or customer data is never shared with third parties. Optional Turkey hosting location available.'} },
+  { q:{tr:'Aylık ücret yerine kullanım başı ödeme mümkün mü?',en:'Can I pay per use instead of monthly?'}, a:{tr:'Evet. Randevu agent\'ı için tamamlanan randevu başı ₺35–45 modeli de mevcuttur. Hangi model sizin için avantajlı olduğunu ücretsiz danışmada hesaplıyoruz.',en:'Yes. For the appointment agent, a per-completed-appointment model at ₺35–45 is also available. We calculate which model is better for you during the free consultation.'} },
+  { q:{tr:'Teknik bilgim olmadan kullanabilir miyim?',en:'Can I use it without technical knowledge?'}, a:{tr:'AgentTR\'nin kurulum ve yönetim araçları teknik bilgi gerektirmez. Siz kuralları Türkçe tanımlarsınız; agent bunu uygular. Entegrasyon gereken durumlarda teknik ekibimiz destek verir.',en:'AgentTR\'s setup and management tools require no technical knowledge. You define rules in plain language; the agent applies them. Our technical team supports integrations when needed.'} },
+];
+
+// ═══════════ WIZARD DATA ═══════════
+
+const wzSteps = [
+  {
+    q:{tr:'Hangi sektördesiniz?',en:'What is your industry?'},
+    hint:{tr:'Size en uygun agent\'ı belirlemek için sektörünüzü seçin.',en:'Select your sector to identify the best agent fit.'},
+    options:[
+      {icon:'🏥',label:{tr:'Sağlık / Klinik',en:'Health / Clinic'},sub:{tr:'Özel klinik, poliklinik, muayenehane',en:'Private clinic, polyclinic, medical office'},val:'saglik'},
+      {icon:'⚖️',label:{tr:'Hukuk',en:'Legal'},sub:{tr:'Avukatlık bürosu, hukuk danışmanlık',en:'Law firm, legal consultancy'},val:'hukuk'},
+      {icon:'🧮',label:{tr:'Muhasebe / Finans',en:'Accounting / Finance'},sub:{tr:'SMMM ofisi, muhasebe bürosu',en:'CPA office, accounting firm'},val:'muhasebe'},
+      {icon:'🏗️',label:{tr:'İnşaat / Proje',en:'Construction / Project'},sub:{tr:'Müteahhit, proje yönetimi',en:'Contractor, project management'},val:'insaat'},
+      {icon:'🚢',label:{tr:'Lojistik / İhracat',en:'Logistics / Export'},sub:{tr:'Gümrük müşaviri, nakliye',en:'Customs broker, shipping'},val:'lojistik'},
+      {icon:'🎓',label:{tr:'Eğitim',en:'Education'},sub:{tr:'Özel okul, dershane, kurs',en:'Private school, tutoring, courses'},val:'egitim'},
+      {icon:'🏨',label:{tr:'Otelcilik',en:'Hospitality'},sub:{tr:'Otel, pansiyon, apart',en:'Hotel, guesthouse, serviced apt'},val:'otel'},
+      {icon:'🛒',label:{tr:'E-Ticaret',en:'E-Commerce'},sub:{tr:'Online mağaza, marketplace satıcısı',en:'Online store, marketplace seller'},val:'eticaret'},
+      {icon:'🏭',label:{tr:'Üretim / Sanayi',en:'Manufacturing'},sub:{tr:'Fabrika, atölye, imalat',en:'Factory, workshop, manufacturing'},val:'uretim'},
+      {icon:'🏦',label:{tr:'Finans / Sigorta',en:'Finance / Insurance'},sub:{tr:'Sigorta acentesi, finans danışmanlık',en:'Insurance agency, financial advisory'},val:'finans'},
+    ]
+  },
+  {
+    q:{tr:'En büyük operasyonel sorununuz nedir?',en:'What is your biggest operational pain point?'},
+    hint:{tr:'Şu an en çok zaman harcadığınız veya kaçırdığınız alan hangisi?',en:'Where do you spend the most time or drop the ball most often?'},
+    options:[
+      {icon:'📞',label:{tr:'İletişim & Takip',en:'Communication & Follow-up'},sub:{tr:'Müşteri/hasta/müvekkil iletişimi zaman alıyor',en:'Client communication takes too much time'},val:'iletisim'},
+      {icon:'📄',label:{tr:'Belge & Evrak',en:'Documents & Paperwork'},sub:{tr:'Form doldurmak, belge hazırlamak, arşivlemek',en:'Filling forms, preparing docs, archiving'},val:'belge'},
+      {icon:'⏰',label:{tr:'Süre & Takvim',en:'Deadlines & Calendar'},sub:{tr:'Son tarihleri kaçırıyoruz veya hatırlatma gerekiyor',en:'Missing deadlines or need constant reminders'},val:'takvim'},
+      {icon:'📊',label:{tr:'Raporlama',en:'Reporting'},sub:{tr:'Yönetim raporu hazırlamak, veri derlemek',en:'Preparing management reports, gathering data'},val:'rapor'},
+    ]
+  },
+  {
+    q:{tr:'İşletmenizin büyüklüğü?',en:'What is your business size?'},
+    hint:{tr:'Bu, agent\'ın ölçeğini ve bütçe modelini belirler.',en:'This determines the agent scale and budget model.'},
+    options:[
+      {icon:'👤',label:{tr:'Bağımsız / Solo',en:'Independent / Solo'},sub:{tr:'1–3 kişi, küçük ofis',en:'1–3 people, small office'},val:'solo'},
+      {icon:'🏢',label:{tr:'KOBİ',en:'SME'},sub:{tr:'4–50 çalışan',en:'4–50 employees'},val:'kobi'},
+      {icon:'🏛️',label:{tr:'Orta–Büyük',en:'Mid–Large'},sub:{tr:'50+ çalışan, çok şubeli',en:'50+ employees, multi-branch'},val:'buyuk'},
+    ]
+  },
+  {
+    q:{tr:'Aylık tahmini işlem hacminiz?',en:'What is your estimated monthly transaction volume?'},
+    hint:{tr:'Agent\'ın ROI hesabı için bu bilgiye ihtiyacımız var.',en:'We need this to calculate the agent\'s ROI for your business.'},
+    options:[
+      {icon:'🌱',label:{tr:'100\'den az',en:'Under 100'},sub:{tr:'Randevu / belge / müşteri işlemi',en:'Appointments / docs / customer interactions'},val:'az'},
+      {icon:'📈',label:{tr:'100–500',en:'100–500'},sub:{tr:'Aktif büyüme aşaması',en:'Active growth stage'},val:'orta'},
+      {icon:'🚀',label:{tr:'500–2.000',en:'500–2,000'},sub:{tr:'Olgun operasyon',en:'Mature operation'},val:'yuksek'},
+      {icon:'⚡',label:{tr:'2.000+',en:'2,000+'},sub:{tr:'Yüksek hacim, ölçekleme',en:'High volume, scaling'},val:'cok_yuksek'},
+    ]
+  },
+  {
+    q:{tr:'İşletmenizin adı? (isteğe bağlı)',en:'What is your business name? (optional)'},
+    hint:{tr:'İş planını kişiselleştirmek için kullanılır. Boş bırakabilirsiniz.',en:'Used to personalize the business plan. You can leave it blank.'},
+    isText: true,
+    placeholder:{tr:'Örn: Sağlık Klinik, Hukuk Bürosu...',en:'E.g. ABC Clinic, Smith Law Firm...'},
+  },
+];
+
+const productMap = {
+  saglik: 0, hukuk: 1, muhasebe: 2, insaat: 3, lojistik: 4, egitim: 5,
+  otel: 6, eticaret: 7, uretim: 8, finans: 9
+};
+
+// ═══════════ STATE ═══════════
+let lang = 'tr';
+let wzCurrent = 0;
+let wzAnswers = [];
+let activeFilter = 'all';
+
+// ═══════════ LANG ═══════════
+function setLang(l) {
+  lang = l;
+  document.body.classList.toggle('lang-en', l === 'en');
+  document.getElementById('btnTR').classList.toggle('active', l === 'tr');
+  document.getElementById('btnEN').classList.toggle('active', l === 'en');
+  renderWizard();
+  renderCases();
+  renderProducts();
+  renderFAQ();
+  updateChatDemo();
+}
+
+// ═══════════ CHAT DEMO ═══════════
+const chats = {
+  tr:[
+    {role:'user',text:'Yarın sabah için randevu alabilir miyim?'},
+    {role:'agent',text:'Merhaba! Yarın sabah 09:00–12:00 arasında müsait slotlarım var. Hangi saati tercih edersiniz?'},
+    {role:'user',text:'10:30 olur.'},
+    {role:'agent',text:'Harika! 10:30 için Doktor Ayşe Kaya ile randevunuzu oluşturdum. SMS ile teyit gönderildi ✓', actions:['✓ Takvime eklendi','📱 SMS gönderildi']},
+  ],
+  en:[
+    {role:'user',text:'Can I book an appointment for tomorrow morning?'},
+    {role:'agent',text:'Hello! Tomorrow morning I have slots between 09:00–12:00. Which time do you prefer?'},
+    {role:'user',text:'10:30 would work.'},
+    {role:'agent',text:'Done! Your appointment with Dr. Ayşe Kaya at 10:30 is confirmed. SMS sent ✓', actions:['✓ Added to calendar','📱 SMS sent']},
+  ]
+};
+
+let chatIdx = 0;
+let chatTimer;
+
+function updateChatDemo() {
+  const el = document.getElementById('chatDemo');
+  if (!el) return;
+  el.innerHTML = '';
+  chatIdx = 0;
+  clearInterval(chatTimer);
+  runChat();
+}
+
+function runChat() {
+  const msgs = chats[lang];
+  if (chatIdx < msgs.length) {
+    appendChatMsg(msgs[chatIdx]);
+    chatIdx++;
+    chatTimer = setTimeout(runChat, chatIdx === msgs.length ? 8000 : 1400);
+  } else {
+    chatIdx = 0;
+    chatTimer = setTimeout(updateChatDemo, 3000);
+  }
+}
+
+function appendChatMsg(m) {
+  const el = document.getElementById('chatDemo');
+  const div = document.createElement('div');
+  div.className = 'chat-msg' + (m.role === 'agent' ? ' agent' : '');
+
+  const avEl = document.createElement('div');
+  avEl.className = 'chat-avatar ' + (m.role === 'agent' ? 'agent-av' : 'user-av');
+  avEl.textContent = m.role === 'agent' ? '🤖' : '👤';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble';
+  bubble.textContent = m.text;
+
+  div.appendChild(avEl);
+  div.appendChild(bubble);
+  el.appendChild(div);
+
+  if (m.actions) {
+    const row = document.createElement('div');
+    row.className = 'chat-action';
+    m.actions.forEach(a => {
+      const pill = document.createElement('span');
+      pill.className = 'chat-pill';
+      pill.textContent = a;
+      row.appendChild(pill);
+    });
+    el.appendChild(row);
+  }
+
+  el.scrollTop = el.scrollHeight;
+}
+
+// ═══════════ CASES ═══════════
+const sectorLabels = {
+  all:{tr:'Tümü',en:'All'},
+  saglik:{tr:'Sağlık',en:'Health'},
+  hukuk:{tr:'Hukuk',en:'Legal'},
+  muhasebe:{tr:'Muhasebe',en:'Accounting'},
+  insaat:{tr:'İnşaat',en:'Construction'},
+  lojistik:{tr:'Lojistik',en:'Logistics'},
+  egitim:{tr:'Eğitim',en:'Education'},
+  finans:{tr:'Finans',en:'Finance'},
+};
+
+function renderCases() {
+  const filter = document.getElementById('caseFilter');
+  const grid = document.getElementById('casesGrid');
+
+  const sectors = ['all','saglik','hukuk','muhasebe','insaat','lojistik','egitim','finans'];
+  filter.innerHTML = sectors.map(s => `
+    <button class="filter-btn ${activeFilter===s?'active':''}" onclick="filterCases('${s}')">
+      ${sectorLabels[s][lang]}
+    </button>
+  `).join('');
+
+  grid.innerHTML = cases.map(c => `
+    <div class="case-card ${activeFilter !== 'all' && c.sector !== activeFilter ? 'hidden' : ''}">
+      <div class="case-header">
+        <div class="case-emoji" style="background:${c.bg}">${c.icon}</div>
+        <div>
+          <div class="case-sector">${sectorLabels[c.sector][lang] || c.sector}</div>
+          <div class="case-name">${c.name[lang]}</div>
+        </div>
+      </div>
+      <div class="case-desc">${c.desc[lang]}</div>
+      <div class="case-metrics">
+        ${c.metrics.map(m => `<div class="case-metric">${m[lang]}</div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterCases(s) {
+  activeFilter = s;
+  renderCases();
+}
+
+// ═══════════ PRODUCTS ═══════════
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = products.map(p => `
+    <div class="prod-card">
+      <div class="prod-card-top">
+        <div class="prod-card-icon">${p.icon}</div>
+        <div class="prod-card-sector">${p.sector[lang]}</div>
+        <div class="prod-card-name">${p.name[lang]}</div>
+        <div class="prod-card-desc">${p.desc[lang]}</div>
+      </div>
+      <div class="prod-card-body">
+        <ul class="prod-features">
+          ${p.features.map(f => `<li class="pf-item">${f[lang]}</li>`).join('')}
+        </ul>
+        <div class="prod-price-row">
+          <div class="prod-price">${p.price}<span>${p.period[lang]}</span></div>
+          <a href="javascript:void(0)" onclick="navTo('wizard')" class="prod-btn">${lang==='tr'?'Başlat →':'Start →'}</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════ FAQ ═══════════
+function renderFAQ() {
+  const list = document.getElementById('faqList');
+  list.innerHTML = faqs.map((f,i) => `
+    <div class="faq-item" id="faq-${i}">
+      <div class="faq-q" onclick="toggleFAQ(${i})">
+        ${f.q[lang]}
+        <span class="faq-arr">▾</span>
+      </div>
+      <div class="faq-a">${f.a[lang]}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFAQ(i) {
+  document.querySelectorAll('.faq-item').forEach((el,idx)=>{
+    if(idx===i) el.classList.toggle('open');
+    else el.classList.remove('open');
+  });
+}
+
+// ═══════════ WIZARD ═══════════
+// ═══════════ PAYWALL STATE ═══════════
+let bizPlanUnlocked = false;
+let bizPlanHTML = '';
+
+// ═══════════ WIZARD RENDER ═══════════
+function renderWizard() {
+  const stepLabels = {tr:['Sektör','Problem','Ölçek','Hacim','İşletme'], en:['Sector','Problem','Scale','Volume','Business']};
+  const row = document.getElementById('wsiRow');
+  row.innerHTML = wzSteps.map((s,i) => `
+    <div class="wsi ${i < wzCurrent ? 'done' : i === wzCurrent ? 'active' : ''}">
+      <div class="wsi-dot">${i < wzCurrent ? '✓' : i+1}</div>
+      <span style="display:${window.innerWidth<640?'none':'inline'}">${stepLabels[lang][i]||''}</span>
+    </div>
+    ${i < wzSteps.length-1 ? '<div class="wsi-line"></div>' : ''}
+  `).join('');
+
+  const body = document.getElementById('wizardBody');
+  body.innerHTML = wzSteps.map((s,i) => {
+    if (s.isText) {
+      return `
+        <div class="wz-step ${i===wzCurrent?'active':''}" id="wzs-${i}">
+          <div class="wz-q">${s.q[lang]}</div>
+          <div class="wz-hint">${s.hint[lang]}</div>
+          <input type="text" class="wz-text-input" id="wztxt-${i}"
+            placeholder="${s.placeholder[lang]}"
+            value="${wzAnswers[i]||''}"
+            oninput="wzTextInput(${i}, this.value)"
+          />
+        </div>`;
+    }
+    return `
+      <div class="wz-step ${i===wzCurrent?'active':''}" id="wzs-${i}">
+        <div class="wz-q">${s.q[lang]}</div>
+        <div class="wz-hint">${s.hint[lang]}</div>
+        <div class="wz-options">
+          ${s.options.map(o => `
+            <button class="wz-opt ${wzAnswers[i]===o.val?'selected':''}" onclick="wzSelect(${i},'${o.val}')">
+              <div class="wz-opt-icon">${o.icon}</div>
+              <div class="wz-opt-label">${o.label[lang]}</div>
+              <div class="wz-opt-sub">${o.sub[lang]}</div>
+            </button>
+          `).join('')}
+        </div>
+      </div>`;
+  }).join('') + `<div class="wz-result ${wzCurrent===wzSteps.length?'active':''}" id="wzResult"></div>`;
+
+  updateWzNav();
+  if (wzCurrent === wzSteps.length) renderResult();
+}
+
+function wzSelect(step, val) {
+  wzAnswers[step] = val;
+  renderWizard();
+}
+
+function wzTextInput(step, val) {
+  wzAnswers[step] = val;
+  document.getElementById('wzNext').disabled = false;
+}
+
+function wzNav(dir) {
+  const step = wzSteps[wzCurrent];
+  // Text step: always allow advance (optional field)
+  if (dir === 1 && !step?.isText && !wzAnswers[wzCurrent]) return;
+  wzCurrent = Math.max(0, Math.min(wzSteps.length, wzCurrent + dir));
+  renderWizard();
+}
+
+function updateWzNav() {
+  const back = document.getElementById('wzBack');
+  const next = document.getElementById('wzNext');
+  back.style.display = wzCurrent === 0 ? 'none' : 'block';
+  if (wzCurrent === wzSteps.length) {
+    next.style.display = 'none';
+  } else {
+    next.style.display = 'flex';
+    const isTextStep = wzSteps[wzCurrent]?.isText;
+    next.disabled = !isTextStep && !wzAnswers[wzCurrent];
+    const isLast = wzCurrent === wzSteps.length - 1;
+    next.innerHTML = isLast
+      ? `<span>🤖 ${lang==='tr' ? 'İş Planı Oluştur' : 'Generate Business Plan'}</span>`
+      : (lang==='tr' ? 'Devam →' : 'Continue →');
+  }
+  back.innerHTML = lang==='tr' ? '← Geri' : '← Back';
+}
+
+// ═══════════ RESULT + CLAUDE API ═══════════
+async function renderResult() {
+  const sector = wzAnswers[0] || 'saglik';
+  const problem = wzAnswers[1] || 'iletisim';
+  const size = wzAnswers[2] || 'kobi';
+  const volume = wzAnswers[3] || 'orta';
+  const bizName = wzAnswers[4] || '';
+  const prodIdx = productMap[sector] ?? 0;
+  const mainProd = products[prodIdx];
+
+  const sectorName = { saglik:'Özel Sağlık Kliniği', hukuk:'Hukuk Bürosu', muhasebe:'Muhasebe/SMMM Ofisi',
+    insaat:'İnşaat & Proje', lojistik:'Lojistik & Gümrük', egitim:'Özel Okul/Dershane',
+    otel:'Otel & Konaklama', eticaret:'E-Ticaret', uretim:'Üretim & Sanayi', finans:'Finans & Sigorta'};
+  const problemName = { iletisim:'İletişim & Müşteri Takibi', belge:'Belge & Evrak Yönetimi',
+    takvim:'Süre & Takvim Yönetimi', rapor:'Raporlama & Veri Analizi'};
+  const sizeName = { solo:'Solo/Mikro (1-3 kişi)', kobi:'KOBİ (4-50 çalışan)', buyuk:'Orta-Büyük (50+ çalışan)'};
+  const volumeName = { az:'<100 işlem/ay', orta:'100-500 işlem/ay', yuksek:'500-2000 işlem/ay', cok_yuksek:'2000+ işlem/ay'};
+
+  const el = document.getElementById('wzResult');
+  el.innerHTML = `
+    <div style="text-align:center; padding: 48px 0;">
+      <div style="font-size:40px; margin-bottom:16px; animation: spin 1s linear infinite; display:inline-block;">⚙️</div>
+      <div style="font-family:var(--display); font-size:18px; color:var(--white); margin-bottom:8px;">
+        ${lang==='tr' ? 'İş planınız hazırlanıyor...' : 'Generating your business plan...'}
+      </div>
+      <div style="font-size:13px; color:rgba(255,255,255,0.4);">
+        ${lang==='tr' ? 'Claude AI analiz ediyor' : 'Claude AI is analyzing'}
+      </div>
+      <style>@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }</style>
+    </div>`;
+
+  // Build Claude prompt
+  const isEn = lang === 'en';
+  const prompt = isEn
+    ? `You are a business consultant specializing in AI automation for Turkish SMEs. Create a concise, practical AI agent business plan in English for this business:
+
+Business: ${bizName || sectorName[sector]}
+Sector: ${sectorName[sector]}
+Main problem: ${problemName[problem]}
+Size: ${sizeName[size]}
+Monthly volume: ${volumeName[volume]}
+Recommended product: ${mainProd.name.en} (${mainProd.price}/mo on Salesforce Agentforce)
+
+Write a SHORT business plan with these exact HTML sections (use these heading styles):
+<h3>🎯 Problem & Opportunity</h3> - 2-3 sentences on their specific pain
+<h3>🤖 Recommended Agent Solution</h3> - what the agent does for THIS business specifically
+<h3>📊 ROI Calculation</h3> - concrete numbers: time saved, cost saved, revenue gained (use ₺ and hours)
+<h3>🗓️ 90-Day Rollout Plan</h3> - Week 1-2, Week 3-4, Month 2, Month 3 milestones
+<h3>⚠️ Top 3 Risks & Mitigations</h3> - brief risk table
+
+Keep it punchy. Use <strong> for key numbers. Total ~400 words. No intro preamble.`
+    : `Sen Türk KOBİ'lere AI otomasyon danışmanlığı yapan bir iş danışmanısın. Şu işletme için kısa, pratik bir AI agent iş planı yaz:
+
+İşletme: ${bizName || sectorName[sector]}
+Sektör: ${sectorName[sector]}
+Ana sorun: ${problemName[problem]}
+Büyüklük: ${sizeName[size]}
+Aylık hacim: ${volumeName[volume]}
+Önerilen ürün: ${mainProd.name.tr} (${mainProd.price}/ay, Salesforce Agentforce üzerinde)
+
+Aşağıdaki HTML bölümleriyle KISA bir iş planı yaz:
+<h3>🎯 Sorun & Fırsat</h3> - bu işletmenin özel ağrı noktası, 2-3 cümle
+<h3>🤖 Önerilen Agent Çözümü</h3> - agent'ın BU işletme için spesifik olarak ne yapacağı
+<h3>📊 ROI Hesabı</h3> - somut rakamlar: kazanılan zaman, tasarruf edilen maliyet, kazanılan gelir (₺ ve saat cinsinden)
+<h3>🗓️ 90 Günlük Uygulama Planı</h3> - Hafta 1-2, Hafta 3-4, Ay 2, Ay 3 milestonları
+<h3>⚠️ Top 3 Risk & Önlem</h3> - kısa risk tablosu
+
+Net ve özlü yaz. Kilit rakamları <strong> ile vurgula. Toplam ~400 kelime. Giriş yok, direkt başla.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages:[{ role:'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const planText = data.content?.[0]?.text || '';
+    bizPlanHTML = planText;
+    showResultWithPlan(sector, mainProd, bizName, sectorName[sector]);
+  } catch(e) {
+    // Fallback if API fails
+    bizPlanHTML = lang==='tr'
+      ? `<h3>🎯 Sorun & Fırsat</h3><p>İşletmeniz için AI agent analizi tamamlandı. Detaylı raporu almak için aşağıdan devam edin.</p>`
+      : `<h3>🎯 Problem & Opportunity</h3><p>AI agent analysis complete. Continue below to receive your full report.</p>`;
+    showResultWithPlan(sector, mainProd, bizName, sectorName[sector]);
+  }
+}
+
+function showResultWithPlan(sector, mainProd, bizName, sectorNameStr) {
+  const el = document.getElementById('wzResult');
+  const displayName = bizName || sectorNameStr;
+  const tr = lang === 'tr';
+
+  // Split plan into free (first section) + locked (rest)
+  const sections = bizPlanHTML.split(/<h3>/i).filter(Boolean);
+  const freeHTML  = sections[0] ? '<h3>' + sections[0] : bizPlanHTML.substring(0, 320) + '…';
+  const lockedHTML = sections.slice(1).map(s => '<h3>' + s).join('');
+
+  // Quick ROI estimate based on volume answer
+  const volMap = { az:'~₺3.000', orta:'~₺8.500', yuksek:'~₺22.000', cok_yuksek:'~₺55.000' };
+  const roiEst = volMap[wzAnswers[3]] || '~₺8.500';
+  const timeEst = { az:'2 saat', orta:'6 saat', yuksek:'18 saat', cok_yuksek:'45 saat' }[wzAnswers[3]] || '6 saat';
+  const sizeLabel = { solo:'1–3 kişi', kobi:'4–50 çalışan', buyuk:'50+ çalışan' }[wzAnswers[2]] || '';
+
+  // What's inside locked section (preview bullets)
+  const lockedItems = tr
+    ? ['📊 Ay bazlı ROI hesabı ve geri ödeme süresi','🗓️ 90 günlük adım adım uygulama planı','⚠️ Risk analizi ve önlem stratejileri','🔗 Entegrasyon haritası (API, WhatsApp, ERP)','💬 İlk hafta için 5 hazır agent talimatı']
+    : ['📊 Month-by-month ROI and payback period','🗓️ 90-day step-by-step rollout plan','⚠️ Risk analysis and mitigation strategies','🔗 Integration map (API, WhatsApp, ERP)','💬 5 ready-made agent instructions for week 1'];
+
+  el.innerHTML = `
+  <div class="plan-result-shell">
+
+    <!-- ── META BAR ── -->
+    <div class="plan-meta-bar">
+      <div class="plan-meta-chip">${mainProd.icon} ${tr ? mainProd.name.tr : mainProd.name.en}</div>
+      <div class="plan-meta-title">${displayName} ${tr ? '— Kişisel AI Agent İş Planı' : '— Personal AI Agent Business Plan'}</div>
+      <div class="plan-meta-badge">✦ ${tr ? 'Claude AI ile üretildi' : 'Generated by Claude AI'}</div>
+    </div>
+
+    <!-- ── FREE PREVIEW ── -->
+    <div class="plan-free-section">
+
+      <!-- Stat row above content -->
+      <div class="plan-stat-row">
+        <div class="plan-stat">
+          <div class="plan-stat-val">${roiEst}</div>
+          <div class="plan-stat-label">${tr ? 'tahmini aylık tasarruf' : 'estimated monthly saving'}</div>
+        </div>
+        <div class="plan-stat">
+          <div class="plan-stat-val">${timeEst}</div>
+          <div class="plan-stat-label">${tr ? 'haftalık geri kazanılan süre' : 'weekly time recovered'}</div>
+        </div>
+        <div class="plan-stat">
+          <div class="plan-stat-val">${mainProd.price}</div>
+          <div class="plan-stat-label">${tr ? `agent maliyeti / ay · ${sizeLabel}` : `agent cost / mo · ${sizeLabel}`}</div>
+        </div>
+      </div>
+
+      ${freeHTML}
+    </div>
+
+    <!-- ── BLURRED LOCKED CONTENT ── -->
+    <div class="plan-locked-wrapper">
+      <div class="plan-locked-blur">${lockedHTML}</div>
+    </div>
+
+    <!-- ── PAYWALL ── -->
+    <div class="plan-paywall-outer">
+      <div class="plan-paywall-card" id="planPaywall">
+
+        <!-- Social proof -->
+        <div class="pw-social">
+          <div class="pw-social-item"><span class="pw-stars">★★★★★</span> <strong>4.9</strong> ${tr ? 'müşteri puanı' : 'customer rating'}</div>
+          <div class="pw-social-item">🏢 <strong>120+</strong> ${tr ? 'Türk işletmesi kurulum tamamladı' : 'Turkish businesses deployed'}</div>
+          <div class="pw-social-item">⚡ ${tr ? 'Ortalama <strong>3 haftada</strong> canlı' : 'Average <strong>3 weeks</strong> to live'}</div>
+        </div>
+
+        <div class="pw-headline">
+          ${tr
+            ? `${displayName} için planın geri kalanı kilitli`
+            : `The rest of ${displayName}'s plan is locked`}
+        </div>
+        <div class="pw-sub">
+          ${tr
+            ? `ROI hesabı, 90 günlük uygulama takvimi, entegrasyon haritası ve hazır agent talimatlarına erişmek için aşağıdan devam edin. Sektörünüze özel, Claude AI tarafından üretilmiş içerik.`
+            : `Access the ROI breakdown, 90-day rollout timeline, integration map and ready-made agent instructions below. Sector-specific content generated by Claude AI.`}
+        </div>
+
+        <!-- What you get -->
+        <div class="pw-gets">
+          ${lockedItems.map(item => `
+            <div class="pw-get-item">
+              <div class="pw-get-icon">${item.slice(0,2)}</div>
+              <div class="pw-get-text">
+                <strong>${item.slice(3).split(' ').slice(0,3).join(' ')}</strong>
+                <span>${item.slice(3).split(' ').slice(3).join(' ')}</span>
+              </div>
+            </div>`).join('')}
+        </div>
+
+        <!-- Pricing -->
+        <div class="pw-pricing">
+
+          <!-- Tier 1: Plan only -->
+          <div class="pw-plan" onclick="handlePayment('plan')">
+            <div class="pw-plan-name">${tr ? '📄 İş Planı' : '📄 Business Plan'}</div>
+            <div class="pw-plan-price">₺500 <sub>${tr ? 'tek seferlik' : 'one-time'}</sub></div>
+            <ul class="pw-plan-includes">
+              <li>${tr ? 'Tam iş planı PDF' : 'Full business plan PDF'}</li>
+              <li>${tr ? 'ROI & geri ödeme hesabı' : 'ROI & payback calculation'}</li>
+              <li>${tr ? '90 gün takvimi' : '90-day timeline'}</li>
+            </ul>
+            <div class="pw-plan-btn">${tr ? 'Satın Al →' : 'Purchase →'}</div>
+          </div>
+
+          <!-- Tier 2: Full pilot (featured) -->
+          <div class="pw-plan featured" onclick="handlePayment('pilot')">
+            <div class="pw-plan-tag">${tr ? '⚡ EN HIZLI YOL' : '⚡ FASTEST ROUTE'}</div>
+            <div class="pw-plan-name">${tr ? '🚀 Pilot Paketi' : '🚀 Pilot Package'}</div>
+            <div class="pw-plan-price">₺2.500 <sub>${tr ? 'tek seferlik' : 'one-time'}</sub></div>
+            <ul class="pw-plan-includes">
+              <li>${tr ? 'Tam iş planı + tüm ekler' : 'Full plan + all appendices'}</li>
+              <li>${tr ? '1 ay ücretsiz kurulum danışmanlığı' : '1-month free setup consulting'}</li>
+              <li>${tr ? 'Salesforce Agentforce lisans yardımı' : 'Salesforce Agentforce license support'}</li>
+              <li>${tr ? '5 hazır agent talimat seti' : '5 ready-made agent instruction sets'}</li>
+              <li>${tr ? 'WhatsApp entegrasyon kurulumu' : 'WhatsApp integration setup'}</li>
+              <li>${tr ? 'Öncelikli destek (48 saat)' : 'Priority support (48 hrs)'}</li>
+            </ul>
+            <div class="pw-plan-btn">${tr ? 'Hemen Başla →' : 'Start Now →'}</div>
+          </div>
+
+        </div>
+
+        <!-- Guarantee row -->
+        <div class="pw-guarantee">
+          <div class="pw-g-item">🛡️ ${tr ? '<strong>7 gün</strong> iade garantisi' : '<strong>7-day</strong> refund guarantee'}</div>
+          <div class="pw-g-item">🔒 ${tr ? 'KVKK & GDPR uyumlu' : 'KVKK & GDPR compliant'}</div>
+          <div class="pw-g-item">💳 ${tr ? 'Güvenli ödeme' : 'Secure payment'}</div>
+          <div class="pw-g-item">📞 ${tr ? 'İnsan desteği dahil' : 'Human support included'}</div>
+        </div>
+
+        <!-- Demo unlock -->
+        <div style="text-align:center; margin-top:14px;">
+          <button onclick="unlockPlan()" style="font-size:11px; color:rgba(255,255,255,0.2); text-decoration:underline; background:none; border:none; cursor:pointer;">
+            ${tr ? '🔓 Test: planı önizle (demo modu)' : '🔓 Test: preview plan (demo mode)'}
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <div style="text-align:center; margin-top:20px;">
+      <button onclick="wzCurrent=0; wzAnswers=[]; bizPlanHTML=''; renderWizard();"
+        style="font-size:13px; color:rgba(255,255,255,0.35); text-decoration:underline; background:none; border:none; cursor:pointer;">
+        ${tr ? '↩ Farklı bir sektör dene' : '↩ Try a different sector'}
+      </button>
+    </div>
+
+  </div>`;
+}
+
+function handlePayment(tier) {
+  const tr = lang === 'tr';
+  const isFeatured = tier === 'pilot';
+  const price = isFeatured ? '₺2.500' : '₺500';
+  const subject = isFeatured
+    ? (tr ? 'Pilot Paketi Satın Alma' : 'Pilot Package Purchase')
+    : (tr ? 'İş Planı PDF Satın Alma' : 'Business Plan PDF Purchase');
+  const body = tr
+    ? `Merhaba,\n\nPaket: ${isFeatured ? 'Pilot Paketi' : 'İş Planı PDF'} (${price})\nSektör: ${wzAnswers[0]}\nİşletme: ${wzAnswers[4] || '-'}\n\nÖdeme ve kurulum süreci için iletişime geçiyorum.`
+    : `Hello,\n\nPackage: ${isFeatured ? 'Pilot Package' : 'Business Plan PDF'} (${price})\nSector: ${wzAnswers[0]}\nBusiness: ${wzAnswers[4] || '-'}\n\nReaching out to proceed with payment and setup.`;
+
+  const pwEl = document.getElementById('planPaywall');
+  pwEl.innerHTML = `
+    <div class="pw-confirm">
+      <div class="pw-confirm-icon">${isFeatured ? '🚀' : '📄'}</div>
+      <div class="pw-confirm-title">
+        ${tr
+          ? (isFeatured ? 'Pilot Paketi seçtiniz' : 'İş Planı PDF seçtiniz')
+          : (isFeatured ? 'You selected the Pilot Package' : 'You selected the Business Plan PDF')}
+      </div>
+      <div class="pw-confirm-sub">
+        ${tr
+          ? `<strong>${price}</strong> — ${isFeatured
+              ? '24 saat içinde uzman danışmanımız size ulaşır ve kurulum sürecini başlatır.'
+              : 'PDF planınız hazırlanır ve 24 saat içinde e-posta ile iletilir.'}`
+          : `<strong>${price}</strong> — ${isFeatured
+              ? 'Our expert consultant will reach out within 24 hours to begin the setup process.'
+              : 'Your PDF plan will be prepared and emailed within 24 hours.'}`}
+      </div>
+      <a href="mailto:info@agenttr.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}"
+         class="pw-confirm-link">
+        ✉️ ${tr ? 'info@agenttr.org — Şimdi Başlat' : 'info@agenttr.org — Start Now'}
+      </a>
+      <div style="margin-top:16px; font-size:12px; color:rgba(255,255,255,0.25);">
+        ${tr ? 'E-posta gönderdikten sonra 1 iş günü içinde yanıt alırsınız.' : 'You will receive a response within 1 business day of sending the email.'}
+      </div>
+      <div style="margin-top:12px;">
+        <button onclick="unlockPlan()" style="font-size:11px; color:rgba(255,255,255,0.2); text-decoration:underline; background:none; border:none; cursor:pointer;">
+          ${tr ? '🔓 Demo: planı önizle' : '🔓 Demo: preview plan'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function unlockPlan() {
+  const wrapper = document.getElementById('planLockedWrapper') || document.querySelector('.plan-locked-wrapper');
+  if (wrapper) {
+    const sections = bizPlanHTML.split(/<h3>/i).filter(Boolean);
+    const unlockedHTML = sections.slice(1).map(s => '<h3>' + s).join('');
+    wrapper.outerHTML = `<div class="plan-free-section">${unlockedHTML}</div>`;
+  }
+  // Also remove paywall card blur if it exists
+  const pw = document.querySelector('.plan-paywall-outer');
+  if (pw) pw.style.display = 'none';
+}
+
+// ═══════════ SCROLL REVEAL ═══════════
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+
+// ═══════════ SMOOTH SCROLL ═══════════
+function navTo(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ═══════════ INIT ═══════════
+renderCases();
+renderProducts();
+renderFAQ();
+renderWizard();
+updateChatDemo();
+</script>
+</body>
+</html>
