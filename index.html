@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgentTR — Türkiye'nin AI Agent Platformu</title>
-<meta name="description" content="Randevudan belgeye, takipten rapora — tekrar eden her işi AI agent'a devredin. 3 haftada canlı, ilk aydan kârlı.">
+<title>AgentTR — KOBİ ve Kurumsal Şirketler için AI Agent Platformu</title>
+<meta name="description" content="Özel sağlık kliniklerinden kurumsal İK departmanlarına kadar — Türkiye'ye özel kurumsal AI agent platformu.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --ink:#0c0f1a; --ink2:#1a2035; --slate:#2a3450; --mid:#4a5980;
-  --muted:#7a8aaa; --ghost:#b0bdd4; --edge:#e2e8f2; --paper:#f7f9fc; --white:#ffffff;
-  --blue:#2563eb; --blue-l:#3b82f6; --blue-xl:#93c5fd;
-  --cyan:#06b6d4; --violet:#7c3aed; --emerald:#059669; --amber:#d97706; --rose:#e11d48;
-  --sans:'Inter',sans-serif; --display:'Syne',sans-serif; --mono:'JetBrains Mono',monospace;
-  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-xl:28px;
+:root{
+  --ink:#0c0f1a;--slate:#1e2a45;--mid:#4a5980;--muted:#7a8aaa;--ghost:#b0bdd4;--edge:#e4eaf5;--paper:#f6f8fc;--white:#fff;
+  --blue:#2563eb;--cyan:#06b6d4;--violet:#7c3aed;--emerald:#059669;--amber:#d97706;--rose:#e11d48;
+  --wa:#25D366;--wa-dark:#128C7E;--wa-bg:#DCF8C6;
+  --sans:'Inter',sans-serif;--display:'Syne',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:10px;--rl:18px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -22,582 +21,502 @@ body{font-family:var(--sans);background:var(--white);color:var(--ink);overflow-x
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
 ul{list-style:none}
-
-/* LANG */
 .tr-only{display:inline!important}.en-only{display:none!important}
-body.lang-en .tr-only{display:none!important}body.lang-en .en-only{display:inline!important}
 div.tr-only{display:block!important}div.en-only{display:none!important}
+body.lang-en .tr-only{display:none!important}body.lang-en .en-only{display:inline!important}
 body.lang-en div.tr-only{display:none!important}body.lang-en div.en-only{display:block!important}
 
 /* NAV */
-nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--edge);padding:0 40px;display:flex;align-items:center;height:64px;gap:28px}
-.nav-logo{font-family:var(--display);font-weight:800;font-size:20px;color:var(--ink);letter-spacing:-0.5px;flex-shrink:0}
-.nav-logo sup{font-size:10px;font-weight:500;color:var(--blue);vertical-align:super;margin-left:2px}
-.nav-links{display:flex;gap:4px;flex:1}
-.nav-link{font-size:13px;font-weight:500;color:var(--mid);padding:6px 12px;border-radius:8px;transition:all .15s}
-.nav-link:hover{color:var(--ink);background:var(--paper)}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--edge);padding:0 40px;display:flex;align-items:center;height:64px;gap:20px}
+.nav-logo{font-family:var(--display);font-weight:800;font-size:20px;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:6px}
+.nav-logo-dot{width:7px;height:7px;border-radius:50%;background:var(--wa);flex-shrink:0}
+.nav-pills{display:flex;gap:2px;flex:1}
+.nav-pill{font-size:13px;font-weight:500;color:var(--mid);padding:6px 12px;border-radius:7px;transition:all .15s}
+.nav-pill:hover{color:var(--ink);background:var(--paper)}
 .nav-right{display:flex;gap:8px;align-items:center;margin-left:auto}
-.lang-btn{font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid var(--edge);color:var(--mid);background:var(--paper);transition:all .15s}
+.lang-btn{font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:6px;border:1px solid var(--edge);color:var(--mid);background:var(--paper);transition:all .15s;cursor:pointer}
 .lang-btn.active,.lang-btn:hover{border-color:var(--blue);color:var(--blue);background:#eff6ff}
-.nav-cta{font-size:13px;font-weight:600;padding:8px 18px;background:var(--blue);color:var(--white);border-radius:8px;transition:all .15s}
+.nav-cta-ghost{font-size:13px;font-weight:600;padding:8px 16px;border-radius:8px;border:1px solid var(--edge);color:var(--mid);transition:all .15s}
+.nav-cta-ghost:hover{border-color:var(--blue);color:var(--blue)}
+.nav-cta{font-size:13px;font-weight:700;padding:9px 18px;background:var(--blue);color:var(--white);border-radius:8px;transition:all .15s;display:flex;align-items:center;gap:6px}
 .nav-cta:hover{background:#1d4ed8}
-/* urgency badge */
-.nav-urgency{font-family:var(--mono);font-size:10px;background:rgba(217,119,6,0.12);color:var(--amber);border:1px solid rgba(217,119,6,0.3);padding:3px 10px;border-radius:100px;letter-spacing:0.3px}
 
 /* HERO */
 .hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;background:var(--ink)}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 80% 50%,rgba(37,99,235,.2) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 15% 80%,rgba(124,58,237,.12) 0%,transparent 60%),linear-gradient(160deg,#0c0f1a 0%,#111827 100%)}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 80% 50%,rgba(37,99,235,.18) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(124,58,237,.12) 0%,transparent 60%),linear-gradient(160deg,#0c0f1a 0%,#111827 100%)}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%)}
-.hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:80px 40px;width:100%;display:grid;grid-template-columns:1fr 400px;gap:60px;align-items:center}
-@media(max-width:960px){.hero-content{grid-template-columns:1fr}}
-
-/* rotating headlines */
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);padding:6px 14px;border-radius:100px;margin-bottom:20px}
+.hero-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:80px 40px;width:100%}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);padding:6px 14px;border-radius:100px;margin-bottom:28px}
 .hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(6,182,212,.4)}50%{opacity:.8;box-shadow:0 0 0 6px rgba(6,182,212,0)}}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(6,182,212,.5)}50%{opacity:.8;box-shadow:0 0 0 7px rgba(6,182,212,0)}}
+.hero-title{font-family:var(--display);font-size:clamp(34px,4.8vw,64px);font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-2px;margin-bottom:22px;max-width:820px}
+.hero-title .hl-wa{background:linear-gradient(135deg,var(--wa),#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-title .hl-blue{background:linear-gradient(135deg,#60a5fa,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;color:rgba(255,255,255,.5);line-height:1.7;max-width:580px;margin-bottom:36px}
+.hero-tags{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px}
+.hero-tag{font-size:13px;font-weight:500;padding:7px 16px;border-radius:100px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);transition:all .2s;cursor:pointer}
+.hero-tag:hover,.hero-tag.active{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.85)}
+.hero-tag.kobi{border-color:rgba(37,211,102,.3);color:rgba(37,211,102,.8)}
+.hero-tag.kurumsal{border-color:rgba(96,165,250,.3);color:rgba(96,165,250,.8)}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.btn-primary{font-size:15px;font-weight:700;padding:14px 28px;background:var(--blue);color:var(--white);border-radius:var(--r);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px)}
+.btn-outline-light{font-size:14px;font-weight:500;padding:14px 24px;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);border-radius:var(--r);transition:all .2s}
+.btn-outline-light:hover{border-color:rgba(255,255,255,.4);color:var(--white)}
+.hero-scarcity{font-family:var(--mono);font-size:11px;color:var(--amber);display:flex;align-items:center;gap:6px}
+.hero-scarcity::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse-a 2s infinite}
+@keyframes pulse-a{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.5)}50%{box-shadow:0 0 0 6px rgba(217,119,6,0)}}
+.hero-stat-bar{display:flex;gap:32px;flex-wrap:wrap;padding-top:36px;border-top:1px solid rgba(255,255,255,.07);margin-top:20px}
+.hstat-val{font-family:var(--display);font-size:26px;font-weight:800;color:var(--white);line-height:1;margin-bottom:4px}
+.hstat-label{font-size:12px;color:rgba(255,255,255,.35)}
 
-.hero-title{font-family:var(--display);font-size:clamp(32px,4.5vw,60px);font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-2px;margin-bottom:20px}
-.hero-title .hl{background:linear-gradient(135deg,var(--blue-l),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:17px;font-weight:400;color:rgba(255,255,255,.55);line-height:1.7;max-width:540px;margin-bottom:10px}
-.hero-proof{font-size:14px;color:rgba(255,255,255,.35);margin-bottom:32px;display:flex;align-items:center;gap:6px}
-.hero-proof strong{color:rgba(255,255,255,.6)}
-.hero-proof::before{content:'★★★★★';color:var(--amber);font-size:12px;letter-spacing:1px}
+/* SECTION BASE */
+.section{padding:88px 40px}
+.section-inner{max-width:1200px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-family:var(--display);font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-1px;line-height:1.1;color:var(--ink);margin-bottom:16px}
+.section-sub{font-size:17px;color:var(--muted);line-height:1.65;max-width:560px;margin-bottom:0}
 
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px}
-.btn-primary{font-size:15px;font-weight:700;padding:15px 28px;background:var(--blue);color:var(--white);border-radius:var(--r-md);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
-.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 8px 24px rgba(37,99,235,.4)}
-.btn-ghost{font-size:14px;font-weight:500;padding:15px 24px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65);border-radius:var(--r-md);transition:all .2s}
-.btn-ghost:hover{border-color:rgba(255,255,255,.3);color:var(--white)}
-.btn-scarcity{font-size:11px;font-family:var(--mono);color:var(--amber);display:flex;align-items:center;gap:6px;margin-top:12px}
-.btn-scarcity::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite}
+/* LIVE WA DEMOS */
+.demos-section{background:var(--paper)}
+.demos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px}
+.demo-card{border-radius:var(--rl);overflow:hidden;border:1px solid var(--edge);background:var(--white);transition:all .2s}
+.demo-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.09);transform:translateY(-3px)}
+.demo-card-header{padding:16px 20px;border-bottom:1px solid var(--edge);display:flex;align-items:center;gap:10px}
+.demo-card-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.demo-card-title{font-size:14px;font-weight:700;color:var(--ink)}
+.demo-card-badge{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:100px;margin-left:auto;flex-shrink:0}
+/* WA phone inside demo */
+.wa-mini{background:#0b141a;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:260px}
+.wm{max-width:86%;padding:8px 11px;border-radius:7px;font-size:12.5px;line-height:1.5}
+.wm.in{background:#202c33;color:rgba(255,255,255,.85);align-self:flex-start;border-radius:0 7px 7px 7px}
+.wm.out{background:#005c4b;color:rgba(255,255,255,.9);align-self:flex-end;border-radius:7px 0 7px 7px}
+.wm.agent{background:#1a2b22;border-left:2px solid var(--wa);align-self:flex-start;border-radius:0 7px 7px 7px;color:rgba(255,255,255,.8)}
+.wm-time{font-size:10px;color:rgba(255,255,255,.25);text-align:right;margin-top:2px}
+.wm-label{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.2);margin-bottom:2px}
+.demo-card-footer{padding:14px 20px;border-top:1px solid var(--edge);display:flex;justify-content:space-between;align-items:center}
+.demo-metric{display:flex;gap:8px}
+.dm-pill{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:100px;background:var(--paper);border:1px solid var(--edge);color:var(--mid)}
+.dm-pill.green{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
 
-/* hero stats */
-.hero-stats{display:flex;gap:32px;flex-wrap:wrap;padding-top:32px;border-top:1px solid rgba(255,255,255,.08)}
-.stat-item{}
-.stat-val{font-family:var(--display);font-size:26px;font-weight:800;color:var(--white);line-height:1;margin-bottom:4px}
-.stat-label{font-size:12px;color:rgba(255,255,255,.35);line-height:1.4;max-width:100px}
+/* SPLIT: KOBI + KURUMSAL */
+.split-section{background:var(--white)}
+.split-tabs{display:flex;gap:4px;background:var(--paper);border:1px solid var(--edge);border-radius:12px;padding:4px;width:fit-content;margin:0 auto 44px}
+.split-tab{font-size:14px;font-weight:600;padding:9px 24px;border-radius:9px;color:var(--mid);transition:all .15s;cursor:pointer}
+.split-tab.active{background:var(--ink);color:var(--white)}
+.split-view{display:none}
+.split-view.active{display:block}
 
-/* hero right panel — live feed */
-.hero-panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-xl);padding:24px;display:flex;flex-direction:column;gap:0}
-@media(max-width:960px){.hero-panel{display:none}}
-.hp-label{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px}
-.hp-feed{display:flex;flex-direction:column;gap:0}
-.hp-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.hp-item:last-child{border-bottom:none}
-.hp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.hp-dot.active{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
-.hp-dot.pending{background:var(--amber);box-shadow:0 0 0 3px rgba(217,119,6,.2)}
-.hp-text{flex:1}
-.hp-sector{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.5px}
-.hp-action{font-size:13px;color:rgba(255,255,255,.8);margin-top:2px}
-.hp-time{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.25)}
-.hp-summary{margin-top:16px;padding:14px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.2);border-radius:var(--r-sm)}
-.hp-sum-val{font-family:var(--display);font-size:22px;font-weight:800;color:var(--blue-xl);margin-bottom:2px}
-.hp-sum-label{font-size:12px;color:rgba(255,255,255,.4)}
+/* KOBI - Case filter */
+.case-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px}
+.cf{font-size:13px;font-weight:500;padding:7px 16px;border-radius:100px;border:1.5px solid var(--edge);color:var(--mid);background:var(--white);transition:all .15s;cursor:pointer}
+.cf:hover{border-color:var(--blue);color:var(--blue)}
+.cf.active{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.cases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.case-card{background:var(--white);border:1px solid var(--edge);border-radius:14px;padding:20px;transition:all .2s}
+.case-card:hover{border-color:rgba(37,99,235,.25);box-shadow:0 6px 24px rgba(37,99,235,.07)}
+.case-icon{font-size:28px;margin-bottom:12px}
+.case-name{font-family:var(--display);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.case-desc{font-size:13.5px;color:var(--mid);line-height:1.65;margin-bottom:14px}
+.case-metrics{display:flex;gap:8px;flex-wrap:wrap}
+.cmet{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:100px;background:var(--paper);border:1px solid var(--edge);color:var(--mid)}
 
-/* PAIN SECTION */
-.pain-section{background:var(--paper);padding:80px 40px}
-.pain-inner{max-width:1200px;margin:0 auto}
-.pain-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:48px}
-.pain-card{background:var(--white);border:1px solid var(--edge);border-radius:var(--r-lg);padding:24px;position:relative;overflow:hidden;transition:all .2s}
-.pain-card:hover{border-color:var(--blue-l);transform:translateY(-2px);box-shadow:0 4px 24px rgba(37,99,235,.08)}
-.pain-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-color,var(--blue));opacity:0;transition:opacity .2s}
-.pain-card:hover::before{opacity:1}
-.pain-cost{font-family:var(--display);font-size:32px;font-weight:800;color:var(--rose);margin-bottom:4px;line-height:1}
-.pain-cost-label{font-size:12px;color:var(--muted);margin-bottom:16px;font-family:var(--mono)}
-.pain-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px}
-.pain-desc{font-size:13.5px;color:var(--mid);line-height:1.6;margin-bottom:14px}
-.pain-after{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--emerald)}
-.pain-after::before{content:'✓';display:inline-flex;width:18px;height:18px;border-radius:50%;background:#dcfce7;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+/* KURUMSAL - Dept grid */
+.dept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.dept-card{background:var(--white);border:1.5px solid var(--edge);border-radius:14px;padding:22px;transition:all .2s;position:relative}
+.dept-card:hover{border-color:rgba(37,99,235,.3);box-shadow:0 8px 28px rgba(0,0,0,.07);transform:translateY(-2px)}
+.dept-card-icon{font-size:28px;margin-bottom:12px}
+.dept-card-dept{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:6px}
+.dept-card-name{font-family:var(--display);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.dept-card-desc{font-size:13.5px;color:var(--mid);line-height:1.65;margin-bottom:16px}
+.dept-card-agents{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.dca{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--slate)}
+.dca::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--wa);flex-shrink:0}
+.dept-card-wa{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--wa-dark);background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);padding:3px 10px;border-radius:100px}
 
-/* TESTIMONIALS */
-.social-section{background:var(--white);padding:80px 40px}
-.social-inner{max-width:1200px;margin:0 auto}
-.logo-strip{display:flex;gap:32px;align-items:center;flex-wrap:wrap;margin:40px 0;padding:24px 0;border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)}
-.logo-item{font-family:var(--display);font-size:15px;font-weight:700;color:var(--ghost);letter-spacing:-0.5px;transition:color .2s}
-.logo-item:hover{color:var(--mid)}
-.testimonials{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:40px}
-.tcard{background:var(--paper);border:1px solid var(--edge);border-radius:var(--r-lg);padding:24px;transition:all .2s}
-.tcard:hover{border-color:var(--blue-l);background:var(--white)}
-.tcard-stars{color:var(--amber);font-size:13px;letter-spacing:2px;margin-bottom:12px}
-.tcard-text{font-size:14px;color:var(--slate);line-height:1.7;margin-bottom:16px;font-style:italic}
-.tcard-text::before{content:'"'}
-.tcard-text::after{content:'"'}
-.tcard-author{display:flex;align-items:center;gap:10px}
-.tcard-avatar{width:36px;height:36px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:var(--white);flex-shrink:0}
-.tcard-name{font-size:13px;font-weight:600;color:var(--ink)}
-.tcard-role{font-size:12px;color:var(--muted)}
-.tcard-result{margin-top:12px;padding:8px 12px;background:#eff6ff;border-radius:6px;font-size:12px;font-family:var(--mono);color:var(--blue)}
+/* PRODUCTS */
+.products-section{background:var(--paper)}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:0}
+.prod-card{background:var(--white);border:1.5px solid var(--edge);border-radius:var(--rl);overflow:hidden;transition:all .2s;display:flex;flex-direction:column}
+.prod-card:hover{border-color:rgba(37,99,235,.3);box-shadow:0 8px 28px rgba(0,0,0,.08);transform:translateY(-2px)}
+.prod-card-top{padding:22px 22px 18px;border-bottom:1px solid var(--edge);background:var(--paper)}
+.prod-card-sector{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:6px}
+.prod-card-icon{font-size:28px;margin-bottom:8px}
+.prod-card-name{font-family:var(--display);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.prod-card-desc{font-size:13px;color:var(--mid);line-height:1.55}
+.prod-card-body{padding:16px 22px 20px;flex:1;display:flex;flex-direction:column}
+.prod-card-features{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;flex:1}
+.pcf{font-size:13px;color:var(--slate);display:flex;align-items:center;gap:7px}
+.pcf::before{content:'';width:14px;height:14px;border-radius:50%;background:rgba(37,211,102,.15);flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='%23059669'%3E%3Cpath d='M5.5 10L2 6.5l1.5-1.5 2 2 5-5L12 3.5 5.5 10z'/%3E%3C/svg%3E");background-size:contain}
+.prod-card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--edge)}
+.prod-price{font-family:var(--display);font-size:20px;font-weight:800;color:var(--ink)}
+.prod-price span{font-size:12px;font-weight:400;color:var(--muted);font-family:var(--sans)}
+.prod-btn{font-size:12px;font-weight:700;padding:8px 14px;border-radius:7px;background:var(--blue);color:var(--white);transition:all .15s}
+.prod-btn:hover{background:#1d4ed8}
 
-/* ROI SECTION */
-.roi-section{background:var(--ink);padding:80px 40px;position:relative;overflow:hidden}
-.roi-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 100% 50%,rgba(37,99,235,.15) 0%,transparent 60%)}
-.roi-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto}
-.roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:48px}
-@media(max-width:800px){.roi-grid{grid-template-columns:1fr}}
-.roi-calc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-xl);padding:32px}
-.roi-calc-label{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
-.roi-input-row{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.roi-input-label{font-size:12px;color:rgba(255,255,255,.4)}
-.roi-range{width:100%;accent-color:var(--blue);height:4px}
-.roi-input-val{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--white)}
-.roi-result{margin-top:24px;padding:20px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.2);border-radius:var(--r-md)}
-.roi-result-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.roi-res-item{}
-.roi-res-val{font-family:var(--display);font-size:28px;font-weight:800;margin-bottom:4px;line-height:1}
-.roi-res-label{font-size:11px;color:rgba(255,255,255,.4);line-height:1.4}
-
-.roi-steps{display:flex;flex-direction:column;gap:20px}
-.roi-step{display:flex;gap:16px;align-items:flex-start}
-.roi-step-num{width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:14px;font-weight:700;color:var(--blue-xl);flex-shrink:0}
-.roi-step-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px}
-.roi-step-desc{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6}
-.roi-step-timeline{font-family:var(--mono);font-size:11px;color:var(--cyan);margin-top:4px}
-
-/* HOW SECTION */
-.how-section{background:var(--paper);padding:80px 40px}
-.how-inner{max-width:1200px;margin:0 auto}
-.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative}
-@media(max-width:900px){.steps-row{grid-template-columns:1fr 1fr;gap:24px}}
-.steps-row::before{content:'';position:absolute;top:28px;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--blue-xl),var(--cyan),var(--blue-xl),transparent);z-index:0}
-@media(max-width:900px){.steps-row::before{display:none}}
-.step-card{position:relative;z-index:1;padding:0 24px;text-align:center}
-.step-num{width:56px;height:56px;border-radius:50%;border:2px solid var(--edge);background:var(--white);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:20px;font-weight:800;color:var(--blue);margin:0 auto 20px;transition:all .2s}
-.step-card:hover .step-num{background:var(--blue);color:var(--white);border-color:var(--blue);box-shadow:0 0 0 8px rgba(37,99,235,.1)}
-.step-title{font-family:var(--display);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
-.step-desc{font-size:13.5px;color:var(--muted);line-height:1.6}
-
-/* USE CASES */
-.cases-section{background:var(--white);padding:80px 40px}
-.cases-inner{max-width:1200px;margin:0 auto}
-.cases-filter{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 32px}
-.filter-btn{font-size:13px;font-weight:500;padding:7px 16px;border-radius:100px;border:1px solid var(--edge);color:var(--mid);background:var(--white);transition:all .15s}
-.filter-btn:hover{border-color:var(--blue-l);color:var(--blue)}
-.filter-btn.active{background:var(--blue);border-color:var(--blue);color:var(--white)}
-.cases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-.case-card{background:var(--paper);border:1px solid var(--edge);border-radius:var(--r-lg);padding:24px;transition:all .2s}
-.case-card:hover{border-color:var(--blue-l);box-shadow:0 4px 24px rgba(37,99,235,.08);transform:translateY(-2px)}
-.case-card.hidden{display:none}
-.case-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.case-emoji{width:46px;height:46px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:22px}
-.case-sector{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);margin-bottom:3px}
-.case-name{font-weight:600;font-size:15px;color:var(--ink)}
-.case-problem{font-size:13px;color:var(--rose);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.case-problem::before{content:'⚠';font-size:11px}
-.case-desc{font-size:13.5px;color:var(--mid);line-height:1.6;margin-bottom:14px}
-.case-result{font-size:13px;font-weight:600;color:var(--emerald);display:flex;align-items:center;gap:6px;margin-bottom:10px}
-.case-result::before{content:'→'}
-.case-metrics{display:flex;gap:10px;flex-wrap:wrap}
-.case-metric{font-family:var(--mono);font-size:11px;background:var(--white);padding:4px 10px;border-radius:6px;color:var(--slate);border:1px solid var(--edge)}
+/* HOW */
+.how-section{background:var(--white)}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:52px}
+.how-grid::before{content:'';position:absolute;top:26px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,transparent,var(--edge),transparent)}
+.how-step{padding:0 24px;text-align:center;position:relative;z-index:1}
+.how-num{width:52px;height:52px;border-radius:50%;border:2px solid var(--edge);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 16px;transition:all .2s}
+.how-step:hover .how-num{border-color:var(--blue);box-shadow:0 0 0 8px rgba(37,99,235,.06)}
+.how-step-title{font-family:var(--display);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.how-step-desc{font-size:13px;color:var(--muted);line-height:1.6}
 
 /* WIZARD */
-.wizard-section{background:linear-gradient(160deg,var(--ink) 0%,#111827 100%);padding:80px 40px;position:relative;overflow:hidden}
-.wizard-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 100% 50%,rgba(37,99,235,.15) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 0% 20%,rgba(124,58,237,.1) 0%,transparent 60%)}
-.wizard-inner{position:relative;z-index:1;max-width:900px;margin:0 auto}
-.wizard-shell{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-xl);overflow:hidden;margin-top:48px}
-.wizard-header{background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08);padding:20px 32px;display:flex;align-items:center;gap:16px}
-.wizard-step-indicators{display:flex;gap:8px;flex:1;flex-wrap:wrap}
+.wizard-section{background:linear-gradient(160deg,var(--ink) 0%,#0d1520 100%);padding:88px 40px;position:relative;overflow:hidden}
+.wizard-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 80% 60%,rgba(37,99,235,.15) 0%,transparent 60%)}
+.wizard-inner{position:relative;z-index:1;max-width:800px;margin:0 auto}
+.wizard-shell{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);overflow:hidden;margin-top:44px}
+.wizard-header{background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.08);padding:16px 32px}
+.wsi-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .wsi{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.3)}
-.wsi.done{color:var(--cyan)}.wsi.active{color:var(--white)}
+.wsi.done{color:var(--wa)}.wsi.active{color:var(--white)}
 .wsi-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:1.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.3);flex-shrink:0}
-.wsi.done .wsi-dot{background:var(--cyan);border-color:var(--cyan);color:var(--ink)}
+.wsi.done .wsi-dot{background:var(--wa);border-color:var(--wa);color:var(--ink)}
 .wsi.active .wsi-dot{background:var(--blue);border-color:var(--blue);color:var(--white)}
 .wsi-line{flex:1;height:1px;background:rgba(255,255,255,.08);min-width:16px}
-.wsi.done .wsi-line{background:var(--cyan)}
-.wizard-body{padding:36px 32px 28px;min-height:300px}
+.wsi.done .wsi-line{background:rgba(37,211,102,.4)}
+.wizard-body{padding:36px 32px 28px;min-height:280px}
 .wz-step{display:none}.wz-step.active{display:block}
 .wz-q{font-family:var(--display);font-size:22px;font-weight:700;color:var(--white);margin-bottom:6px}
 .wz-hint{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:28px}
-.wz-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px}
-.wz-opt{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:16px 18px;text-align:left;color:var(--white);transition:all .15s;display:flex;flex-direction:column;gap:6px}
-.wz-opt:hover{border-color:var(--blue-l);background:rgba(37,99,235,.1)}
-.wz-opt.selected{border-color:var(--cyan);background:rgba(6,182,212,.1)}
-.wz-opt-icon{font-size:24px}
-.wz-opt-label{font-weight:600;font-size:14px}
-.wz-opt-sub{font-size:11px;color:rgba(255,255,255,.4);line-height:1.4}
-.wz-text-input{width:100%;padding:16px 20px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:var(--r-md);color:var(--white);font-family:var(--sans);font-size:16px;outline:none;transition:border-color .15s}
-.wz-text-input:focus{border-color:var(--cyan);background:rgba(6,182,212,.06)}
+.wz-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.wz-opt{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r);padding:14px 16px;text-align:left;color:var(--white);transition:all .15s;display:flex;flex-direction:column;gap:6px;cursor:pointer}
+.wz-opt:hover{border-color:var(--blue);background:rgba(37,99,235,.08)}
+.wz-opt.selected{border-color:var(--blue);background:rgba(37,99,235,.12)}
+.wz-opt-icon{font-size:22px}
+.wz-opt-label{font-weight:600;font-size:13.5px}
+.wz-opt-sub{font-size:11px;color:rgba(255,255,255,.4)}
+.wz-text-input{width:100%;padding:14px 18px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:var(--r);color:var(--white);font-family:var(--sans);font-size:15px;outline:none;transition:border-color .15s}
+.wz-text-input:focus{border-color:var(--blue)}
 .wz-text-input::placeholder{color:rgba(255,255,255,.25)}
-.wizard-footer{padding:16px 32px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.08)}
-.wz-back{font-size:14px;color:rgba(255,255,255,.4);padding:10px 20px;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.1);transition:all .15s}
+.wizard-footer{padding:14px 32px 22px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.08)}
+.wz-back{font-size:14px;color:rgba(255,255,255,.4);padding:10px 20px;border-radius:var(--r);border:1px solid rgba(255,255,255,.1);transition:all .15s}
 .wz-back:hover{color:var(--white);border-color:rgba(255,255,255,.25)}
-.wz-next{font-size:14px;font-weight:600;padding:10px 28px;border-radius:var(--r-sm);background:var(--blue);color:var(--white);transition:all .15s;display:flex;align-items:center;gap:8px}
+.wz-next{font-size:14px;font-weight:700;padding:10px 26px;border-radius:var(--r);background:var(--blue);color:var(--white);transition:all .15s;display:flex;align-items:center;gap:8px}
 .wz-next:hover{background:#1d4ed8}
 .wz-next:disabled{opacity:.35;cursor:not-allowed}
-
-/* PLAN RESULT */
 .wz-result{display:none}.wz-result.active{display:block}
-.plan-meta-bar{display:flex;align-items:center;gap:12px;background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:var(--r-md) var(--r-md) 0 0;padding:14px 20px;flex-wrap:wrap}
-.plan-meta-chip{font-family:var(--mono);font-size:11px;color:var(--cyan);background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);padding:3px 10px;border-radius:100px}
-.plan-meta-title{font-family:var(--display);font-size:15px;font-weight:700;color:var(--white);flex:1}
-.plan-meta-badge{font-family:var(--mono);font-size:10px;background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.25);padding:3px 10px;border-radius:100px}
-.plan-free-section{background:rgba(255,255,255,.03);border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08);padding:28px 28px 20px;color:rgba(255,255,255,.82);font-size:14px;line-height:1.8}
-.plan-free-section h3{font-family:var(--display);font-size:13px;font-weight:700;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;margin-top:22px}
-.plan-free-section h3:first-child{margin-top:0}
-.plan-free-section strong{color:var(--white);font-weight:600}
-.plan-free-section p{margin-bottom:10px}
-.plan-free-section ul{padding-left:0;margin-bottom:10px}
-.plan-free-section li{padding:5px 0 5px 18px;position:relative;color:rgba(255,255,255,.7)}
-.plan-free-section li::before{content:'→';position:absolute;left:0;color:var(--cyan);font-size:11px;top:7px}
-.plan-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
-.plan-stat{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);border-radius:var(--r-sm);padding:14px 16px;text-align:center}
-.plan-stat-val{font-family:var(--display);font-size:22px;font-weight:800;color:var(--blue-xl);line-height:1;margin-bottom:4px}
-.plan-stat-label{font-size:11px;color:rgba(255,255,255,.4);line-height:1.3}
-.plan-locked-wrapper{position:relative}
-.plan-locked-blur{padding:20px 28px;color:rgba(255,255,255,.6);font-size:14px;line-height:1.75;filter:blur(6px);user-select:none;pointer-events:none;background:rgba(255,255,255,.02);border-left:1px solid rgba(255,255,255,.06);border-right:1px solid rgba(255,255,255,.06);max-height:160px;overflow:hidden}
-.plan-locked-blur h3{font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
-
-/* PAYWALL */
-.plan-paywall-outer{background:linear-gradient(180deg,rgba(10,13,26,0) 0%,rgba(10,13,26,1) 28%);padding:0}
-.plan-paywall-card{background:rgba(15,20,40,.98);border:1px solid rgba(255,255,255,.1);border-top:2px solid var(--cyan);border-radius:0 0 var(--r-lg) var(--r-lg);padding:32px 28px 28px}
-.pw-social{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
-.pw-social-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.45)}
+/* Plan result */
+.plan-meta-bar{display:flex;align-items:center;gap:12px;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);border-radius:var(--r) var(--r) 0 0;padding:14px 22px;flex-wrap:wrap}
+.plan-chip{font-family:var(--mono);font-size:11px;color:#93c5fd;background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);padding:3px 10px;border-radius:100px}
+.plan-badge{font-family:var(--mono);font-size:10px;background:rgba(6,182,212,.15);color:#67e8f9;border:1px solid rgba(6,182,212,.25);padding:3px 10px;border-radius:100px}
+.plan-free{background:rgba(255,255,255,.03);border-left:1px solid rgba(255,255,255,.07);border-right:1px solid rgba(255,255,255,.07);padding:26px 26px 18px;color:rgba(255,255,255,.82);font-size:14px;line-height:1.8}
+.plan-free h3{font-family:var(--display);font-size:11px;font-weight:700;color:#93c5fd;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;margin-top:20px}
+.plan-free h3:first-child{margin-top:0}
+.plan-free strong{color:var(--white)}
+.plan-free p{margin-bottom:8px}
+.plan-free ul{margin-bottom:8px}
+.plan-free li{padding:3px 0 3px 16px;position:relative;color:rgba(255,255,255,.7)}
+.plan-free li::before{content:'→';position:absolute;left:0;color:#60a5fa;font-size:11px;top:5px}
+.plan-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.plan-stat{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);border-radius:8px;padding:12px;text-align:center}
+.plan-stat-val{font-family:var(--display);font-size:20px;font-weight:800;color:#60a5fa;line-height:1;margin-bottom:3px}
+.plan-stat-lbl{font-size:11px;color:rgba(255,255,255,.35)}
+.plan-locked-blur{padding:18px 26px;color:rgba(255,255,255,.5);font-size:14px;line-height:1.75;filter:blur(5px);user-select:none;pointer-events:none;background:rgba(255,255,255,.02);border-left:1px solid rgba(255,255,255,.05);border-right:1px solid rgba(255,255,255,.05);max-height:140px;overflow:hidden}
+.pw-gradient{background:linear-gradient(180deg,rgba(10,13,26,0) 0%,rgba(10,13,26,1) 30%)}
+.pw-card{background:rgba(12,15,26,.97);border:1px solid rgba(255,255,255,.1);border-top:2px solid var(--blue);border-radius:0 0 var(--rl) var(--rl);padding:28px 26px}
+.pw-social{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.pw-social-item{font-size:12px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px}
 .pw-social-item strong{color:var(--white)}
-.pw-stars{color:#fbbf24;font-size:12px;letter-spacing:1px}
-.pw-headline{font-family:var(--display);font-size:20px;font-weight:800;color:var(--white);margin-bottom:6px;line-height:1.2}
-.pw-sub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:20px;line-height:1.6}
-.pw-gets{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
-@media(max-width:600px){.pw-gets{grid-template-columns:1fr}}
-.pw-get-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 12px}
-.pw-get-icon{font-size:16px;flex-shrink:0;margin-top:1px}
-.pw-get-text strong{display:block;color:var(--white);font-size:12px;margin-bottom:1px}
-.pw-get-text span{font-size:11px;color:rgba(255,255,255,.4)}
-.pw-pricing{display:grid;grid-template-columns:1fr 1.6fr;gap:12px;margin-bottom:16px}
-@media(max-width:600px){.pw-pricing{grid-template-columns:1fr}}
-.pw-plan{border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:20px 18px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:6px;background:rgba(255,255,255,.03);position:relative}
+.pw-headline{font-family:var(--display);font-size:19px;font-weight:800;color:var(--white);margin-bottom:6px}
+.pw-sub{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:18px;line-height:1.6}
+.pw-gets{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.pw-get{display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:9px 11px}
+.pw-get-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.pw-get-txt strong{display:block;color:var(--white);font-size:12px;margin-bottom:1px}
+.pw-get-txt span{font-size:11px;color:rgba(255,255,255,.35)}
+.pw-pricing{display:grid;grid-template-columns:1fr 1.6fr;gap:12px;margin-bottom:14px}
+.pw-plan{border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r);padding:18px 16px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:5px;background:rgba(255,255,255,.03);position:relative}
 .pw-plan:hover{border-color:rgba(255,255,255,.25);transform:translateY(-2px)}
-.pw-plan.featured{border-color:var(--cyan);background:linear-gradient(160deg,rgba(6,182,212,.08) 0%,rgba(37,99,235,.06) 100%);box-shadow:0 0 0 1px rgba(6,182,212,.15),0 8px 32px rgba(6,182,212,.1)}
-.pw-plan-tag{position:absolute;top:-11px;left:18px;background:linear-gradient(90deg,var(--cyan),var(--blue-l));color:var(--ink);font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 12px;border-radius:100px;letter-spacing:.5px}
-.pw-plan-name{font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}
-.pw-plan-price{font-family:var(--display);font-size:30px;font-weight:800;color:var(--white);line-height:1;margin:4px 0}
-.pw-plan-price sub{font-size:13px;font-weight:400;color:rgba(255,255,255,.4);vertical-align:baseline}
-.pw-plan-includes{font-size:12px;color:rgba(255,255,255,.4);line-height:1.5;margin-bottom:6px}
-.pw-plan-includes li{padding:2px 0 2px 14px;position:relative}
-.pw-plan-includes li::before{content:'✓';position:absolute;left:0;color:var(--emerald);font-size:10px;top:4px}
-.pw-plan-btn{display:block;text-align:center;font-size:13px;font-weight:700;padding:10px;border-radius:8px;transition:all .15s;margin-top:auto}
-.pw-plan:not(.featured) .pw-plan-btn{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6)}
-.pw-plan:not(.featured):hover .pw-plan-btn{border-color:rgba(255,255,255,.3);color:var(--white)}
-.pw-plan.featured .pw-plan-btn{background:linear-gradient(90deg,var(--cyan),var(--blue-l));color:var(--ink);box-shadow:0 4px 16px rgba(6,182,212,.3)}
-.pw-guarantee{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
-.pw-g-item{font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px}
-.pw-confirm{text-align:center;padding:32px 20px;background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15);border-radius:var(--r-md)}
-.pw-confirm-icon{font-size:44px;margin-bottom:14px}
-.pw-confirm-title{font-family:var(--display);font-size:20px;font-weight:800;color:var(--white);margin-bottom:8px}
-.pw-confirm-sub{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:22px;line-height:1.6}
-.pw-confirm-link{display:inline-flex;align-items:center;gap:8px;background:#10b981;color:var(--white);font-weight:700;padding:13px 28px;border-radius:10px;font-size:14px;transition:all .15s}
-.pw-confirm-link:hover{background:#059669}
+.pw-plan.feat{border-color:var(--blue);background:rgba(37,99,235,.08)}
+.pw-tag{position:absolute;top:-10px;left:16px;background:linear-gradient(90deg,var(--blue),var(--cyan));color:var(--white);font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 10px;border-radius:100px}
+.pw-plan-name{font-size:13px;font-weight:600;color:rgba(255,255,255,.5)}
+.pw-price{font-family:var(--display);font-size:26px;font-weight:800;color:var(--white);line-height:1;margin:3px 0}
+.pw-price sub{font-size:12px;font-weight:400;color:rgba(255,255,255,.35);vertical-align:baseline}
+.pw-includes{font-size:11px;color:rgba(255,255,255,.35);line-height:1.5}
+.pw-includes li{padding:2px 0 2px 12px;position:relative}
+.pw-includes li::before{content:'✓';position:absolute;left:0;color:#60a5fa;font-size:10px;top:3px}
+.pw-btn{display:block;text-align:center;font-size:13px;font-weight:700;padding:9px;border-radius:7px;transition:all .15s;margin-top:auto}
+.pw-plan:not(.feat) .pw-btn{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5)}
+.pw-plan.feat .pw-btn{background:var(--blue);color:var(--white)}
+.pw-guarantee{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}
+.pw-g{font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:4px}
 
-/* PRODUCTS */
-.products-section{background:var(--paper);padding:80px 40px}
-.products-inner{max-width:1200px;margin:0 auto}
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:48px}
-.prod-card{border:1px solid var(--edge);border-radius:var(--r-lg);overflow:hidden;transition:all .2s;background:var(--white)}
-.prod-card:hover{border-color:transparent;box-shadow:0 8px 32px rgba(0,0,0,.1);transform:translateY(-3px)}
-.prod-card-top{padding:24px 24px 18px;border-bottom:1px solid var(--edge);background:var(--paper)}
-.prod-card-icon{font-size:32px;margin-bottom:12px}
-.prod-card-name{font-family:var(--display);font-size:17px;font-weight:700;color:var(--ink);margin-bottom:4px}
-.prod-card-sector{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
-.prod-card-desc{font-size:13.5px;color:var(--mid);line-height:1.6}
-.prod-card-body{padding:18px 24px}
-.prod-roi-highlight{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.prod-roi-val{font-family:var(--display);font-size:18px;font-weight:800;color:var(--blue)}
-.prod-roi-label{font-size:11px;color:var(--blue);opacity:.7}
-.prod-features{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
-.pf-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--slate)}
-.pf-item::before{content:'';width:16px;height:16px;border-radius:50%;background:#dcfce7;flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2316a34a'%3E%3Cpath d='M6.5 11.5L3 8l1.5-1.5 2 2 5-5L13 5l-6.5 6.5z'/%3E%3C/svg%3E");background-size:contain}
-.prod-price-row{display:flex;justify-content:space-between;align-items:center}
-.prod-price{font-family:var(--display);font-size:20px;font-weight:800;color:var(--ink)}
-.prod-price span{font-size:12px;font-weight:400;color:var(--muted);font-family:var(--sans)}
-.prod-btn{font-size:13px;font-weight:600;padding:9px 18px;border-radius:var(--r-sm);background:var(--blue);color:var(--white);transition:all .15s}
-.prod-btn:hover{background:#1d4ed8}
+/* TESTIMONIALS */
+.testi-section{background:var(--paper)}
+.logo-strip{display:flex;gap:32px;align-items:center;flex-wrap:wrap;margin:36px 0;padding:18px 0;border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)}
+.logo-item{font-family:var(--display);font-size:14px;font-weight:700;color:var(--ghost)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:36px}
+.tcard{background:var(--white);border:1px solid var(--edge);border-radius:14px;padding:22px;transition:all .2s}
+.tcard:hover{border-color:rgba(37,99,235,.2)}
+.tcard-stars{color:#fbbf24;font-size:12px;letter-spacing:2px;margin-bottom:10px}
+.tcard-text{font-size:13.5px;color:var(--slate);line-height:1.7;margin-bottom:14px;font-style:italic}
+.tcard-author{display:flex;align-items:center;gap:10px}
+.tcard-av{width:36px;height:36px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:var(--white);flex-shrink:0}
+.tcard-name{font-size:13px;font-weight:600;color:var(--ink)}
+.tcard-role{font-size:11px;color:var(--muted)}
+.tcard-type{font-family:var(--mono);font-size:10px;color:var(--blue);background:#eff6ff;border:1px solid #bfdbfe;padding:2px 8px;border-radius:100px;margin-top:8px;display:inline-block}
 
 /* FAQ */
-.faq-section{background:var(--white);padding:80px 40px}
+.faq-section{background:var(--white);padding:88px 40px}
 .faq-inner{max-width:1200px;margin:0 auto}
-.faq-list{max-width:760px;margin:48px auto 0;display:flex;flex-direction:column;gap:10px}
-.faq-item{background:var(--paper);border:1px solid var(--edge);border-radius:var(--r-md);overflow:hidden}
-.faq-q{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;cursor:pointer;font-weight:600;font-size:15px;color:var(--ink);transition:all .15s;gap:16px}
-.faq-q:hover{background:var(--white)}
-.faq-arr{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;transition:transform .25s;color:var(--blue);border:1px solid var(--edge)}
+.faq-list{max-width:740px;margin:44px auto 0;display:flex;flex-direction:column;gap:6px}
+.faq-item{border:1px solid var(--edge);border-radius:10px;overflow:hidden}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;font-weight:600;font-size:15px;color:var(--ink);transition:all .15s;gap:16px}
+.faq-q:hover{background:var(--paper)}
+.faq-arr{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:12px;transition:transform .25s;color:var(--blue);border:1px solid var(--edge)}
 .faq-item.open .faq-arr{transform:rotate(180deg);background:var(--blue);color:var(--white);border-color:var(--blue)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .25s;font-size:14px;color:var(--mid);line-height:1.75;padding:0 24px}
-.faq-item.open .faq-a{max-height:300px;padding:0 24px 20px}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .2s;font-size:14px;color:var(--mid);line-height:1.75;padding:0 20px}
+.faq-item.open .faq-a{max-height:300px;padding:0 20px 16px}
 
-/* CTA FOOTER */
-.cta-section{background:linear-gradient(135deg,var(--blue) 0%,#1d4ed8 50%,var(--violet) 100%);padding:96px 40px;text-align:center}
+/* SECURITY */
+.security-section{background:var(--paper);padding:64px 40px}
+.security-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.sec-certs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sec-cert{background:var(--white);border:1px solid var(--edge);border-radius:var(--r);padding:16px;text-align:center}
+.sec-cert-icon{font-size:24px;margin-bottom:8px}
+.sec-cert-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.sec-cert-desc{font-size:11px;color:var(--muted)}
+
+/* CTA */
+.cta-section{background:linear-gradient(135deg,var(--ink) 0%,#1e1b4b 100%);padding:96px 40px;text-align:center}
 .cta-inner{max-width:600px;margin:0 auto}
 .cta-title{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:16px}
-.cta-sub{font-size:17px;color:rgba(255,255,255,.7);margin-bottom:12px;line-height:1.6}
-.cta-urgency{font-family:var(--mono);font-size:12px;color:var(--amber);background:rgba(217,119,6,.15);border:1px solid rgba(217,119,6,.3);padding:6px 16px;border-radius:100px;display:inline-block;margin-bottom:32px}
+.cta-sub{font-size:17px;color:rgba(255,255,255,.55);margin-bottom:12px;line-height:1.65}
+.cta-urgency{font-family:var(--mono);font-size:11px;color:var(--cyan);background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);padding:6px 16px;border-radius:100px;display:inline-block;margin-bottom:32px}
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.cta-white{font-size:15px;font-weight:700;padding:15px 32px;border-radius:var(--r-md);background:var(--white);color:var(--blue);transition:all .15s}
-.cta-white:hover{box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(-1px)}
-.cta-outline{font-size:15px;font-weight:500;padding:15px 28px;border-radius:var(--r-md);border:1.5px solid rgba(255,255,255,.4);color:var(--white);transition:all .15s}
-.cta-outline:hover{border-color:var(--white);background:rgba(255,255,255,.08)}
-
-/* FOOTER */
+.cta-btn-primary{font-size:15px;font-weight:700;padding:15px 32px;border-radius:var(--r);background:var(--blue);color:var(--white);transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+.cta-btn-primary:hover{background:#1d4ed8;transform:translateY(-1px)}
+.cta-btn-outline{font-size:15px;font-weight:500;padding:15px 28px;border-radius:var(--r);border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);transition:all .15s}
+.cta-btn-outline:hover{border-color:rgba(255,255,255,.4);color:var(--white)}
 footer{background:var(--ink);color:rgba(255,255,255,.4);padding:48px 40px 32px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px}
-.footer-brand{font-family:var(--display);font-size:18px;font-weight:800;color:var(--white);margin-bottom:6px}
-.footer-tagline{font-size:13px}
+.footer-brand{font-family:var(--display);font-size:18px;font-weight:800;color:var(--white);margin-bottom:5px}
+.footer-sub{font-size:13px}
 .footer-links{display:flex;gap:24px;font-size:13px;flex-wrap:wrap}
 .footer-links a:hover{color:var(--white)}
-
-/* EYEBROW / SECTION */
-.section-eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
-.section-title{font-family:var(--display);font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-1px;line-height:1.1;color:var(--ink);margin-bottom:16px}
-.section-sub{font-size:17px;color:var(--muted);line-height:1.65;max-width:560px}
-.section-title-light{font-family:var(--display);font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-1px;line-height:1.1;color:var(--white);margin-bottom:16px}
-.section-sub-light{font-size:17px;color:rgba(255,255,255,.45);line-height:1.65;max-width:560px}
-
-/* REVEAL */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
-.reveal.visible{opacity:1;transform:none}
+@media(max-width:900px){.demos-grid,.how-grid{grid-template-columns:1fr 1fr}.security-inner{grid-template-columns:1fr}}
+@media(max-width:640px){.demos-grid,.dept-grid,.cases-grid,.products-grid,.tgrid,.pw-pricing,.pw-gets,.sec-certs{grid-template-columns:1fr}.how-grid{grid-template-columns:1fr 1fr}.hero-title{letter-spacing:-1px}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <div class="nav-logo">AgentTR<sup>AI</sup></div>
-  <div class="nav-links">
-    <a href="javascript:void(0)" onclick="navTo('aciklar')" class="nav-link"><span class="tr-only">Neden Agent?</span><span class="en-only">Why Agent?</span></a>
-    <a href="javascript:void(0)" onclick="navTo('ornekler')" class="nav-link"><span class="tr-only">Örnekler</span><span class="en-only">Use Cases</span></a>
-    <a href="javascript:void(0)" onclick="navTo('wizard')" class="nav-link"><span class="tr-only">İş Planı Al</span><span class="en-only">Get Business Plan</span></a>
-    <a href="javascript:void(0)" onclick="navTo('urunler')" class="nav-link"><span class="tr-only">Ürünler</span><span class="en-only">Products</span></a>
+  <div class="nav-logo"><span class="nav-logo-dot"></span>AgentTR</div>
+  <div class="nav-pills">
+    <a href="javascript:void(0)" onclick="navTo('demos')" class="nav-pill"><span class="tr-only">Örnekler</span><span class="en-only">Examples</span></a>
+    <a href="javascript:void(0)" onclick="navTo('cozumler')" class="nav-pill"><span class="tr-only">Çözümler</span><span class="en-only">Solutions</span></a>
+    <a href="javascript:void(0)" onclick="navTo('urunler')" class="nav-pill"><span class="tr-only">Ürünler</span><span class="en-only">Products</span></a>
+    <a href="javascript:void(0)" onclick="navTo('wizard')" class="nav-pill"><span class="tr-only">Sizi Tanıyalım</span><span class="en-only">Find Your Agent</span></a>
   </div>
   <div class="nav-right">
-    <div class="nav-urgency tr-only">⚡ Bu ay 4 slot kaldı</div>
-    <div class="nav-urgency en-only">⚡ 4 slots left this month</div>
     <button class="lang-btn active" id="btnTR" onclick="setLang('tr')">TR</button>
     <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+    <a href="mailto:info@agenttr.net" class="nav-cta-ghost"><span class="tr-only">İletişim</span><span class="en-only">Contact</span></a>
     <a href="javascript:void(0)" onclick="navTo('wizard')" class="nav-cta">
-      <span class="tr-only">Ücretsiz ROI Hesabı →</span>
-      <span class="en-only">Free ROI Calculator →</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      <span class="tr-only">Agent Bul</span><span class="en-only">Find Agent</span>
     </a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div>
-      <div class="hero-eyebrow">
-        <span class="tr-only">Türkiye'nin AI Agent Platformu</span>
-        <span class="en-only">Turkey's AI Agent Platform</span>
-      </div>
-      <h1 class="hero-title" id="heroTitle">
-        <span class="tr-only">Resepsiyonistiniz haftada <span class="hl">18 saat</span> telefon bekliyor.</span>
-        <span class="en-only">Your receptionist spends <span class="hl">18 hours</span> a week waiting by the phone.</span>
-      </h1>
-      <p class="hero-sub">
-        <span class="tr-only">Bu süreyi sıfıra indiren AI agent 3 haftada canlıya alınır, ilk aydan itibaren maliyetini çıkarır. 120+ Türk işletmesi zaten geçti.</span>
-        <span class="en-only">The AI agent that reduces this to zero goes live in 3 weeks and pays for itself from month one. 120+ Turkish businesses already switched.</span>
-      </p>
-      <p class="hero-proof">
-        <span class="tr-only"><strong>4.9/5</strong> müşteri puanı · <strong>120+</strong> aktif kurulum · Ortalama <strong>₺8.500</strong> aylık tasarruf</span>
-        <span class="en-only"><strong>4.9/5</strong> customer rating · <strong>120+</strong> active deployments · Average <strong>₺8,500</strong> monthly saving</span>
-      </p>
-      <div class="hero-actions">
-        <a href="javascript:void(0)" onclick="navTo('wizard')" class="btn-primary">
-          <span class="tr-only">Ücretsiz ROI hesabı yap — 2 dakika</span>
-          <span class="en-only">Free ROI calculation — 2 minutes</span>
-          →
-        </a>
-        <a href="javascript:void(0)" onclick="navTo('aciklar')" class="btn-ghost">
-          <span class="tr-only">Nasıl çalışır?</span>
-          <span class="en-only">How does it work?</span>
-        </a>
-      </div>
-      <div class="btn-scarcity">
-        <span class="tr-only">Bu ay yalnızca 4 kurulum slotu açık — Kasım kotası dolmadan başlayın</span>
-        <span class="en-only">Only 4 setup slots open this month — start before November quota fills</span>
-      </div>
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="tr-only">Kurumsal AI Agent Platformu · AGENTFORCE TÜRKİYE</span><span class="en-only">Enterprise AI Agent Platform · AGENTFORCE TURKEY</span></div>
+    <h1 class="hero-title">
+      <span class="tr-only"><span class="hl-blue">KOBİ'den kurumsal şirkete</span> —<br>her ihtiyaca özel <span class="hl-wa">AI agent</span></span>
+      <span class="en-only"><span class="hl-blue">From SME to enterprise</span> —<br><span class="hl-wa">AI agents</span> for every need</span>
+    </h1>
+    <p class="hero-sub">
+      <span class="tr-only">Özel sağlık kliniklerinizden Fortune 500 şirketlerin İK departmanlarına kadar — Türk mevzuatına uygun, WhatsApp öncelikli AI agent platformu.</span>
+      <span class="en-only">From private health clinics to Fortune 500 HR departments — AI agent platform compliant with Turkish law, WhatsApp-first, compliant with Turkish law.</span>
+    </p>
+    <div class="hero-tags">
+      <span class="hero-tag kobi">🏥 <span class="tr-only">Özel Klinik</span><span class="en-only">Private Clinic</span></span>
+      <span class="hero-tag kobi">⚖️ <span class="tr-only">Hukuk Bürosu</span><span class="en-only">Law Firm</span></span>
+      <span class="hero-tag kobi">🧮 <span class="tr-only">SMMM Ofisi</span><span class="en-only">CPA Office</span></span>
+      <span class="hero-tag kobi">🏗️ <span class="tr-only">İnşaat</span><span class="en-only">Construction</span></span>
+      <span class="hero-tag kurumsal">👥 <span class="tr-only">Kurumsal İK</span><span class="en-only">Corporate HR</span></span>
+      <span class="hero-tag kurumsal">💰 <span class="tr-only">Mali İşler Dept.</span><span class="en-only">Finance Dept.</span></span>
+      <span class="hero-tag kurumsal">📈 <span class="tr-only">CRM & Satış</span><span class="en-only">CRM & Sales</span></span>
     </div>
-
-    <!-- Live feed panel -->
-    <div class="hero-panel">
-      <div class="hp-label"><span class="tr-only">Canlı agent aktivitesi</span><span class="en-only">Live agent activity</span></div>
-      <div class="hp-feed">
-        <div class="hp-item">
-          <div class="hp-dot active"></div>
-          <div class="hp-text">
-            <div class="hp-sector">SAĞLIK KLİNİĞİ · İSTANBUL</div>
-            <div class="hp-action"><span class="tr-only">Randevu agent: 47 randevu işlendi</span><span class="en-only">Appointment agent: 47 bookings processed</span></div>
-          </div>
-          <div class="hp-time">2 dk önce</div>
-        </div>
-        <div class="hp-item">
-          <div class="hp-dot active"></div>
-          <div class="hp-text">
-            <div class="hp-sector">HUKUK BÜROSU · ANKARA</div>
-            <div class="hp-action"><span class="tr-only">Dava agent: 3 duruşma tarihi uyarıldı</span><span class="en-only">Case agent: 3 hearing alerts sent</span></div>
-          </div>
-          <div class="hp-time">8 dk önce</div>
-        </div>
-        <div class="hp-item">
-          <div class="hp-dot active"></div>
-          <div class="hp-text">
-            <div class="hp-sector">SMMM OFİSİ · İZMİR</div>
-            <div class="hp-action"><span class="tr-only">Beyanname agent: 12 müşteriye bildirim</span><span class="en-only">Tax agent: 12 client notifications sent</span></div>
-          </div>
-          <div class="hp-time">15 dk önce</div>
-        </div>
-        <div class="hp-item">
-          <div class="hp-dot pending"></div>
-          <div class="hp-text">
-            <div class="hp-sector">İNŞAAT FİRMASI · BURSA</div>
-            <div class="hp-action"><span class="tr-only">Hakediş agent: ödeme uyarısı gönderildi</span><span class="en-only">Payment agent: overdue alert dispatched</span></div>
-          </div>
-          <div class="hp-time">22 dk önce</div>
-        </div>
-      </div>
-      <div class="hp-summary">
-        <div class="hp-sum-val">₺284.500</div>
-        <div class="hp-sum-label"><span class="tr-only">bu ay müşterilerimizin toplam tasarrufu</span><span class="en-only">total savings for our clients this month</span></div>
-      </div>
+    <div class="hero-actions">
+      <a href="javascript:void(0)" onclick="navTo('wizard')" class="btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span class="tr-only">Agent Sihirbazını Başlat</span><span class="en-only">Start Agent Wizard</span>
+      </a>
+      <a href="javascript:void(0)" onclick="navTo('demos')" class="btn-outline-light">
+        <span class="tr-only">Canlı Örnekleri Gör →</span><span class="en-only">See Live Examples →</span>
+      </a>
+    </div>
+    <div class="hero-scarcity">
+      <span class="tr-only">Bu ay yalnızca 6 kurulum slotu açık</span>
+      <span class="en-only">Only 6 setup slots open this month</span>
+    </div>
+    <div class="hero-stat-bar">
+      <div><div class="hstat-val">120+</div><div class="hstat-label"><span class="tr-only">aktif kurulum</span><span class="en-only">active deployments</span></div></div>
+      <div><div class="hstat-val">10</div><div class="hstat-label"><span class="tr-only">sektör çözümü</span><span class="en-only">sector solutions</span></div></div>
+      <div><div class="hstat-val">3 hf</div><div class="hstat-label"><span class="tr-only">canlıya alım</span><span class="en-only">time to live</span></div></div>
+      <div><div class="hstat-val">240×</div><div class="hstat-label"><span class="tr-only">Harvey'den ucuz</span><span class="en-only">cheaper than Harvey</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- PAIN SECTION -->
-<section class="pain-section" id="aciklar">
-  <div class="pain-inner">
-    <div class="section-eyebrow"><span class="tr-only">SORUN & MALİYET</span><span class="en-only">PROBLEM & COST</span></div>
-    <h2 class="section-title"><span class="tr-only">Her gün tekrar eden bu işler ne kadara mal oluyor?</span><span class="en-only">How much are these daily repetitive tasks really costing you?</span></h2>
-    <p class="section-sub"><span class="tr-only">Hesabı kim yapıyor? Çoğu işletme maliyeti görmüyor çünkü maaş bordrosuna gömülü. Rakamlar şok edici.</span><span class="en-only">Who's running the numbers? Most businesses don't see the cost because it's buried in payroll. The numbers are shocking.</span></p>
-    <div class="pain-grid reveal" id="painGrid"></div>
-  </div>
-</section>
+<!-- LIVE WA DEMOS -->
+<section class="section demos-section" id="demos">
+  <div class="section-inner">
+    <div class="eyebrow"><span class="tr-only">CANLI ÖRNEKLER</span><span class="en-only">LIVE EXAMPLES</span></div>
+    <h2 class="section-title"><span class="tr-only">WhatsApp'ta gerçek agent konuşmaları</span><span class="en-only">Real agent conversations on WhatsApp</span></h2>
+    <p class="section-sub"><span class="tr-only">Hem KOBİ hem kurumsal senaryolar — aynı platform, aynı altyapı, farklı yapılandırmalar.</span><span class="en-only">Both SME and enterprise scenarios — same platform, same infrastructure, different configurations.</span></p>
+    <div class="demos-grid">
 
-<!-- SOCIAL PROOF -->
-<section class="social-section">
-  <div class="social-inner">
-    <div class="section-eyebrow"><span class="tr-only">MÜŞTERİ SONUÇLARI</span><span class="en-only">CUSTOMER RESULTS</span></div>
-    <h2 class="section-title"><span class="tr-only">120+ işletme tekrar eden işi agent'a devretti</span><span class="en-only">120+ businesses handed off repetitive work to agents</span></h2>
-    <div class="logo-strip">
-      <div class="logo-item">MedPlus Klinik</div>
-      <div class="logo-item">Yılmaz Hukuk</div>
-      <div class="logo-item">Başaran SMMM</div>
-      <div class="logo-item">Özgür İnşaat</div>
-      <div class="logo-item">AlfaLojistik</div>
-      <div class="logo-item">Nobel Akademi</div>
-    </div>
-    <div class="testimonials reveal" id="testimonialsGrid"></div>
-  </div>
-</section>
-
-<!-- ROI SECTION -->
-<section class="roi-section">
-  <div class="roi-bg"></div>
-  <div class="roi-inner">
-    <div class="section-eyebrow" style="color:var(--cyan)"><span class="tr-only">ROI HESABI</span><span class="en-only">ROI CALCULATION</span></div>
-    <h2 class="section-title-light"><span class="tr-only">Sizin için ne kadar kazanır?</span><span class="en-only">How much does it earn for you?</span></h2>
-    <p class="section-sub-light"><span class="tr-only">İşletmenizin verilerini girin — gerçek zamanlı ROI hesabı.</span><span class="en-only">Enter your business data — real-time ROI calculation.</span></p>
-    <div class="roi-grid reveal">
-      <div class="roi-calc">
-        <div class="roi-calc-label"><span class="tr-only">İşletme Verileriniz</span><span class="en-only">Your Business Data</span></div>
-        <div class="roi-input-row">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <span class="roi-input-label"><span class="tr-only">Aylık tekrar eden işlem sayısı</span><span class="en-only">Monthly repetitive transactions</span></span>
-            <span class="roi-input-val" id="volVal">300</span>
-          </div>
-          <input type="range" class="roi-range" min="50" max="2000" value="300" step="50" oninput="calcROI()" id="volSlider">
-        </div>
-        <div class="roi-input-row">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <span class="roi-input-label"><span class="tr-only">İşlem başı ortalama süre (dk)</span><span class="en-only">Average time per transaction (min)</span></span>
-            <span class="roi-input-val" id="timeVal">12</span>
-          </div>
-          <input type="range" class="roi-range" min="3" max="60" value="12" step="1" oninput="calcROI()" id="timeSlider">
-        </div>
-        <div class="roi-input-row">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <span class="roi-input-label"><span class="tr-only">Çalışan saatlik maliyet (₺)</span><span class="en-only">Employee hourly cost (₺)</span></span>
-            <span class="roi-input-val" id="costVal">₺150</span>
-          </div>
-          <input type="range" class="roi-range" min="80" max="500" value="150" step="10" oninput="calcROI()" id="costSlider">
-        </div>
-        <div class="roi-result">
-          <div class="roi-result-row">
-            <div class="roi-res-item">
-              <div class="roi-res-val" id="roiSaving" style="color:#93c5fd">₺9.000</div>
-              <div class="roi-res-label"><span class="tr-only">aylık tasarruf</span><span class="en-only">monthly saving</span></div>
-            </div>
-            <div class="roi-res-item">
-              <div class="roi-res-val" id="roiTime" style="color:#6ee7b7">60 saat</div>
-              <div class="roi-res-label"><span class="tr-only">kazanılan süre</span><span class="en-only">time recovered</span></div>
-            </div>
-            <div class="roi-res-item">
-              <div class="roi-res-val" id="roiPayback" style="color:#fcd34d">3. hafta</div>
-              <div class="roi-res-label"><span class="tr-only">geri dönüş süresi</span><span class="en-only">payback period</span></div>
-            </div>
-            <div class="roi-res-item">
-              <div class="roi-res-val" id="roiYear" style="color:#c4b5fd">₺108K</div>
-              <div class="roi-res-label"><span class="tr-only">yıllık net kazanım</span><span class="en-only">annual net gain</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="roi-steps">
-        <div class="roi-step">
-          <div class="roi-step-num">1</div>
+      <!-- HR DEMO -->
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <div class="demo-card-icon" style="background:#eff6ff">👥</div>
           <div>
-            <div class="roi-step-title"><span class="tr-only">Ücretsiz keşif görüşmesi</span><span class="en-only">Free discovery call</span></div>
-            <div class="roi-step-desc"><span class="tr-only">30 dakikada işletmenizin otomasyon potansiyelini birlikte analiz ediyoruz. Taahhütsüz, doğrudan öneriler.</span><span class="en-only">In 30 minutes we analyze your automation potential together. No commitment, direct recommendations.</span></div>
-            <div class="roi-step-timeline"><span class="tr-only">Gün 1</span><span class="en-only">Day 1</span></div>
+            <div class="demo-card-title"><span class="tr-only">Kurumsal İK — Onboarding</span><span class="en-only">Corporate HR — Onboarding</span></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--mono)"><span class="tr-only">Üretim şirketi · 850 çalışan</span><span class="en-only">Manufacturing · 850 employees</span></div>
           </div>
+          <div class="demo-card-badge" style="background:#eff6ff;color:var(--blue);border:1px solid #bfdbfe"><span class="tr-only">KURUMSAL</span><span class="en-only">ENTERPRISE</span></div>
         </div>
-        <div class="roi-step">
-          <div class="roi-step-num">2</div>
-          <div>
-            <div class="roi-step-title"><span class="tr-only">Pilot agent kurulumu</span><span class="en-only">Pilot agent setup</span></div>
-            <div class="roi-step-desc"><span class="tr-only">En yüksek etkili tek iş sürecinden başlıyoruz. WhatsApp, e-posta veya web entegrasyonu 2 haftada tamamlanır.</span><span class="en-only">We start with your highest-impact process. WhatsApp, email or web integration completed in 2 weeks.</span></div>
-            <div class="roi-step-timeline"><span class="tr-only">Gün 3–14</span><span class="en-only">Day 3–14</span></div>
+        <div class="wa-mini" id="hrDemo">
+          <div class="wm-label">İK DEPARTMANI · WHATSAPP</div>
+          <div class="wm in" id="hr0" style="display:none"><span class="tr-only">Merhaba, Ahmet Yılmaz için onboarding süreci başlatılabilir mi? Pazartesi işe başlıyor.</span><span class="en-only">Hi, can we start the onboarding process for Ahmet Yılmaz? He starts Monday.</span></div>
+          <div class="wm agent" id="hr1" style="display:none"><span class="tr-only">✅ <strong>Ahmet Yılmaz</strong> onboarding başlatıldı.<br><br>Otomatik tamamlananlar:<br>• SGK işe giriş bildirimi → gönderildi<br>• IT erişim talebi → açıldı (#IT-4821)<br>• Oryantasyon daveti → Pazartesi 09:00<br>• Belge kontrol listesi → e-posta ile iletildi<br><br>Eksik: İmzalı iş sözleşmesi (3/4 belge tamam)</span><span class="en-only">✅ <strong>Ahmet Yılmaz</strong> onboarding started.<br><br>Auto-completed:<br>• SGK enrollment → sent<br>• IT access request → opened (#IT-4821)<br>• Orientation invite → Monday 09:00<br>• Document checklist → emailed<br><br>Missing: Signed contract (3/4 docs done)</span></div>
+          <div class="wm in" id="hr2" style="display:none"><span class="tr-only">Sözleşmeyi e-posta ile takip eder misin?</span><span class="en-only">Can you follow up on the contract via email?</span></div>
+          <div class="wm agent" id="hr3" style="display:none"><span class="tr-only">📧 Takip e-postası gönderildi.<br>Pazartesi 17:00'ye kadar onay gelmezse tekrar hatırlatacağım.<br><br>Onboarding durumunu buradan takip edebilirsiniz: <u>agenttr.net/onboarding/4821</u></span><span class="en-only">📧 Follow-up email sent.<br>I'll remind again if no response by Monday 17:00.<br><br>Track onboarding status here: <u>agenttr.net/onboarding/4821</u></span></div>
+        </div>
+        <div class="demo-card-footer">
+          <div class="demo-metric">
+            <span class="dm-pill green"><span class="tr-only">SGK entegre</span><span class="en-only">SGK integrated</span></span>
+            <span class="dm-pill green"><span class="tr-only">IT otomasyon</span><span class="en-only">IT automation</span></span>
           </div>
-        </div>
-        <div class="roi-step">
-          <div class="roi-step-num">3</div>
-          <div>
-            <div class="roi-step-title"><span class="tr-only">Canlıya alım ve ölçekleme</span><span class="en-only">Go-live and scale</span></div>
-            <div class="roi-step-desc"><span class="tr-only">Agent gerçek verilerle çalışmaya başlar. Sonuçları ölçüyor, ince ayar yapıyor ve ikinci süreci hazırlıyoruz.</span><span class="en-only">Agent starts running on real data. We measure results, fine-tune, and prepare the second process.</span></div>
-            <div class="roi-step-timeline"><span class="tr-only">Gün 15–30</span><span class="en-only">Day 15–30</span></div>
-          </div>
-        </div>
-        <div style="margin-top:8px">
-          <a href="javascript:void(0)" onclick="navTo('wizard')" class="btn-primary" style="display:inline-flex">
-            <span class="tr-only">Kendi planımı oluştur →</span>
-            <span class="en-only">Build my plan →</span>
-          </a>
+          <span style="font-size:11px;color:var(--muted)"><span class="tr-only">3 dak.</span><span class="en-only">3 min</span></span>
         </div>
       </div>
+
+      <!-- MALI ISLER DEMO -->
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <div class="demo-card-icon" style="background:#f0fdf4">💰</div>
+          <div>
+            <div class="demo-card-title"><span class="tr-only">Mali İşler — Fatura Onayı</span><span class="en-only">Finance — Invoice Approval</span></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--mono)"><span class="tr-only">Lojistik şirketi · 240 çalışan</span><span class="en-only">Logistics company · 240 employees</span></div>
+          </div>
+          <div class="demo-card-badge" style="background:#f0fdf4;color:#166534;border:1px solid #bbf7d0"><span class="tr-only">KURUMSAL</span><span class="en-only">ENTERPRISE</span></div>
+        </div>
+        <div class="wa-mini" id="maliDemo">
+          <div class="wm-label">MALİ İŞLER · WHATSAPP</div>
+          <div class="wm in" id="ma0" style="display:none"><span class="tr-only">[Fatura fotoğrafı eklendi]<br>Bu faturayı acil onaya gönderir misin?</span><span class="en-only">[Invoice photo attached]<br>Can you send this invoice for urgent approval?</span></div>
+          <div class="wm agent" id="ma1" style="display:none"><span class="tr-only">📸 Fatura OCR ile işlendi:<br><br>🏢 <strong>Kargo Express A.Ş.</strong><br>💰 ₺28.450 + KDV<br>📅 Tarih: 24 Haziran 2025<br>🏷️ Kategori: Lojistik gideri<br><br>Bütçe kontrolü: ✅ Limit dahilinde<br>Onay kademesi: CFO (₺25.000 üzeri)<br><br>CFO'ya göndereyim mi?</span><span class="en-only">📸 Invoice processed via OCR:<br><br>🏢 <strong>Kargo Express Ltd.</strong><br>💰 ₺28,450 + VAT<br>📅 Date: June 24, 2025<br>🏷️ Category: Logistics expense<br><br>Budget check: ✅ Within limit<br>Approval tier: CFO (above ₺25,000)<br><br>Shall I send to CFO?</span></div>
+          <div class="wm in" id="ma2" style="display:none"><span class="tr-only">Evet gönder</span><span class="en-only">Yes, send</span></div>
+          <div class="wm agent" id="ma3" style="display:none"><span class="tr-only">✅ CFO onayına gönderildi.<br><br>📋 Ref: <strong>#FT-2025-0847</strong><br>⏱️ SLA: 24 saat<br>💳 Ödeme vadesi: 24 Temmuz<br><br>Onay gelince muhasebe sistemine otomatik işleyeceğim.</span><span class="en-only">✅ Sent for CFO approval.<br><br>📋 Ref: <strong>#FT-2025-0847</strong><br>⏱️ SLA: 24 hours<br>💳 Payment due: July 24<br><br>I'll auto-post to accounting when approved.</span></div>
+        </div>
+        <div class="demo-card-footer">
+          <div class="demo-metric">
+            <span class="dm-pill green"><span class="tr-only">OCR + GİB</span><span class="en-only">OCR + GİB</span></span>
+            <span class="dm-pill green"><span class="tr-only">Onay zinciri</span><span class="en-only">Approval chain</span></span>
+          </div>
+          <span style="font-size:11px;color:var(--muted)"><span class="tr-only">90 sn.</span><span class="en-only">90 sec</span></span>
+        </div>
+      </div>
+
+      <!-- CRM DEMO -->
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <div class="demo-card-icon" style="background:#fdf4ff">📈</div>
+          <div>
+            <div class="demo-card-title"><span class="tr-only">CRM — Lead Yönetimi</span><span class="en-only">CRM — Lead Management</span></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--mono)"><span class="tr-only">Yazılım şirketi · KOBİ</span><span class="en-only">Software company · SME</span></div>
+          </div>
+          <div class="demo-card-badge" style="background:#fdf4ff;color:#6b21a8;border:1px solid #e9d5ff"><span class="tr-only">KOBİ</span><span class="en-only">SME</span></div>
+        </div>
+        <div class="wa-mini" id="crmDemo">
+          <div class="wm-label">SATIŞ EKİBİ · WHATSAPP</div>
+          <div class="wm in" id="cr0" style="display:none"><span class="tr-only">Yeni lead: Anadolu Tekstil, 180 çalışan, ERP ve CRM arıyorlar. Genel müdürle görüştüm.</span><span class="en-only">New lead: Anadolu Tekstil, 180 employees, looking for ERP and CRM. Spoke with the GM.</span></div>
+          <div class="wm agent" id="cr1" style="display:none"><span class="tr-only">✅ <strong>Anadolu Tekstil</strong> CRM'e eklendi!<br><br>🎯 Lead skoru: <strong>82/100</strong> (Yüksek öncelik)<br>💡 Gerekçe: 180 çalışan + çift ihtiyaç (ERP+CRM)<br><br>Önerilen adımlar:<br>1. Demo toplantısı → bu hafta içinde<br>2. İK + Mali İşler paket teklifi<br>3. Referans: Demir Tekstil (benzer profil)<br><br>Teklif taslağı oluşturayım mı?</span><span class="en-only">✅ <strong>Anadolu Tekstil</strong> added to CRM!<br><br>🎯 Lead score: <strong>82/100</strong> (High priority)<br>💡 Reason: 180 employees + dual need (ERP+CRM)<br><br>Suggested next steps:<br>1. Demo meeting → this week<br>2. HR + Finance bundle offer<br>3. Reference: Demir Tekstil (similar profile)<br><br>Shall I create a quote draft?</span></div>
+          <div class="wm in" id="cr2" style="display:none"><span class="tr-only">Evet, Çarşamba için toplantı da ayarla</span><span class="en-only">Yes, and schedule a meeting for Wednesday</span></div>
+          <div class="wm agent" id="cr3" style="display:none"><span class="tr-only">📋 Teklif taslağı oluşturuldu ve e-postanıza iletildi.<br><br>📅 Toplantı: Çarşamba 14:00<br>📧 Davet: Genel Müdür + siz<br>🔗 Meet linki: eklendi<br><br>CRM güncellemesi: Aşama → <strong>Demo</strong></span><span class="en-only">📋 Quote draft created and sent to your email.<br><br>📅 Meeting: Wednesday 14:00<br>📧 Invite: GM + you<br>🔗 Meet link: added<br><br>CRM update: Stage → <strong>Demo</strong></span></div>
+        </div>
+        <div class="demo-card-footer">
+          <div class="demo-metric">
+            <span class="dm-pill green"><span class="tr-only">AI lead skoru</span><span class="en-only">AI lead score</span></span>
+            <span class="dm-pill green"><span class="tr-only">CRM otomasyon</span><span class="en-only">CRM automation</span></span>
+          </div>
+          <span style="font-size:11px;color:var(--muted)"><span class="tr-only">2 dak.</span><span class="en-only">2 min</span></span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- USE CASES -->
-<section class="cases-section" id="ornekler">
-  <div class="cases-inner">
-    <div class="section-eyebrow"><span class="tr-only">GERÇEK SONUÇLAR</span><span class="en-only">REAL RESULTS</span></div>
-    <h2 class="section-title"><span class="tr-only">Sektörünüzde agent ne yapıyor?</span><span class="en-only">What does the agent do in your sector?</span></h2>
-    <p class="section-sub"><span class="tr-only">Gerçek iş sorunları, ölçülen sonuçlar. Kendi alanınızı filtreleyin.</span><span class="en-only">Real business problems, measured results. Filter to your field.</span></p>
-    <div class="cases-filter" id="caseFilter"></div>
-    <div class="cases-grid" id="casesGrid"></div>
+<!-- SPLIT: KOBİ + KURUMSAL -->
+<section class="section split-section" id="cozumler">
+  <div class="section-inner">
+    <div class="eyebrow" style="text-align:center"><span class="tr-only">ÇÖZÜMLER</span><span class="en-only">SOLUTIONS</span></div>
+    <h2 class="section-title" style="text-align:center;margin-bottom:8px"><span class="tr-only">KOBİ mi, kurumsal mı?</span><span class="en-only">SME or enterprise?</span></h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto 36px"><span class="tr-only">İkisi için de hazır — aynı altyapı, ihtiyaca göre yapılandırma.</span><span class="en-only">Ready for both — same infrastructure, configured to your needs.</span></p>
+
+    <div class="split-tabs">
+      <div class="split-tab active" onclick="switchSplit('kobi',this)">🏥 <span class="tr-only">KOBİ Sektör Çözümleri</span><span class="en-only">SME Sector Solutions</span></div>
+      <div class="split-tab" onclick="switchSplit('kurumsal',this)">🏢 <span class="tr-only">Kurumsal Departman Çözümleri</span><span class="en-only">Enterprise Dept. Solutions</span></div>
+    </div>
+
+    <!-- KOBİ VIEW -->
+    <div class="split-view active" id="sv-kobi">
+      <div class="case-filters" id="caseFilters"></div>
+      <div class="cases-grid" id="casesGrid"></div>
+    </div>
+
+    <!-- KURUMSAL VIEW -->
+    <div class="split-view" id="sv-kurumsal">
+      <div class="dept-grid" id="deptGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS (KOBİ paketleri) -->
+<section class="section products-section" id="urunler">
+  <div class="section-inner">
+    <div class="eyebrow"><span class="tr-only">HAZIR PAKETLER</span><span class="en-only">READY PACKAGES</span></div>
+    <h2 class="section-title"><span class="tr-only">Sektörünüze özel ürünler</span><span class="en-only">Products for your sector</span></h2>
+    <p class="section-sub" style="margin-bottom:36px"><span class="tr-only">Her paket Türk mevzuatına uygun, WhatsApp dahil ve 3 haftada canlı.</span><span class="en-only">Every package is Turkish law compliant, WhatsApp included, live in 3 weeks.</span></p>
+    <div class="products-grid" id="productsGrid"></div>
+    <div style="text-align:center;margin-top:40px">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px"><span class="tr-only"><strong>WhatsApp tüm paketlerde dahil</strong> — rakip platformlarda ücretli eklenti olan WhatsApp bizde standart.</span><span class="en-only"><strong>WhatsApp included in all packages</strong> — WhatsApp is a paid add-on elsewhere; it's standard with us.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="section how-section">
+  <div class="section-inner">
+    <div class="eyebrow"><span class="tr-only">NASIL ÇALIŞIR</span><span class="en-only">HOW IT WORKS</span></div>
+    <h2 class="section-title"><span class="tr-only">3 haftada canlıya alım, 4 adımda</span><span class="en-only">Live in 3 weeks, 4 steps</span></h2>
+    <div class="how-grid">
+      <div class="how-step"><div class="how-num">🎯</div><div class="how-step-title"><span class="tr-only">Sektör & ihtiyaç analizi</span><span class="en-only">Sector & needs analysis</span></div><div class="how-step-desc"><span class="tr-only">KOBİ sektörünüzü veya kurumsal departmanınızı ve öncelikli kullanım senaryolarını belirleriz.</span><span class="en-only">We identify your SME sector or enterprise department and priority use cases.</span></div></div>
+      <div class="how-step"><div class="how-num">🔗</div><div class="how-step-title"><span class="tr-only">Sistem entegrasyonu</span><span class="en-only">System integration</span></div><div class="how-step-desc"><span class="tr-only">GİB, UYAP, SGK, ERP, CRM — mevcut sistemlerinize bağlanırız. Yeni kurulum gerektirmez.</span><span class="en-only">GİB, UYAP, SGK, ERP, CRM — we connect to your existing systems. No new installation required.</span></div></div>
+      <div class="how-step"><div class="how-num">💬</div><div class="how-step-title"><span class="tr-only">WhatsApp kanalı kurulumu</span><span class="en-only">WhatsApp channel setup</span></div><div class="how-step-desc"><span class="tr-only">Mevcut WhatsApp Business hattınıza bağlanırız. Numara değişmez, kullanıcı eğitimi gerekmez.</span><span class="en-only">We connect to your existing WhatsApp Business line. No number change, no user training required.</span></div></div>
+      <div class="how-step"><div class="how-num">🚀</div><div class="how-step-title"><span class="tr-only">Canlıya alım & ölçekleme</span><span class="en-only">Go-live & scale</span></div><div class="how-step-desc"><span class="tr-only">3. haftada pilot, 4. haftada tüm ekip. Başarı sonrası yeni departman veya sektör genişlemesi.</span><span class="en-only">Week 3 pilot, week 4 full team. After success, expand to new departments or sectors.</span></div></div>
+    </div>
   </div>
 </section>
 
 <!-- WIZARD -->
-<section class="wizard-section" id="wizard">
+<section class="section wizard-section" id="wizard">
   <div class="wizard-bg"></div>
   <div class="wizard-inner">
-    <div class="section-eyebrow" style="color:var(--cyan)"><span class="tr-only">KİŞİSEL İŞ PLANI</span><span class="en-only">PERSONAL BUSINESS PLAN</span></div>
-    <h2 class="section-title-light"><span class="tr-only">5 soruda size özel AI agent planı</span><span class="en-only">Your personalized AI agent plan in 5 questions</span></h2>
-    <p class="section-sub-light"><span class="tr-only">Claude AI sektörünüzü, sorunlarınızı ve ölçeğinizi analiz eder — ROI hesabı, 90 günlük uygulama takvimi ve entegrasyon haritasıyla birlikte.</span><span class="en-only">Claude AI analyzes your sector, problems and scale — with ROI calculation, 90-day rollout timeline and integration map.</span></p>
+    <div class="eyebrow" style="color:#93c5fd"><span class="tr-only">SİZİ TANIYALIM</span><span class="en-only">TELL US ABOUT YOU</span></div>
+    <h2 class="section-title" style="color:var(--white)"><span class="tr-only">5 soruda size özel AI agent planı</span><span class="en-only">Your custom AI agent plan in 5 questions</span></h2>
+    <p style="font-size:17px;color:rgba(255,255,255,.45);margin-bottom:0"><span class="tr-only">KOBİ veya kurumsal — doğru agent'ı ve uygulama yolunu birlikte belirleyelim.</span><span class="en-only">SME or enterprise — let's identify the right agent and path together.</span></p>
     <div class="wizard-shell">
-      <div class="wizard-header">
-        <div class="wizard-step-indicators" id="wsiRow"></div>
-      </div>
+      <div class="wizard-header"><div class="wsi-row" id="wsiRow"></div></div>
       <div class="wizard-body" id="wizardBody"></div>
       <div class="wizard-footer">
         <button class="wz-back" id="wzBack" onclick="wzNav(-1)">← <span class="tr-only">Geri</span><span class="en-only">Back</span></button>
@@ -609,13 +528,39 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:48px 40px 32px;d
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<section class="products-section" id="urunler">
-  <div class="products-inner">
-    <div class="section-eyebrow"><span class="tr-only">ÜRÜN KATALOĞU</span><span class="en-only">PRODUCT CATALOG</span></div>
-    <h2 class="section-title"><span class="tr-only">Sektörünüze hazır, 3 haftada canlı</span><span class="en-only">Ready for your sector, live in 3 weeks</span></h2>
-    <p class="section-sub"><span class="tr-only">Salesforce Agentforce altyapısı — kurumsal güvenlik, Türk mevzuatı uyumu, WhatsApp entegrasyonu dahil.</span><span class="en-only">Salesforce Agentforce infrastructure — enterprise security, Turkish regulatory compliance, WhatsApp included.</span></p>
-    <div class="products-grid" id="productsGrid"></div>
+<!-- TESTIMONIALS -->
+<section class="section testi-section">
+  <div class="section-inner">
+    <div class="eyebrow"><span class="tr-only">MÜŞTERİ SONUÇLARI</span><span class="en-only">CUSTOMER RESULTS</span></div>
+    <h2 class="section-title"><span class="tr-only">KOBİ'den kurumsal şirkete gerçek sonuçlar</span><span class="en-only">Real results from SMEs to enterprises</span></h2>
+    <div class="logo-strip">
+      <span class="logo-item">MedPlus Klinikler</span>
+      <span class="logo-item">Başaran SMMM</span>
+      <span class="logo-item">AlfaLojistik</span>
+      <span class="logo-item">Demir Tekstil</span>
+      <span class="logo-item">Nobel Akademi</span>
+      <span class="logo-item">Özgür İnşaat</span>
+    </div>
+    <div class="tgrid" id="testiGrid"></div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="security-section">
+  <div class="security-inner">
+    <div>
+      <div class="eyebrow"><span class="tr-only">GÜVENLİK & UYUMLULUK</span><span class="en-only">SECURITY & COMPLIANCE</span></div>
+      <h2 class="section-title" style="font-size:28px"><span class="tr-only">Kurumsal güvenlik, KOBİ fiyatı</span><span class="en-only">Enterprise security, SME price</span></h2>
+      <p class="section-sub" style="margin-bottom:24px;font-size:15px"><span class="tr-only">Kurumsal düzeyde güvenlik altyapısı üzerinde çalışıyoruz. 8.000+ Fortune 500 firmasının güvendiği standartlar — aynı güvenlik, Türk KOBİ için uyarlanmış fiyat.</span><span class="en-only">We run on enterprise-grade infrastructure trusted by 8,000+ Fortune 500 companies — same security, price adapted for Turkish SMEs.</span></p>
+    </div>
+    <div class="sec-certs">
+      <div class="sec-cert"><div class="sec-cert-icon">🏅</div><div class="sec-cert-name">ISO 27001</div><div class="sec-cert-desc"><span class="tr-only">Bilgi güvenliği</span><span class="en-only">Information security</span></div></div>
+      <div class="sec-cert"><div class="sec-cert-icon">🛡️</div><div class="sec-cert-name">SOC 2</div><div class="sec-cert-desc"><span class="tr-only">Güven & güvenlik</span><span class="en-only">Trust & security</span></div></div>
+      <div class="sec-cert"><div class="sec-cert-icon">🇪🇺</div><div class="sec-cert-name">GDPR</div><div class="sec-cert-desc"><span class="tr-only">AB uyumluluk</span><span class="en-only">EU compliance</span></div></div>
+      <div class="sec-cert"><div class="sec-cert-icon">🇹🇷</div><div class="sec-cert-name">KVKK</div><div class="sec-cert-desc"><span class="tr-only">Türkiye uyumluluk</span><span class="en-only">Turkey compliance</span></div></div>
+      <div class="sec-cert"><div class="sec-cert-icon">💬</div><div class="sec-cert-name">Meta API</div><div class="sec-cert-desc"><span class="tr-only">Resmi WhatsApp</span><span class="en-only">Official WhatsApp</span></div></div>
+      <div class="sec-cert"><div class="sec-cert-icon">⚡</div><div class="sec-cert-name">Kurumsal AI</div><div class="sec-cert-desc"><span class="tr-only">Agent altyapısı</span><span class="en-only">Agent infrastructure</span></div></div>
+    </div>
   </div>
 </section>
 
@@ -623,8 +568,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:48px 40px 32px;d
 <section class="faq-section" id="sss">
   <div class="faq-inner">
     <div style="text-align:center">
-      <div class="section-eyebrow" style="display:inline-block"><span class="tr-only">SIKÇA SORULAN</span><span class="en-only">FAQ</span></div>
-      <h2 class="section-title"><span class="tr-only">Aklınızdaki sorular</span><span class="en-only">Your questions answered</span></h2>
+      <div class="eyebrow" style="display:inline-block"><span class="tr-only">SIKÇA SORULAN</span><span class="en-only">FAQ</span></div>
+      <h2 class="section-title"><span class="tr-only">Aklınızdaki sorular</span><span class="en-only">Your questions</span></h2>
     </div>
     <div class="faq-list" id="faqList"></div>
   </div>
@@ -633,12 +578,16 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:48px 40px 32px;d
 <!-- CTA -->
 <section class="cta-section">
   <div class="cta-inner">
-    <h2 class="cta-title"><span class="tr-only">Rakibiniz bu işi şu an agent'a yaptırıyor.</span><span class="en-only">Your competitor is already using an agent for this.</span></h2>
-    <p class="cta-sub"><span class="tr-only">İlk 30 dakika ücretsiz keşif görüşmesi — hangi süreç, hangi tasarruf, ne zaman. Net cevaplar, taahhütsüz.</span><span class="en-only">First 30 minutes free discovery call — which process, which saving, what timeline. Clear answers, no commitment.</span></p>
-    <div class="cta-urgency"><span class="tr-only">⚡ Bu ay yalnızca 4 kurulum slotu açık</span><span class="en-only">⚡ Only 4 setup slots open this month</span></div>
+    <div class="eyebrow" style="color:var(--cyan);display:inline-block;margin-bottom:16px"><span class="tr-only">HAREKETE GEÇ</span><span class="en-only">TAKE ACTION</span></div>
+    <h2 class="cta-title"><span class="tr-only">KOBİ veya kurumsal, agent planınız hazır.</span><span class="en-only">SME or enterprise, your agent plan is ready.</span></h2>
+    <p class="cta-sub"><span class="tr-only">30 dakika ücretsiz keşif görüşmesi — ihtiyacınıza göre doğru agent ve uygulama yolu.</span><span class="en-only">30-minute free discovery call — the right agent and path for your needs.</span></p>
+    <div class="cta-urgency">⚡ <span class="tr-only">Bu ay yalnızca 6 kurulum slotu açık</span><span class="en-only">Only 6 setup slots open this month</span></div>
     <div class="cta-btns">
-      <a href="javascript:void(0)" onclick="navTo('wizard')" class="cta-white"><span class="tr-only">Ücretsiz İş Planı Al →</span><span class="en-only">Get Free Business Plan →</span></a>
-      <a href="mailto:info@agenttr.net" class="cta-outline"><span class="tr-only">Doğrudan Yaz</span><span class="en-only">Write Directly</span></a>
+      <a href="javascript:void(0)" onclick="navTo('wizard')" class="cta-btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span class="tr-only">Agent Sihirbazını Başlat →</span><span class="en-only">Start Agent Wizard →</span>
+      </a>
+      <a href="mailto:info@agenttr.net" class="cta-btn-outline"><span class="tr-only">Doğrudan Yaz</span><span class="en-only">Write Directly</span></a>
     </div>
   </div>
 </section>
@@ -646,231 +595,239 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:48px 40px 32px;d
 <footer>
   <div>
     <div class="footer-brand">AgentTR</div>
-    <div class="footer-tagline"><span class="tr-only">Türkiye'nin AI Agent Platformu — Salesforce Agentforce üzerinde</span><span class="en-only">Turkey's AI Agent Platform — built on Salesforce Agentforce</span></div>
+    <div class="footer-sub"><span class="tr-only">KOBİ ve Kurumsal Şirketler için AI Agent Platformu</span><span class="en-only">AI Agent Platform for SMEs & Enterprises</span></div>
   </div>
   <div class="footer-links">
-    <a href="javascript:void(0)" onclick="navTo('aciklar')"><span class="tr-only">Neden Agent?</span><span class="en-only">Why Agent?</span></a>
-    <a href="javascript:void(0)" onclick="navTo('ornekler')"><span class="tr-only">Örnekler</span><span class="en-only">Use Cases</span></a>
+    <a href="javascript:void(0)" onclick="navTo('cozumler')"><span class="tr-only">Çözümler</span><span class="en-only">Solutions</span></a>
     <a href="javascript:void(0)" onclick="navTo('urunler')"><span class="tr-only">Ürünler</span><span class="en-only">Products</span></a>
+    <a href="javascript:void(0)" onclick="navTo('wizard')"><span class="tr-only">Agent Bul</span><span class="en-only">Find Agent</span></a>
     <a href="mailto:info@agenttr.net">info@agenttr.net</a>
   </div>
 </footer>
 
 <script>
-// ═══ DATA ═══
-const lang_ref = () => lang;
-let lang = 'tr';
+let lang='tr', wzCurrent=0, wzAnswers=[], bizPlanHTML='';
 
-const painPoints = [
-  { color:'#e11d48', cost:{tr:'18 saat',en:'18 hrs'}, costLabel:{tr:'/ hafta telefonda',en:'/ week on the phone'}, title:{tr:'Randevu & İletişim',en:'Scheduling & Communication'}, desc:{tr:'Resepsiyonist veya sekreter haftanın yarısını telefon, WhatsApp ve e-posta yanıtlamaya harcıyor. Bu süre hastaya, müvekkile veya müşteriye harcanabilir.',en:'Receptionist or secretary spends half the week answering calls, WhatsApp and emails. This time could go to patients, clients or customers.'}, after:{tr:'Agent %92 iletişimi devralır, siz sadece istisnaları görürsünüz',en:'Agent handles 92% of communications, you only see the exceptions'} },
-  { color:'#d97706', cost:{tr:'₺12.000',en:'₺12,000'}, costLabel:{tr:'/ kaçırılan süre cezası',en:'/ missed deadline penalty'}, title:{tr:'Süre & Takvim Kaçırma',en:'Missed Deadlines'}, desc:{tr:'Beyanname tarihleri, duruşma süreleri, hakediş son günleri — bunlardan biri kaçırıldığında hem para hem itibar kaybı yaşanır.',en:'Tax deadlines, hearing dates, payment due dates — missing any one costs both money and reputation.'}, after:{tr:'Agent tüm takvimleri izler, ilgili herkesi 72 saat önceden uyarır',en:'Agent monitors all calendars, alerts everyone 72 hours in advance'} },
-  { color:'#7c3aed', cost:{tr:'6 saat',en:'6 hrs'}, costLabel:{tr:'/ belge başı hazırlık',en:'/ doc preparation'}, title:{tr:'Belge & Evrak Yükü',en:'Document Burden'}, desc:{tr:'Form doldurmak, PDF hazırlamak, e-fatura okumak, GTİP kodu bulmak — hepsi tekrar eden, dikkat gerektiren ama değer üretmeyen işler.',en:'Filling forms, preparing PDFs, reading e-invoices, finding GTİP codes — all repetitive, attention-draining, value-free work.'}, after:{tr:'Agent belgeleri okur, doldurur ve ilgili sisteme iletir',en:'Agent reads, fills and submits documents to the relevant system'} },
-  { color:'#059669', cost:{tr:'3 gün',en:'3 days'}, costLabel:{tr:'/ aylık rapor hazırlık',en:'/ monthly report prep'}, title:{tr:'Raporlama & Veri Derleme',en:'Reporting & Data Gathering'}, desc:{tr:'Yönetim raporu, müşteri özeti, proje durumu — veriler farklı sistemlerde, derleme manuel, sunmak ise ayrı iş.',en:'Management reports, client summaries, project status — data scattered across systems, collection manual, presentation separate work.'}, after:{tr:'Agent her Pazartesi 08:00\'de hazır raporu yöneticiye iletir',en:'Agent delivers the ready report to management every Monday at 08:00'} },
-];
-
-const testimonials = [
-  { initials:'AK', name:{tr:'Dr. Ayşe Kara',en:'Dr. Ayşe Kara'}, role:{tr:'Genel Cerrahi Uzmanı, İstanbul',en:'General Surgery Specialist, Istanbul'}, text:{tr:'Haftada 340 randevu talebini resepsiyonistim karşılıyordu. Şimdi agent karşılıyor — %91 otomasyon oranı ile. Resepsiyonistim artık hasta deneyimiyle ilgileniyor.',en:'My receptionist was handling 340 appointment requests per week. Now the agent does it — with 91% automation. My receptionist now focuses on patient experience.'}, result:{tr:'✓ Haftada 22 saat kazanıldı · ₺6.800 aylık tasarruf',en:'✓ 22 hours saved weekly · ₺6,800 monthly saving'} },
-  { initials:'MY', name:{tr:'Av. Mehmet Yıldız',en:'Att. Mehmet Yıldız'}, role:{tr:'Kurucu Ortak, Yıldız Hukuk Bürosu',en:'Founding Partner, Yıldız Law Firm'}, text:{tr:'UYAP\'ta kaçırdığımız bir itiraz süresi bize ₺45.000\'e mal olmuştu. Agent\'tan bu yana sıfır kaçırma — 14 ay oldu. ROI hesabı yapmak gülünç geliyor artık.',en:'A missed objection deadline on UYAP cost us ₺45,000. Zero misses since the agent — 14 months now. Calculating ROI feels ridiculous at this point.'}, result:{tr:'✓ Sıfır kaçırılan süre · 14 ay kesintisiz · 128 dosya izleniyor',en:'✓ Zero missed deadlines · 14 uninterrupted months · 128 files monitored'} },
-  { initials:'SB', name:{tr:'Serkan Başaran',en:'Serkan Başaran'}, role:{tr:'SMMM, Başaran Mali Müşavirlik',en:'CPA, Başaran Financial Advisory'}, text:{tr:'42 müşterim var ve beyanname sezonunda haftalarca uyumadan çalışıyordum. Agent takvimi yönetince ben danışmanlığa odaklandım. Müşteri sayımı 42\'den 71\'e çıkardım.',en:'I had 42 clients and worked sleepless weeks during declaration season. When the agent took over the calendar, I focused on consulting. I grew my client base from 42 to 71.'}, result:{tr:'✓ Müşteri sayısı %69 arttı · Fazla mesai sıfırlandı',en:'✓ Client base grew 69% · Overtime eliminated'} },
-];
-
-const cases = [
-  { sector:'saglik', icon:'🏥', bg:'#eff6ff', name:{tr:'Randevu & Hasta Takip',en:'Appointment & Patient Follow-up'}, problem:{tr:'Günde 80+ telefon, 3 resepsiyonist yorgun',en:'80+ calls/day, 3 exhausted receptionists'}, desc:{tr:'Hasta WhatsApp\'tan randevu ister. Agent müsait saatleri gösterir, rezerve eder, hatırlatma gönderir, iptal durumunda listeye alır.',en:'Patient requests via WhatsApp. Agent shows slots, books, sends reminders, waitlists on cancellation.'}, result:{tr:'%92 otomasyon · Haftada 22 saat kazanıldı',en:'92% automation · 22 hrs/week recovered'}, metrics:[{tr:'47 randevu/gün',en:'47 appts/day'},{tr:'Sıfır kayıp randevu',en:'Zero missed appts'}] },
-  { sector:'saglik', icon:'💊', bg:'#f0fdf4', name:{tr:'İlaç Hatırlatma',en:'Medication Reminders'}, problem:{tr:'Kronik hastalar ilaçlarını unutuyor, geri dönüşler artıyor',en:'Chronic patients forget medication, readmissions rising'}, desc:{tr:'Günlük ilaç hatırlatması, uyumsuzluk durumunda doktor uyarısı, SGK uyumlu hasta takip formatı.',en:'Daily medication reminders, doctor alert on non-compliance, SGK-compliant patient tracking format.'}, result:{tr:'%40 uyum artışı · Hekim başı 3 saat tasarruf',en:'40% adherence lift · 3 hrs saved per physician'}, metrics:[{tr:'Günlük otomatik',en:'Daily automatic'},{tr:'SGK uyumlu',en:'SGK compliant'}] },
-  { sector:'hukuk', icon:'⚖️', bg:'#fdf4ff', name:{tr:'Dava & Süre Takip',en:'Case & Deadline Tracking'}, problem:{tr:'UYAP\'tan kaçırılan itiraz süresi ₺45K zarara yol açtı',en:'Missed UYAP objection window caused ₺45K loss'}, desc:{tr:'UYAP\'tan duruşma tarihlerini çeker, avukate ve müvekkile 72 saat öncesinde hatırlatma gönderir.',en:'Pulls hearing dates from UYAP, sends 72-hour advance reminders to attorney and client.'}, result:{tr:'14 ayda sıfır kaçırılan süre · 128 dosya izleniyor',en:'Zero missed deadlines in 14 months · 128 files'}, metrics:[{tr:'Sıfır kaçırılan süre',en:'Zero missed deadlines'},{tr:'UYAP entegre',en:'UYAP integrated'}] },
-  { sector:'hukuk', icon:'📝', bg:'#fff7ed', name:{tr:'Sözleşme Analizi',en:'Contract Analysis'}, problem:{tr:'100 sayfalık sözleşmede gözden kaçan madde büyük risk',en:'Overlooked clause in 100-page contract = big risk'}, desc:{tr:'PDF sözleşme yükle. 3 dakikada riskli maddeler, eksik hükümler, Türk Borçlar Kanunu uyumsuzlukları listelenir.',en:'Upload PDF contract. In 3 minutes: risky clauses, missing provisions, Turkish Civil Code conflicts listed.'}, result:{tr:'3 dakika analiz · Ortalama 4 riskli madde tespiti',en:'3-min analysis · Average 4 risky clauses flagged'}, metrics:[{tr:'3 dk analiz',en:'3-min analysis'},{tr:'TBK uyum',en:'Civil Code check'}] },
-  { sector:'muhasebe', icon:'🧮', bg:'#eff6ff', name:{tr:'Beyanname Takvimi',en:'Declaration Calendar'}, problem:{tr:'42 müşteri için KDV, muhtasar, kurumlar — elle takip imkânsız',en:'VAT, withholding, corporate tax for 42 clients — impossible to track manually'}, desc:{tr:'Tüm müşteriler için beyanname takvimi, gecikme faizi hesabı, müşteri uyarısı — hepsi otomatik.',en:'Declaration calendar for all clients, penalty interest calculation, client alerts — all automatic.'}, result:{tr:'Müşteri sayısı 42\'den 71\'e çıktı · Fazla mesai sıfırlandı',en:'Client base grew from 42 to 71 · Overtime eliminated'}, metrics:[{tr:'Sıfır gecikme',en:'Zero late filings'},{tr:'GİB entegre',en:'GİB integrated'}] },
-  { sector:'muhasebe', icon:'🧾', bg:'#f0fdf4', name:{tr:'e-Fatura Analizi',en:'e-Invoice Analysis'}, problem:{tr:'Aylık 800+ fatura manuel kategorizasyon haftalar alıyor',en:'800+ monthly invoices, manual categorization takes weeks'}, desc:{tr:'GİB\'den gelen e-faturaları otomatik kategorize eder, gider analizi yapar, şüpheli fatura flagler.',en:'Auto-categorizes e-invoices from GİB, expense analysis, flags suspicious invoices.'}, result:{tr:'%94 otomasyon · Ayda 40 saat kazanıldı',en:'94% automation · 40 hrs/month recovered'}, metrics:[{tr:'GİB API',en:'GİB API'},{tr:'Anlık',en:'Real-time'}] },
-  { sector:'insaat', icon:'🏗️', bg:'#fff7ed', name:{tr:'Hakediş Takip',en:'Progress Payment Tracking'}, problem:{tr:'Alt yüklenici gecikmeleri nakit akışını mahvediyor',en:'Subcontractor delays wrecking cash flow'}, desc:{tr:'Alt yüklenici hakediş belgelerini izler, onay zincirini yönetir, gecikmelerde nakit akış uyarısı verir.',en:'Tracks subcontractor payment docs, manages approval chain, cash flow alerts on delays.'}, result:{tr:'Ortalama tahsilat süresi 47 günden 19 güne düştü',en:'Average collection period dropped from 47 to 19 days'}, metrics:[{tr:'Çok alt yüklenici',en:'Multi-subcontractor'},{tr:'Otomatik onay',en:'Auto approval'}] },
-  { sector:'lojistik', icon:'🚢', bg:'#eff6ff', name:{tr:'İhracat Belgesi',en:'Export Documents'}, problem:{tr:'BİLGE hatası 3 günlük gümrük beklemesine yol açtı',en:'BİLGE error caused 3-day customs wait'}, desc:{tr:'GTİP kodu, EUR.1/A.TR, gümrük beyannamesi ön kontrolü. BİLGE\'ye göndermeden önce eksik belgesi tespit eder.',en:'GTİP code, EUR.1/A.TR, pre-customs check. Flags missing documents before BİLGE submission.'}, result:{tr:'Gümrük bekleme süresi %78 azaldı · 6 saat/belge tasarruf',en:'Customs wait time down 78% · 6 hrs/doc saved'}, metrics:[{tr:'BİLGE entegre',en:'BİLGE integrated'},{tr:'6 saat/belge',en:'6 hrs/doc'}] },
-  { sector:'egitim', icon:'🎓', bg:'#fdf4ff', name:{tr:'Veli İletişimi',en:'Parent Communication'}, problem:{tr:'Öğretmenler not bildirimi için saatler harcıyor',en:'Teachers spending hours on grade notifications'}, desc:{tr:'Sınav sonucu, yoklama, etkinlik bilgilendirmesi WhatsApp ile otomatik. MEB müfredat uyumlu içerik filtresi.',en:'Exam results, attendance, events via WhatsApp automatically. MEB curriculum-compliant content filter.'}, result:{tr:'Öğretmen başı haftada 8 saat kazanıldı · Veli memnuniyeti %31 arttı',en:'8 hrs/week per teacher recovered · Parent satisfaction up 31%'}, metrics:[{tr:'Anlık bildirim',en:'Instant notification'},{tr:'MEB uyumlu',en:'MEB compliant'}] },
-  { sector:'otel', icon:'🏨', bg:'#fff7ed', name:{tr:'Rezervasyon & Misafir',en:'Reservations & Guests'}, problem:{tr:'OTA kanallarından gelen sorular çakışıyor, kaçan rezervasyon var',en:'Overlapping queries from OTA channels, missed reservations'}, desc:{tr:'OTA kanal senkronu, misafir WhatsApp iletişimi, check-in/out hatırlatma ve yorum yönetimi.',en:'OTA channel sync, guest WhatsApp, check-in/out reminders and review management.'}, result:{tr:'Doluluk oranı %12 arttı · 0 çakışan rezervasyon',en:'Occupancy rate up 12% · 0 conflicting reservations'}, metrics:[{tr:'OTA senkron',en:'OTA sync'},{tr:'Sıfır çakışma',en:'Zero conflicts'}] },
-];
-
-const products = [
-  { icon:'🏥', name:{tr:'Klinik Agent',en:'Clinic Agent'}, sector:{tr:'SAĞLIK KLİNİKLERİ',en:'HEALTH CLINICS'}, desc:{tr:'Randevu, hasta hatırlatma, sigorta ön yetki ve memnuniyet takibi.',en:'Appointments, patient reminders, insurance pre-auth and satisfaction tracking.'}, roi:{tr:'Ort. ₺6.800/ay tasarruf',en:'Avg ₺6,800/mo saving'}, features:[{tr:'WhatsApp randevu otomasyonu',en:'WhatsApp appointment automation'},{tr:'SGK/sigorta ön yetki',en:'SGK/insurance pre-auth'},{tr:'Hasta memnuniyet takibi',en:'Patient satisfaction tracking'},{tr:'KVKK uyumlu',en:'KVKK compliant'}], price:'₺4.500', period:{tr:'/ay',en:'/mo'} },
-  { icon:'⚖️', name:{tr:'Hukuk Agent',en:'Legal Agent'}, sector:{tr:'HUKUK BÜROLARI',en:'LAW FIRMS'}, desc:{tr:'UYAP dava takip, süre yönetimi, sözleşme analizi, müvekkil iletişimi.',en:'UYAP case tracking, deadline management, contract analysis, client communication.'}, roi:{tr:'Ort. ₺9.200/ay tasarruf',en:'Avg ₺9,200/mo saving'}, features:[{tr:'UYAP dava takibi',en:'UYAP case tracking'},{tr:'Sözleşme risk analizi',en:'Contract risk analysis'},{tr:'Müvekkil bilgi ajanı',en:'Client information agent'},{tr:'Zamanaşımı uyarı sistemi',en:'Deadline alert system'}], price:'₺6.500', period:{tr:'/ay',en:'/mo'} },
-  { icon:'🧮', name:{tr:'Muhasebe Agent',en:'Accounting Agent'}, sector:{tr:'SMMM OFİSLERİ',en:'CPA OFFICES'}, desc:{tr:'Beyanname takvimi, e-fatura analizi, vergi hatırlatma, finansal sağlık raporu.',en:'Declaration calendar, e-invoice analysis, tax reminders, financial health reports.'}, roi:{tr:'Ort. ₺11.400/ay tasarruf',en:'Avg ₺11,400/mo saving'}, features:[{tr:'GİB e-fatura entegrasyonu',en:'GİB e-invoice integration'},{tr:'Çok müşteri takvimi',en:'Multi-client calendar'},{tr:'Gecikme faizi uyarısı',en:'Penalty interest alerts'},{tr:'Finansal sağlık dashboard',en:'Financial health dashboard'}], price:'₺5.500', period:{tr:'/ay',en:'/mo'} },
-  { icon:'🏗️', name:{tr:'İnşaat Agent',en:'Construction Agent'}, sector:{tr:'İNŞAAT & PROJE',en:'CONSTRUCTION'}, desc:{tr:'Hakediş takip, İSG denetim, tedarikçi iletişimi, nakit akış uyarısı.',en:'Progress payment tracking, HSE audit, supplier communication, cash flow alerts.'}, roi:{tr:'Ort. ₺14.200/ay tasarruf',en:'Avg ₺14,200/mo saving'}, features:[{tr:'Hakediş izleme',en:'Payment tracking'},{tr:'İSG denetim otomasyonu',en:'HSE audit automation'},{tr:'Malzeme sipariş takibi',en:'Material order tracking'},{tr:'Nakit akış uyarıları',en:'Cash flow alerts'}], price:'₺7.000', period:{tr:'/ay',en:'/mo'} },
-  { icon:'🚢', name:{tr:'İhracat Agent',en:'Export Agent'}, sector:{tr:'LOJİSTİK & GÜMRÜK',en:'LOGISTICS & CUSTOMS'}, desc:{tr:'GTİP kodu, gümrük belge kontrolü, BİLGE entegrasyonu, navlun karşılaştırması.',en:'GTİP code, customs document check, BİLGE integration, freight comparison.'}, roi:{tr:'Ort. ₺18.500/ay tasarruf',en:'Avg ₺18,500/mo saving'}, features:[{tr:'GTİP otomatik sınıflandırma',en:'Auto GTİP classification'},{tr:'BİLGE ön kontrol',en:'BİLGE pre-check'},{tr:'EUR.1/A.TR hazırlama',en:'EUR.1/A.TR preparation'},{tr:'Yaptırım kontrolü',en:'Sanctions check'}], price:'₺8.500', period:{tr:'/ay',en:'/mo'} },
-  { icon:'🎓', name:{tr:'Eğitim Agent',en:'Education Agent'}, sector:{tr:'ÖZEL OKUL & DERSHANE',en:'PRIVATE SCHOOLS'}, desc:{tr:'Veli bildirimi, öğrenci takip, kayıt otomasyonu, sınav rehberliği.',en:'Parent notifications, student tracking, enrollment automation, exam guidance.'}, roi:{tr:'Ort. ₺5.200/ay tasarruf',en:'Avg ₺5,200/mo saving'}, features:[{tr:'WhatsApp veli bildirimi',en:'WhatsApp parent alerts'},{tr:'Yoklama ve not takibi',en:'Attendance & grade tracking'},{tr:'Sınav hatırlatma sistemi',en:'Exam reminder system'},{tr:'MEB müfredat uyumlu',en:'MEB curriculum compliant'}], price:'₺3.500', period:{tr:'/ay',en:'/mo'} },
-];
-
-const faqs = [
-  { q:{tr:'Chatbot ile farkı ne?',en:'What\'s the difference from a chatbot?'}, a:{tr:'Chatbot yalnızca yanıt verir. Agent sisteme bağlanır ve iş yapar: takvim açar, form doldurur, belge oluşturur, SMS gönderir. Fark: sohbet vs iş yürütme. Agent insan müdahalesi olmadan bir süreci baştan sona tamamlayabilir.',en:'A chatbot only responds. An agent connects to systems and does work: opens calendars, fills forms, creates documents, sends SMS. The difference: conversation vs execution. An agent can complete a process from start to finish without human intervention.'} },
-  { q:{tr:'3 haftada gerçekten canlıya alınıyor mu?',en:'Does it really go live in 3 weeks?'}, a:{tr:'Standart ürünlerimiz için evet. Hafta 1: keşif ve süreç haritası. Hafta 2: entegrasyon ve test ortamı. Hafta 3: canlıya alım ve ince ayar. Özelleştirme gerektiren projelerde 6–8 haftaya uzayabilir.',en:'Yes, for our standard products. Week 1: discovery and process mapping. Week 2: integration and test environment. Week 3: go-live and fine-tuning. Projects requiring customization may extend to 6–8 weeks.'} },
-  { q:{tr:'WhatsApp entegrasyonu nasıl çalışıyor?',en:'How does WhatsApp integration work?'}, a:{tr:'Meta Business API üzerinden resmi entegrasyon. Mevcut işletme hattınıza bağlanır, siz numarayı değiştirmezsiniz. Türkiye\'de en yaygın müşteri kanalı olduğu için her ürünümüze dahil edilmiştir.',en:'Official integration via Meta Business API. Connects to your existing business number — you don\'t change it. Included in every product because it\'s the most common customer channel in Turkey.'} },
-  { q:{tr:'KVKK ve veri güvenliği nasıl sağlanıyor?',en:'How is KVKK and data security ensured?'}, a:{tr:'Tüm veriler Salesforce\'un ISO 27001 sertifikalı altyapısında işlenir. Hasta, müvekkil veya müşteri verisi üçüncü tarafa iletilmez. Türkiye lokasyonu seçeneği mevcuttur. KVKK aydınlatma metni ve veri işleme sözleşmesi kurulum paketine dahildir.',en:'All data processed on Salesforce\'s ISO 27001 certified infrastructure. No patient, client, or customer data shared with third parties. Turkey hosting option available. KVKK disclosure text and data processing agreement included in setup package.'} },
-  { q:{tr:'Teknik ekibim yoksa kurabilir miyim?',en:'Can I set it up without a technical team?'}, a:{tr:'Evet. Kurulum ve yapılandırma bizim tarafımızdan yapılır. Siz kuralları Türkçe tanımlarsınız — "randevu kabul saatlerimiz 09:00–18:00, cumartesi 10:00–14:00" gibi. Agent bunu uygular. Devam eden operasyon için teknik bilgi gerekmez.',en:'Yes. Setup and configuration is done by us. You define rules in plain language — "our appointment hours are 09:00–18:00, Saturday 10:00–14:00". The agent applies them. No technical knowledge required for ongoing operation.'} },
-  { q:{tr:'₺500 iş planı ile pilot paketi arasındaki fark?',en:'What\'s the difference between the ₺500 plan and pilot package?'}, a:{tr:'₺500 iş planı: Claude AI\'nin ürettiği sektöre özel ROI analizi, 90 günlük yol haritası ve entegrasyon önerilerini içeren PDF. Pilot paket (₺2.500): aynı plana ek olarak 1 aylık kurulum danışmanlığı, Salesforce lisans desteği ve 5 hazır agent talimat seti.',en:'₺500 business plan: PDF containing Claude AI-generated sector-specific ROI analysis, 90-day roadmap and integration recommendations. Pilot package (₺2,500): same plan plus 1 month setup consulting, Salesforce license support and 5 ready-made agent instruction sets.'} },
-];
-
-const wzSteps = [
-  { q:{tr:'Hangi sektördesiniz?',en:'What is your industry?'}, hint:{tr:'Size en uygun agent\'ı belirlemek için sektörünüzü seçin.',en:'Select your sector to identify the best agent fit.'}, options:[
-    {icon:'🏥',label:{tr:'Sağlık / Klinik',en:'Health / Clinic'},sub:{tr:'Özel klinik, poliklinik, muayenehane',en:'Private clinic, polyclinic, medical office'},val:'saglik'},
-    {icon:'⚖️',label:{tr:'Hukuk',en:'Legal'},sub:{tr:'Avukatlık bürosu, danışmanlık',en:'Law firm, legal consultancy'},val:'hukuk'},
-    {icon:'🧮',label:{tr:'Muhasebe / SMMM',en:'Accounting / CPA'},sub:{tr:'SMMM ofisi, muhasebe bürosu',en:'CPA office, accounting firm'},val:'muhasebe'},
-    {icon:'🏗️',label:{tr:'İnşaat / Proje',en:'Construction'},sub:{tr:'Müteahhit, proje yönetimi',en:'Contractor, project management'},val:'insaat'},
-    {icon:'🚢',label:{tr:'Lojistik / İhracat',en:'Logistics / Export'},sub:{tr:'Gümrük müşaviri, nakliye',en:'Customs broker, shipping'},val:'lojistik'},
-    {icon:'🎓',label:{tr:'Eğitim',en:'Education'},sub:{tr:'Özel okul, dershane, kurs',en:'Private school, tutoring, courses'},val:'egitim'},
-    {icon:'🏨',label:{tr:'Otelcilik',en:'Hospitality'},sub:{tr:'Otel, pansiyon, apart',en:'Hotel, guesthouse'},val:'otel'},
-    {icon:'🛒',label:{tr:'E-Ticaret',en:'E-Commerce'},sub:{tr:'Online mağaza, marketplace',en:'Online store, marketplace'},val:'eticaret'},
-    {icon:'🏭',label:{tr:'Üretim / Sanayi',en:'Manufacturing'},sub:{tr:'Fabrika, atölye, imalat',en:'Factory, workshop'},val:'uretim'},
-    {icon:'🏦',label:{tr:'Finans / Sigorta',en:'Finance / Insurance'},sub:{tr:'Sigorta acentesi, finans danışmanlık',en:'Insurance, financial advisory'},val:'finans'},
-  ]},
-  { q:{tr:'Şu an en büyük operasyonel ağrı noktanız hangisi?',en:'What is your biggest operational pain point right now?'}, hint:{tr:'Geçen hafta en çok zamanınızı ne aldı?',en:'What took most of your time last week?'}, options:[
-    {icon:'📞',label:{tr:'İletişim & Müşteri Takibi',en:'Communication & Follow-up'},sub:{tr:'Telefon, WhatsApp, e-posta yanıtları',en:'Phone, WhatsApp, email responses'},val:'iletisim'},
-    {icon:'📄',label:{tr:'Belge & Evrak',en:'Documents & Paperwork'},sub:{tr:'Form, PDF, beyanname hazırlama',en:'Forms, PDFs, declaration prep'},val:'belge'},
-    {icon:'⏰',label:{tr:'Süre & Takvim Takibi',en:'Deadline & Calendar Tracking'},sub:{tr:'Son tarihler, hatırlatmalar, planlama',en:'Deadlines, reminders, scheduling'},val:'takvim'},
-    {icon:'📊',label:{tr:'Raporlama & Veri',en:'Reporting & Data'},sub:{tr:'Rapor hazırlamak, veri derlemek',en:'Preparing reports, gathering data'},val:'rapor'},
-  ]},
-  { q:{tr:'Kaç kişilik bir ekibiniz var?',en:'How large is your team?'}, hint:{tr:'Agent\'ın ölçeğini ve bütçe modelini belirler.',en:'This determines the agent scale and budget model.'}, options:[
-    {icon:'👤',label:{tr:'Solo / Mikro',en:'Solo / Micro'},sub:{tr:'1–3 kişi',en:'1–3 people'},val:'solo'},
-    {icon:'🏢',label:{tr:'Küçük Ekip',en:'Small Team'},sub:{tr:'4–15 kişi',en:'4–15 people'},val:'kucuk'},
-    {icon:'🏛️',label:{tr:'KOBİ',en:'SME'},sub:{tr:'15–50 kişi',en:'15–50 people'},val:'kobi'},
-    {icon:'🏗️',label:{tr:'Büyük / Kurumsal',en:'Large / Enterprise'},sub:{tr:'50+ kişi',en:'50+ people'},val:'buyuk'},
-  ]},
-  { q:{tr:'Aylık kaç işlem yapıyorsunuz?',en:'How many transactions per month?'}, hint:{tr:'Randevu, belge, müşteri etkileşimi, sipariş — ne kadar?',en:'Appointments, documents, customer interactions, orders — how many?'}, options:[
-    {icon:'🌱',label:{tr:'100\'den az',en:'Under 100'},sub:{tr:'Küçük hacim, seçici otomasyon',en:'Small volume, selective automation'},val:'az'},
-    {icon:'📈',label:{tr:'100–500',en:'100–500'},sub:{tr:'Büyüme aşaması',en:'Growth stage'},val:'orta'},
-    {icon:'🚀',label:{tr:'500–2.000',en:'500–2,000'},sub:{tr:'Olgun operasyon',en:'Mature operation'},val:'yuksek'},
-    {icon:'⚡',label:{tr:'2.000+',en:'2,000+'},sub:{tr:'Yüksek hacim',en:'High volume'},val:'cok_yuksek'},
-  ]},
-  { q:{tr:'İşletmenizin adı? (isteğe bağlı)',en:'Your business name? (optional)'}, hint:{tr:'İş planını kişiselleştirmek için kullanılır.',en:'Used to personalize the business plan.'}, isText:true, placeholder:{tr:'Örn: Kara Klinik, Yıldız Hukuk...',en:'E.g. Kara Clinic, Yıldız Law...'} },
-];
-
-const productMap = {saglik:0,hukuk:1,muhasebe:2,insaat:3,lojistik:4,egitim:5,otel:0,eticaret:0,uretim:3,finans:2};
-const sectorLabels = {all:{tr:'Tümü',en:'All'},saglik:{tr:'Sağlık',en:'Health'},hukuk:{tr:'Hukuk',en:'Legal'},muhasebe:{tr:'Muhasebe',en:'Accounting'},insaat:{tr:'İnşaat',en:'Construction'},lojistik:{tr:'Lojistik',en:'Logistics'},egitim:{tr:'Eğitim',en:'Education'},otel:{tr:'Otelcilik',en:'Hospitality'}};
-
-// ═══ STATE ═══
-let wzCurrent=0, wzAnswers=[], bizPlanHTML='', activeFilter='all';
-
-// ═══ LANG ═══
+// Lang
 function setLang(l){
-  lang=l;
-  document.body.classList.toggle('lang-en',l==='en');
+  lang=l;document.body.classList.toggle('lang-en',l==='en');
   document.getElementById('btnTR').classList.toggle('active',l==='tr');
   document.getElementById('btnEN').classList.toggle('active',l==='en');
-  renderWizard(); renderCases(); renderProducts(); renderFAQ(); renderPainGrid(); renderTestimonials();
+  renderAll();
 }
 
-// ═══ ROI CALC ═══
-function calcROI(){
-  const vol=+document.getElementById('volSlider').value;
-  const time=+document.getElementById('timeSlider').value;
-  const cost=+document.getElementById('costSlider').value;
-  document.getElementById('volVal').textContent=vol;
-  document.getElementById('timeVal').textContent=time;
-  document.getElementById('costVal').textContent='₺'+cost;
-  const hoursMonth=(vol*time)/60;
-  const saving=Math.round(hoursMonth*cost*0.85);
-  const agentCost=5500;
-  const net=saving-agentCost;
-  const paybackWeeks=net>0?Math.max(1,Math.round(agentCost/saving*4)):null;
-  document.getElementById('roiSaving').textContent='₺'+saving.toLocaleString('tr-TR');
-  document.getElementById('roiTime').textContent=Math.round(hoursMonth)+' '+( lang==='tr'?'saat':'hrs');
-  document.getElementById('roiPayback').textContent=paybackWeeks?(paybackWeeks+'. '+(lang==='tr'?'hafta':'week')):(lang==='tr'?'Kârlı değil':'Not profitable');
-  document.getElementById('roiYear').textContent='₺'+Math.round(net*12/1000)+'K';
+function navTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+
+// WA Demo animations
+const demos=[
+  {prefix:'hr',ids:['hr0','hr1','hr2','hr3']},
+  {prefix:'ma',ids:['ma0','ma1','ma2','ma3']},
+  {prefix:'cr',ids:['cr0','cr1','cr2','cr3']},
+];
+demos.forEach(d=>{
+  let i=0;
+  function show(){
+    if(i<d.ids.length){
+      document.getElementById(d.ids[i]).style.display='';
+      i++;
+      setTimeout(show, i%2===0?1200:1800);
+    } else {
+      setTimeout(()=>{d.ids.forEach(id=>document.getElementById(id).style.display='none');i=0;setTimeout(show,800);},4000);
+    }
+  }
+  setTimeout(show, d.prefix==='hr'?600:d.prefix==='ma'?1400:2200);
+});
+
+// DATA
+const cases=[
+  {sector:'saglik',icon:'🏥',name:{tr:'Randevu Otomasyonu',en:'Appointment Automation'},desc:{tr:'Hasta WhatsApp\'tan randevu ister. Agent müsait saatleri gösterir, kaydeder, SMS ile teyit gönderir. Resepsiyonist artık telefon beklemez.',en:'Patient requests via WhatsApp. Agent shows slots, books, sends SMS confirmation. Receptionist stops waiting by phone.'},metrics:[{tr:'47 randevu/gün',en:'47 appts/day'},{tr:'%92 otomasyon',en:'92% automation'}]},
+  {sector:'saglik',icon:'💊',name:{tr:'İlaç Hatırlatma',en:'Medication Reminders'},desc:{tr:'Kronik hastalara günlük ilaç hatırlatması. İlaç alınmazsa doktor uyarısı. SGK uyumlu hasta takip formatı.',en:'Daily medication reminder for chronic patients. Doctor alert if missed. SGK-compliant patient tracking.'},metrics:[{tr:'%40 uyum artışı',en:'40% adherence lift'},{tr:'Günlük otomatik',en:'Daily automatic'}]},
+  {sector:'hukuk',icon:'⚖️',name:{tr:'Dava Takip Agent',en:'Case Tracking Agent'},desc:{tr:'UYAP\'tan duruşma tarihlerini çeker, avukata ve müvekkile hatırlatma gönderir. Süre kaçırma riski ortadan kalkar.',en:'Pulls hearing dates from UYAP, sends reminders to attorney and client. Eliminates deadline-miss risk.'},metrics:[{tr:'128 dosya/avukat',en:'128 files/lawyer'},{tr:'Sıfır kaçırılan süre',en:'Zero missed deadlines'}]},
+  {sector:'hukuk',icon:'📝',name:{tr:'Sözleşme Analiz',en:'Contract Analysis'},desc:{tr:'PDF sözleşme yükle. Agent 3 dakikada riskli maddeleri, eksik hükümleri ve TBK uyumsuzluklarını listeler.',en:'Upload PDF. Agent lists risky clauses, missing provisions and Turkish law issues in 3 minutes.'},metrics:[{tr:'3 dak. analiz',en:'3-min analysis'},{tr:'TBK uyum kontrolü',en:'Civil Code check'}]},
+  {sector:'muhasebe',icon:'🧮',name:{tr:'Beyanname Hatırlatma',en:'Declaration Reminders'},desc:{tr:'Tüm müşteriler için KDV, muhtasar, kurumlar vergisi takvimi. Gecikme faizi hesabı ile erken uyarı.',en:'VAT, withholding, corporate tax calendar for all clients. Early warning with penalty interest calculation.'},metrics:[{tr:'Sıfır gecikme cezası',en:'Zero late penalties'},{tr:'Çok müşteri yönetimi',en:'Multi-client mgmt'}]},
+  {sector:'muhasebe',icon:'🧾',name:{tr:'e-Fatura Analiz',en:'e-Invoice Analysis'},desc:{tr:'GİB\'den gelen e-faturaları otomatik kategorize eder, gider analizi yapar, şüpheli fatura flagler.',en:'Auto-categorizes e-invoices from GİB, analyzes expenses, flags suspicious invoices.'},metrics:[{tr:'GİB API entegre',en:'GİB API integrated'},{tr:'Anlık kategorizasyon',en:'Real-time category'}]},
+  {sector:'insaat',icon:'🏗️',name:{tr:'Hakediş Takip',en:'Progress Payment Tracking'},desc:{tr:'Alt yüklenici hakediş belgelerini izler, onay zincirini yönetir, gecikmelerde nakit akış uyarısı verir.',en:'Tracks subcontractor payment docs, manages approval chain, cash flow alert on delays.'},metrics:[{tr:'Çok alt yüklenici',en:'Multi-subcontractor'},{tr:'Otomatik onay zinciri',en:'Auto approval chain'}]},
+  {sector:'lojistik',icon:'🚢',name:{tr:'İhracat Belgesi Agent',en:'Export Document Agent'},desc:{tr:'EUR.1, A.TR, GTİP kodu, gümrük beyannamesi ön kontrolü. BİLGE\'ye göndermeden önce eksik belge tespiti.',en:'EUR.1, A.TR, GTİP code, customs pre-check. Flags missing documents before BİLGE submission.'},metrics:[{tr:'BİLGE entegre',en:'BİLGE integrated'},{tr:'6 saat/belge tasarruf',en:'6 hrs/doc saved'}]},
+  {sector:'egitim',icon:'🎓',name:{tr:'Veli Bildirim Agent',en:'Parent Notification Agent'},desc:{tr:'Sınav sonucu, yoklama, etkinlik bilgilendirmesi WhatsApp ile otomatik. Öğretmenin tek tek mesaj göndermesi tarih oldu.',en:'Exam results, attendance, events via WhatsApp automatically. Teachers stop sending individual messages.'},metrics:[{tr:'5.500+ özel okul',en:'5,500+ private schools'},{tr:'Anlık bildirim',en:'Instant notification'}]},
+  {sector:'finans',icon:'📊',name:{tr:'Yönetim Raporu Agent',en:'Management Report Agent'},desc:{tr:'ERP/Excel verilerinden haftalık yönetim raporu oluşturur. CFO\'ya her Pazartesi 08:00\'de inbox\'ta hazır.',en:'Generates weekly management report from ERP/Excel. In CFO inbox every Monday at 08:00.'},metrics:[{tr:'Her Pazartesi otomatik',en:'Auto every Monday'},{tr:'ERP entegre',en:'ERP integrated'}]},
+];
+
+const deptData=[
+  {icon:'👥',dept:{tr:'İNSAN KAYNAKLARI',en:'HUMAN RESOURCES'},name:{tr:'İK Departman Agent',en:'HR Department Agent'},desc:{tr:'Onboarding otomasyonu, izin & devamsızlık yönetimi, bordro soruları, performans takibi — İK\'nın tekrarlayan iş yükünün %70\'ini devralır.',en:'Onboarding automation, leave & absence management, payroll Q&A, performance tracking — takes over 70% of HR repetitive workload.'},agents:[{tr:'Onboarding & SGK bildirimi',en:'Onboarding & SGK filing'},{tr:'İzin talep & onay zinciri',en:'Leave request & approval chain'},{tr:'Bordro sorgulama ve açıklama',en:'Payroll query and explanation'},{tr:'Performans gözden geçirme',en:'Performance review tracking'}],waTag:{tr:'WhatsApp öncelikli',en:'WhatsApp-first'}},
+  {icon:'💰',dept:{tr:'MALİ İŞLER',en:'FINANCE'},name:{tr:'Mali İşler Departman Agent',en:'Finance Department Agent'},desc:{tr:'Fatura onayı, gider yönetimi, bütçe raporlama, GİB beyanname takibi — fotoğraf çek, WhatsApp\'a gönder, agent sisteme işler.',en:'Invoice approval, expense management, budget reporting, GİB declaration tracking — photo it, send to WhatsApp, agent processes in the system.'},agents:[{tr:'OCR fatura işleme & GİB',en:'OCR invoice processing & GİB'},{tr:'Çok kademeli onay zinciri',en:'Multi-tier approval chain'},{tr:'Haftalık bütçe raporu',en:'Weekly budget report'},{tr:'KDV & beyanname takvimi',en:'VAT & declaration calendar'}],waTag:{tr:'OCR + WhatsApp',en:'OCR + WhatsApp'}},
+  {icon:'⚖️',dept:{tr:'HUKUK / UYUMLULUK',en:'LEGAL / COMPLIANCE'},name:{tr:'Hukuk Departman Agent',en:'Legal Department Agent'},desc:{tr:'UYAP dava takibi, sözleşme analizi, süre yönetimi, KVKK uyumluluk kontrolü — kaçırılan süre riski sıfıra iner.',en:'UYAP case tracking, contract analysis, deadline management, KVKK compliance — missed deadline risk drops to zero.'},agents:[{tr:'UYAP dava & duruşma takibi',en:'UYAP case & hearing tracking'},{tr:'Sözleşme risk analizi',en:'Contract risk analysis'},{tr:'Mevzuat değişiklik uyarısı',en:'Regulation change alerts'},{tr:'KVKK uyumluluk kontrolü',en:'KVKK compliance check'}],waTag:{tr:'UYAP entegre',en:'UYAP integrated'}},
+  {icon:'📈',dept:{tr:'SATIŞ / CRM',en:'SALES / CRM'},name:{tr:'Satış & CRM Agent',en:'Sales & CRM Agent'},desc:{tr:'Lead yönetimi, teklif oluşturma, CRM güncelleme, takip hatırlatmaları — satış ekibi admin işleri yerine satışa odaklanır.',en:'Lead management, quote creation, CRM updates, follow-up reminders — sales team focuses on selling, not admin.'},agents:[{tr:'Lead skorlama & önceliklendirme',en:'Lead scoring & prioritization'},{tr:'Otomatik teklif PDF oluşturma',en:'Auto quote PDF generation'},{tr:'CRM güncelleme (ses/metin)',en:'CRM update (voice/text)'},{tr:'Pipeline takip & hatırlatma',en:'Pipeline tracking & reminder'}],waTag:{tr:'CRM entegre',en:'CRM integrated'}},
+  {icon:'📣',dept:{tr:'PAZARLAMA',en:'MARKETING'},name:{tr:'Pazarlama Agent',en:'Marketing Agent'},desc:{tr:'İçerik üretimi, sosyal medya yönetimi, kampanya raporu, rakip izleme — pazarlama operasyonu WhatsApp\'tan yönetilir.',en:'Content creation, social media management, campaign reports, competitor monitoring — marketing ops managed from WhatsApp.'},agents:[{tr:'Platform içerik taslağı',en:'Platform content drafts'},{tr:'Haftalık kampanya raporu',en:'Weekly campaign report'},{tr:'Rakip değişiklik uyarısı',en:'Competitor change alerts'},{tr:'SEO içerik asistanı',en:'SEO content assistant'}],waTag:{tr:'WhatsApp + AI içerik',en:'WhatsApp + AI content'}},
+  {icon:'🏢',dept:{tr:'İDARİ İŞLER',en:'ADMINISTRATION'},name:{tr:'İdari İşler Agent',en:'Admin Agent'},desc:{tr:'Toplantı planlaması, seyahat rezervasyonu, satın alma akışı, tesis yönetimi — ofis operasyonlarının koordinasyonu otomatikleşir.',en:'Meeting scheduling, travel booking, procurement flow, facility management — office coordination automated.'},agents:[{tr:'Takvim & toplantı organizasyonu',en:'Calendar & meeting organization'},{tr:'Seyahat & rezervasyon',en:'Travel & reservation'},{tr:'Satın alma onay akışı',en:'Procurement approval flow'},{tr:'Tesis arıza takibi',en:'Facility fault tracking'}],waTag:{tr:'Takvim + WhatsApp',en:'Calendar + WhatsApp'}},
+];
+
+const products=[
+  {icon:'🏥',name:{tr:'Klinik Agent',en:'Clinic Agent'},sector:{tr:'ÖZEL SAĞLIK KLİNİKLERİ',en:'PRIVATE HEALTH CLINICS'},desc:{tr:'Randevu, hasta hatırlatma, sigorta ön yetki ve memnuniyet takibini yöneten tam klinik asistanı.',en:'Full clinic assistant: appointments, reminders, insurance pre-auth, satisfaction tracking.'},features:[{tr:'WhatsApp randevu otomasyonu',en:'WhatsApp appointment automation'},{tr:'SGK/sigorta ön yetki',en:'SGK/insurance pre-auth'},{tr:'Hasta memnuniyet takibi',en:'Patient satisfaction tracking'},{tr:'KVKK uyumlu veri işleme',en:'KVKK-compliant data processing'}],price:'₺4.500',period:{tr:'/ay',en:'/mo'}},
+  {icon:'⚖️',name:{tr:'Hukuk Agent',en:'Legal Agent'},sector:{tr:'HUKUK BÜROLARI',en:'LAW FIRMS'},desc:{tr:'UYAP entegrasyonuyla dava takip, süre yönetimi, sözleşme analizi ve müvekkil iletişimi.',en:'Case tracking, deadline management, contract analysis, client communication with UYAP.'},features:[{tr:'UYAP dava takibi',en:'UYAP case tracking'},{tr:'Sözleşme risk analizi',en:'Contract risk analysis'},{tr:'Müvekkil bilgi agent\'ı',en:'Client info agent'},{tr:'Zamanaşımı uyarı sistemi',en:'Limitation alerts'}],price:'₺6.500',period:{tr:'/ay',en:'/mo'}},
+  {icon:'🧮',name:{tr:'Muhasebe Agent',en:'Accounting Agent'},sector:{tr:'SMMM OFİSLERİ',en:'CPA OFFICES'},desc:{tr:'GİB entegrasyonuyla beyanname takvimi, e-fatura analizi, vergi hatırlatma ve finansal sağlık raporu.',en:'Declaration calendar with GİB, e-invoice analysis, tax reminders, financial health reports.'},features:[{tr:'GİB e-fatura entegrasyonu',en:'GİB e-invoice integration'},{tr:'Çok müşteri takvimi',en:'Multi-client calendar'},{tr:'Gecikme faizi uyarısı',en:'Penalty interest alerts'},{tr:'Finansal sağlık dashboard',en:'Financial health dashboard'}],price:'₺5.500',period:{tr:'/ay',en:'/mo'}},
+  {icon:'🏗️',name:{tr:'İnşaat Agent',en:'Construction Agent'},sector:{tr:'İNŞAAT & PROJE',en:'CONSTRUCTION & PROJECT'},desc:{tr:'Hakediş takip, İSG denetim, tedarikçi iletişimi ve nakit akış uyarı sistemi.',en:'Progress payment tracking, HSE audit, supplier communication, cash flow alerts.'},features:[{tr:'Alt yüklenici hakediş izleme',en:'Subcontractor payment tracking'},{tr:'İSG denetim otomasyonu',en:'HSE audit automation'},{tr:'Malzeme sipariş takibi',en:'Material order tracking'},{tr:'Nakit akış uyarıları',en:'Cash flow alerts'}],price:'₺7.000',period:{tr:'/ay',en:'/mo'}},
+  {icon:'🚢',name:{tr:'İhracat Agent',en:'Export Agent'},sector:{tr:'LOJİSTİK & GÜMRÜK',en:'LOGISTICS & CUSTOMS'},desc:{tr:'GTİP kodu, gümrük belge kontrolü, BİLGE entegrasyonu ve navlun karşılaştırması.',en:'GTİP code, customs document check, BİLGE integration, freight rate comparison.'},features:[{tr:'GTİP otomatik sınıflandırma',en:'Auto GTİP classification'},{tr:'BİLGE ön kontrol',en:'BİLGE pre-check'},{tr:'EUR.1 / A.TR hazırlama',en:'EUR.1 / A.TR preparation'},{tr:'Tedarikçi yaptırım kontrolü',en:'Supplier sanctions check'}],price:'₺8.500',period:{tr:'/ay',en:'/mo'}},
+  {icon:'🎓',name:{tr:'Eğitim Agent',en:'Education Agent'},sector:{tr:'ÖZEL OKUL & DERSHANE',en:'PRIVATE SCHOOLS'},desc:{tr:'Veli bildirimi, öğrenci takip, kayıt otomasyonu ve sınav hazırlık rehberliği.',en:'Parent notifications, student tracking, enrollment automation, exam prep guidance.'},features:[{tr:'WhatsApp veli bildirimi',en:'WhatsApp parent alerts'},{tr:'Yoklama ve not takibi',en:'Attendance & grade tracking'},{tr:'Sınav hatırlatma sistemi',en:'Exam reminder system'},{tr:'MEB müfredat uyumlu',en:'MEB curriculum compliant'}],price:'₺3.500',period:{tr:'/ay',en:'/mo'}},
+  {icon:'🏨',name:{tr:'Otelcilik Agent',en:'Hospitality Agent'},sector:{tr:'OTEL & KONAKLAMA',en:'HOTEL & HOSPITALITY'},desc:{tr:'Rezervasyon yönetimi, misafir iletişimi, temizlik planlaması ve online yorum otomasyonu.',en:'Reservation management, guest communication, housekeeping scheduling, review automation.'},features:[{tr:'OTA kanalı rezervasyon senkronu',en:'OTA channel sync'},{tr:'Misafir WhatsApp iletişimi',en:'Guest WhatsApp comms'},{tr:'Check-in/out hatırlatmaları',en:'Check-in/out reminders'},{tr:'Yorum takip ve yanıtlama',en:'Review monitoring & replies'}],price:'₺5.000',period:{tr:'/ay',en:'/mo'}},
+  {icon:'🛒',name:{tr:'E-Ticaret Agent',en:'E-Commerce Agent'},sector:{tr:'E-TİCARET & PERAKENDE',en:'E-COMMERCE & RETAIL'},desc:{tr:'Sipariş takip, iade yönetimi, stok uyarısı ve müşteri destek otomasyonu.',en:'Order tracking, return management, stock alerts, customer support automation.'},features:[{tr:'Trendyol/Hepsiburada entegrasyon',en:'Trendyol/Hepsiburada integration'},{tr:'Kargo takip otomasyonu',en:'Shipping tracking automation'},{tr:'İade süreci yönetimi',en:'Return process management'},{tr:'Stok kritik uyarısı',en:'Low stock alerts'}],price:'₺4.000',period:{tr:'/ay',en:'/mo'}},
+  {icon:'🏭',name:{tr:'Üretim Agent',en:'Manufacturing Agent'},sector:{tr:'ÜRETİM & SANAYİ',en:'MANUFACTURING & INDUSTRY'},desc:{tr:'OEE takibi, bakım planlaması, tedarikçi sipariş otomasyonu ve üretim raporu agent.',en:'OEE tracking, maintenance scheduling, supplier order automation, production reporting.'},features:[{tr:'OEE metrik izleme',en:'OEE metric monitoring'},{tr:'Preventif bakım uyarısı',en:'Preventive maintenance alerts'},{tr:'Tedarikçi sipariş otomasyonu',en:'Supplier order automation'},{tr:'Shift raporu oluşturma',en:'Shift report generation'}],price:'₺9.000',period:{tr:'/ay',en:'/mo'}},
+  {icon:'🏦',name:{tr:'Finans & Sigorta Agent',en:'Finance & Insurance Agent'},sector:{tr:'FİNANS & SİGORTA',en:'FINANCE & INSURANCE'},desc:{tr:'Poliçe yenileme, hasar takip, müşteri bilgilendirme ve uyumluluk raporlama.',en:'Policy renewal, claims tracking, customer notifications, compliance reporting.'},features:[{tr:'Poliçe yenileme otomasyonu',en:'Policy renewal automation'},{tr:'Hasar başvuru takibi',en:'Claims tracking'},{tr:'BDDK/SPK uyumluluk uyarısı',en:'BDDK/SPK compliance alerts'},{tr:'Müşteri portföy özeti',en:'Customer portfolio summary'}],price:'₺8.000',period:{tr:'/ay',en:'/mo'}},
+];
+
+const testimonials=[
+  {initials:'AK',bg:'var(--blue)',name:{tr:'Ayşe K.',en:'Ayşe K.'},role:{tr:'İK Müdürü, İstanbul',en:'HR Manager, Istanbul'},type:{tr:'Kurumsal',en:'Enterprise'},text:{tr:'"İK ekibimiz artık izin taleplerini manuel işlemiyor. WhatsApp\'tan gelen her talep saniyeler içinde işleniyor. Onboarding süreci 3 günden 4 saate indi."',en:'"Our HR team no longer processes leave requests manually. Every WhatsApp request is processed in seconds. Onboarding dropped from 3 days to 4 hours."'}},
+  {initials:'MÖ',bg:'var(--emerald)',name:{tr:'Mehmet Ö.',en:'Mehmet Ö.'},role:{tr:'CFO, Lojistik A.Ş.',en:'CFO, Logistics Co.'},type:{tr:'Kurumsal',en:'Enterprise'},text:{tr:'"Fatura onay süresi 4 günden 4 saate düştü. Agent fotoğrafı alıyor, OCR ile işliyor, CFO\'ya gönderiyor. Muhasebe ekibimiz analitik işe vakit buldu."',en:'"Invoice approval time dropped from 4 days to 4 hours. Agent takes the photo, processes OCR, routes to CFO. Accounting team now has time for analytics."'}},
+  {initials:'SF',bg:'var(--violet)',name:{tr:'Selin F.',en:'Selin F.'},role:{tr:'Satış Direktörü, İzmir',en:'Sales Director, Izmir'},type:{tr:'KOBİ',en:'SME'},text:{tr:'"Satış ekibimiz toplantı sonrası sesli not bırakıyor, agent CRM\'e işliyor. Pipeline temiz, takip kaçmıyor. Dönüşüm oranımız %28 arttı."',en:'"Sales team leaves voice notes after meetings, agent enters CRM. Pipeline clean, no missed follow-ups. Conversion rate up 28%."'}},
+  {initials:'DY',bg:'var(--amber)',name:{tr:'Dr. Deniz Y.',en:'Dr. Deniz Y.'},role:{tr:'Klinik Sahibi, Ankara',en:'Clinic Owner, Ankara'},type:{tr:'KOBİ',en:'SME'},text:{tr:'"Randevu otomasyonu ile resepsiyonistim artık hasta hizmetine odaklanıyor. Günde 47 randevu, %92\'si tamamen otomatik. SGK entegrasyonu hayat kurtardı."',en:'"With appointment automation my receptionist focuses on patient service. 47 appointments/day, 92% fully automatic. SGK integration was a lifesaver."'}},
+];
+
+const faqs=[
+  {q:{tr:'KOBİ için mi yoksa kurumsal şirket için mi daha uygun?',en:'Is it more suitable for SMEs or enterprise companies?'},a:{tr:'Her ikisi için de hazır. KOBİ çözümlerimiz sektöre özel hazır yapılandırmalarla gelir (klinik, hukuk bürosu, muhasebe, vb.). Kurumsal çözümler ise şirket içi departmanlara yöneliktir (İK, Mali İşler, CRM). Aynı altyapı, farklı yapılandırma.',en:'Ready for both. SME solutions come with sector-specific ready configurations (clinic, law firm, accounting, etc.). Enterprise solutions target internal departments (HR, Finance, CRM). Same infrastructure, different configuration.'}},
+  {q:{tr:'WhatsApp neden öne çıkıyor, başka kanallar da var mı?',en:'Why is WhatsApp featured, are there other channels?'},a:{tr:'Türkiye\'de %92 penetrasyona sahip WhatsApp, adaptasyon süresini sıfıra indiriyor. Rakip platformlarda ücretli eklenti olan WhatsApp, bizde tüm paketlere dahil. E-posta, SMS, web chat ve Slack kanalları da destekleniyor; ancak müşterilerimizin %87\'si WhatsApp\'ı öncelikli tercih ediyor.',en:'WhatsApp with 92% penetration in Turkey reduces adaptation time to zero. WhatsApp is a paid add-on elsewhere; with us it is included in all packages. Email, SMS, web chat and Slack are also supported; but 87% of our customers prefer WhatsApp as primary.'}},
+  {q:{tr:'Kurumsal ERP ve CRM sistemlerimizle entegre olur mu?',en:'Does it integrate with our enterprise ERP and CRM systems?'},a:{tr:'Evet. 200+ hazır entegrasyon konnektörü mevcuttur: SAP, Logo, Microsoft Dynamics, Paraşüt, Netsis ve daha fazlası. Türkiye\'ye özgü sistemler için de doğrudan bağlantı yapıyoruz: GİB, UYAP, SGK, BİLGE.',en:'Yes. We offer 200+ ready integration connectors: SAP, Logo, Microsoft Dynamics, Paraşüt, Netsis and more. We also connect directly for Turkey-specific systems: GİB, UYAP, SGK, BİLGE.'}},
+  {q:{tr:'Hangi sektörden/departmandan başlamalıyız?',en:'Which sector/department should we start with?'},a:{tr:'Müşterilerimizin %60\'ı en yüksek manuel iş yüküne sahip yerden başlıyor. KOBİ\'lerde bu genellikle Klinik Agent veya Muhasebe Agent. Kurumsal şirketlerde İK veya Mali İşler. Keşif görüşmesinde birlikte analiz ediyoruz.',en:'60% of our customers start where the highest manual workload is. For SMEs this is usually Clinic Agent or Accounting Agent. For enterprises, HR or Finance. We analyze together in the discovery call.'}},
+  {q:{tr:'Verilerimiz ve güvenlik konusunda ne garantisi var?',en:'What guarantees on our data and security?'},a:{tr:'Altyapımız ISO 27001, SOC 2 Type II, GDPR sertifikalıdır. Türkiye için KVKK uyumlu hizmet sözleşmesi imzalıyoruz. WhatsApp bağlantısı resmi Meta Business API üzerinden yapılır. İsteğe bağlı Türkiye veri lokasyonu seçeneği mevcuttur.',en:'Our infrastructure is ISO 27001, SOC 2 Type II, GDPR certified. We sign KVKK-compliant service agreement for Turkey. WhatsApp connection is via official Meta Business API. Optional Turkey data location is available.'}},
+  {q:{tr:'3 haftada canlıya alım gerçekçi mi?',en:'Is 3-week go-live realistic?'},a:{tr:'Tek bir sektör çözümü veya departman için gerçekçi. Hafta 1: keşif ve sistem bağlantıları. Hafta 2: yapılandırma ve test. Hafta 3: pilot ve canlıya alım. Birden fazla departman veya entegrasyon için süre uzayabilir, paralel çalışırız.',en:'Realistic for a single sector solution or department. Week 1: discovery and system connections. Week 2: configuration and testing. Week 3: pilot and go-live. For multiple departments or integrations, the timeline extends but we work in parallel.'}},
+];
+
+const wzSteps=[
+  {q:{tr:'Şirketiniz nasıl bir yapıda?',en:'What type of company are you?'},hint:{tr:'Size en uygun çözümü belirlemek için',en:'To identify the best solution for you'},options:[
+    {icon:'🏥',label:{tr:'KOBİ — Sektör odaklı',en:'SME — Sector-focused'},sub:{tr:'Klinik, hukuk, muhasebe, inşaat…',en:'Clinic, legal, accounting, construction…'},val:'kobi'},
+    {icon:'🏢',label:{tr:'Kurumsal — Departman odaklı',en:'Enterprise — Department-focused'},sub:{tr:'İK, Mali İşler, CRM, Hukuk dept.',en:'HR, Finance, CRM, Legal dept.'},val:'kurumsal'},
+    {icon:'🌐',label:{tr:'Her ikisi de var',en:'Both apply'},sub:{tr:'Hem sektörel hem departman',en:'Both sector and department needs'},val:'hybrid'},
+    {icon:'🤷',label:{tr:'Emin değilim',en:'Not sure yet'},sub:{tr:'Birlikte belirleyelim',en:'Let us figure out together'},val:'unknown'},
+  ]},
+  {q:{tr:'Hangi alandaki sorunu çözmek istiyorsunuz?',en:'Which area do you want to solve?'},hint:{tr:'En yüksek manuel iş yükü nerede?',en:'Where is the highest manual workload?'},options:[
+    {icon:'📋',label:{tr:'Onboarding / İK süreçleri',en:'Onboarding / HR processes'},sub:{tr:'Çalışan işlemleri otomasyonu',en:'Employee process automation'},val:'ik'},
+    {icon:'🧾',label:{tr:'Fatura / Mali onaylar',en:'Invoice / Finance approvals'},sub:{tr:'Ödeme ve onay akışları',en:'Payment and approval flows'},val:'mali'},
+    {icon:'📈',label:{tr:'Satış / CRM / Lead',en:'Sales / CRM / Lead'},sub:{tr:'Pipeline ve müşteri takibi',en:'Pipeline and customer tracking'},val:'crm'},
+    {icon:'🏥',label:{tr:'Sağlık / Klinik',en:'Health / Clinic'},sub:{tr:'Randevu ve hasta yönetimi',en:'Appointment and patient management'},val:'saglik'},
+    {icon:'⚖️',label:{tr:'Hukuk / Uyumluluk',en:'Legal / Compliance'},sub:{tr:'Dava, sözleşme, süre takibi',en:'Case, contract, deadline tracking'},val:'hukuk'},
+    {icon:'📦',label:{tr:'Diğer sektör/departman',en:'Other sector/department'},sub:{tr:'Muhasebe, lojistik, eğitim…',en:'Accounting, logistics, education…'},val:'diger'},
+  ]},
+  {q:{tr:'Çalışan sayınız?',en:'Employee count?'},hint:{tr:'Yapılandırma ve fiyat modeli için',en:'For configuration and pricing model'},options:[
+    {icon:'🌱',label:{tr:'1–20',en:'1–20'},sub:{tr:'Mikro / başlangıç',en:'Micro / startup'},val:'mikro'},
+    {icon:'📈',label:{tr:'21–100',en:'21–100'},sub:{tr:'Büyüyen KOBİ',en:'Growing SME'},val:'kobi'},
+    {icon:'🏛️',label:{tr:'101–500',en:'101–500'},sub:{tr:'Orta ölçek',en:'Mid-market'},val:'orta'},
+    {icon:'🏗️',label:{tr:'500+',en:'500+'},sub:{tr:'Büyük şirket',en:'Large enterprise'},val:'buyuk'},
+  ]},
+  {q:{tr:'WhatsApp kullanımınız?',en:'Your WhatsApp usage?'},hint:{tr:'Entegrasyon planlaması için',en:'For integration planning'},options:[
+    {icon:'✅',label:{tr:'WhatsApp Business aktif',en:'WhatsApp Business active'},sub:{tr:'Hazır numara var',en:'Ready number available'},val:'aktif'},
+    {icon:'📱',label:{tr:'Bireysel olarak',en:'Individually'},sub:{tr:'Resmi hat yok',en:'No official line'},val:'bireysel'},
+    {icon:'🆕',label:{tr:'Henüz yok',en:'None yet'},sub:{tr:'Sıfırdan başlayacağız',en:'Starting from scratch'},val:'yok'},
+  ]},
+  {q:{tr:'Şirket adınız (isteğe bağlı)',en:'Company name (optional)'},hint:{tr:'Planı kişiselleştirmek için',en:'To personalize the plan'},isText:true,placeholder:{tr:'Örn: Özgür İnşaat A.Ş.',en:'E.g. Özgür Construction Ltd.'}},
+];
+
+const sectorLabels={saglik:{tr:'Sağlık',en:'Health'},hukuk:{tr:'Hukuk',en:'Legal'},muhasebe:{tr:'Muhasebe',en:'Accounting'},insaat:{tr:'İnşaat',en:'Construction'},lojistik:{tr:'Lojistik',en:'Logistics'},egitim:{tr:'Eğitim',en:'Education'},finans:{tr:'Finans',en:'Finance'}};
+const sectorIcons={saglik:'🏥',hukuk:'⚖️',muhasebe:'🧮',insaat:'🏗️',lojistik:'🚢',egitim:'🎓',finans:'📊'};
+
+let activeCaseFilter='all';
+
+function renderAll(){renderCases();renderDepts();renderProducts();renderTestimonials();renderFAQ();renderWizard();}
+
+function switchSplit(mode,btn){
+  document.querySelectorAll('.split-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.split-view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('sv-'+mode).classList.add('active');
 }
 
-// ═══ PAIN GRID ═══
-function renderPainGrid(){
-  document.getElementById('painGrid').innerHTML=painPoints.map(p=>`
-    <div class="pain-card" style="--card-color:${p.color}">
-      <div class="pain-cost" style="color:${p.color}">${p.cost[lang]}</div>
-      <div class="pain-cost-label">${p.costLabel[lang]}</div>
-      <div class="pain-title">${p.title[lang]}</div>
-      <div class="pain-desc">${p.desc[lang]}</div>
-      <div class="pain-after">${p.after[lang]}</div>
-    </div>`).join('');
-}
-
-// ═══ TESTIMONIALS ═══
-function renderTestimonials(){
-  document.getElementById('testimonialsGrid').innerHTML=testimonials.map(t=>`
-    <div class="tcard">
-      <div class="tcard-stars">★★★★★</div>
-      <div class="tcard-text">${t.text[lang]}</div>
-      <div class="tcard-author">
-        <div class="tcard-avatar">${t.initials}</div>
-        <div>
-          <div class="tcard-name">${t.name[lang]}</div>
-          <div class="tcard-role">${t.role[lang]}</div>
-        </div>
-      </div>
-      <div class="tcard-result">${t.result[lang]}</div>
-    </div>`).join('');
-}
-
-// ═══ CASES ═══
 function renderCases(){
-  const sectors=['all','saglik','hukuk','muhasebe','insaat','lojistik','egitim','otel'];
-  document.getElementById('caseFilter').innerHTML=sectors.map(s=>`
-    <button class="filter-btn ${activeFilter===s?'active':''}" onclick="filterCases('${s}')">${sectorLabels[s]?.[lang]||s}</button>`).join('');
-  document.getElementById('casesGrid').innerHTML=cases.map(c=>`
-    <div class="case-card ${activeFilter!=='all'&&c.sector!==activeFilter?'hidden':''}">
-      <div class="case-header">
-        <div class="case-emoji" style="background:${c.bg}">${c.icon}</div>
-        <div><div class="case-sector">${sectorLabels[c.sector]?.[lang]||c.sector}</div><div class="case-name">${c.name[lang]}</div></div>
-      </div>
-      <div class="case-problem">${c.problem[lang]}</div>
+  const sectors=[...new Set(cases.map(c=>c.sector))];
+  document.getElementById('caseFilters').innerHTML=
+    `<button class="cf ${activeCaseFilter==='all'?'active':''}" onclick="filterCases('all')"><span class="tr-only">Tümü</span><span class="en-only">All</span></button>`+
+    sectors.map(s=>`<button class="cf ${activeCaseFilter===s?'active':''}" onclick="filterCases('${s}')">${sectorIcons[s]||'●'} <span class="tr-only">${sectorLabels[s]?.tr||s}</span><span class="en-only">${sectorLabels[s]?.en||s}</span></button>`).join('');
+  const filtered=activeCaseFilter==='all'?cases:cases.filter(c=>c.sector===activeCaseFilter);
+  document.getElementById('casesGrid').innerHTML=filtered.map(c=>`
+    <div class="case-card">
+      <div class="case-icon">${c.icon}</div>
+      <div class="case-name">${c.name[lang]}</div>
       <div class="case-desc">${c.desc[lang]}</div>
-      <div class="case-result">${c.result[lang]}</div>
-      <div class="case-metrics">${c.metrics.map(m=>`<div class="case-metric">${m[lang]}</div>`).join('')}</div>
+      <div class="case-metrics">${c.metrics.map(m=>`<span class="cmet">${m[lang]}</span>`).join('')}</div>
     </div>`).join('');
 }
 
-function filterCases(s){activeFilter=s;renderCases();}
+function filterCases(s){activeCaseFilter=s;renderCases();}
 
-// ═══ PRODUCTS ═══
+function renderDepts(){
+  document.getElementById('deptGrid').innerHTML=deptData.map(d=>`
+    <div class="dept-card">
+      <div class="dept-card-icon">${d.icon}</div>
+      <div class="dept-card-dept">${d.dept[lang]}</div>
+      <div class="dept-card-name">${d.name[lang]}</div>
+      <div class="dept-card-desc">${d.desc[lang]}</div>
+      <div class="dept-card-agents">${d.agents.map(a=>`<div class="dca">${a[lang]}</div>`).join('')}</div>
+      <div class="dept-card-wa"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.975-1.418A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg> ${d.waTag[lang]}</div>
+    </div>`).join('');
+}
+
 function renderProducts(){
   document.getElementById('productsGrid').innerHTML=products.map(p=>`
     <div class="prod-card">
       <div class="prod-card-top">
-        <div class="prod-card-icon">${p.icon}</div>
         <div class="prod-card-sector">${p.sector[lang]}</div>
+        <div class="prod-card-icon">${p.icon}</div>
         <div class="prod-card-name">${p.name[lang]}</div>
         <div class="prod-card-desc">${p.desc[lang]}</div>
       </div>
       <div class="prod-card-body">
-        <div class="prod-roi-highlight">
-          <div class="prod-roi-val">${p.roi[lang]}</div>
-        </div>
-        <ul class="prod-features">${p.features.map(f=>`<li class="pf-item">${f[lang]}</li>`).join('')}</ul>
-        <div class="prod-price-row">
+        <ul class="prod-card-features">${p.features.map(f=>`<li class="pcf">${f[lang]}</li>`).join('')}</ul>
+        <div class="prod-card-footer">
           <div class="prod-price">${p.price}<span>${p.period[lang]}</span></div>
-          <button class="prod-btn" onclick="navTo('wizard')">${lang==='tr'?'Planımı Al →':'Get My Plan →'}</button>
+          <button class="prod-btn" onclick="navTo('wizard')">${lang==='tr'?'Planı Al →':'Get Plan →'}</button>
         </div>
       </div>
     </div>`).join('');
 }
 
-// ═══ FAQ ═══
+function renderTestimonials(){
+  document.getElementById('testiGrid').innerHTML=testimonials.map(t=>`
+    <div class="tcard">
+      <div class="tcard-stars">★★★★★</div>
+      <div class="tcard-text">${t.text[lang]}</div>
+      <div class="tcard-author">
+        <div class="tcard-av" style="background:${t.bg}">${t.initials}</div>
+        <div><div class="tcard-name">${t.name[lang]}</div><div class="tcard-role">${t.role[lang]}</div></div>
+      </div>
+      <div class="tcard-type">${t.type[lang]}</div>
+    </div>`).join('');
+}
+
 function renderFAQ(){
   document.getElementById('faqList').innerHTML=faqs.map((f,i)=>`
     <div class="faq-item" id="faq-${i}">
-      <div class="faq-q" onclick="toggleFAQ(${i})">${f.q[lang]}<span class="faq-arr">▾</span></div>
+      <div class="faq-q" onclick="toggleFaq(${i})">${f.q[lang]}<span class="faq-arr">▾</span></div>
       <div class="faq-a">${f.a[lang]}</div>
     </div>`).join('');
 }
-function toggleFAQ(i){document.querySelectorAll('.faq-item').forEach((el,idx)=>{idx===i?el.classList.toggle('open'):el.classList.remove('open');})}
+function toggleFaq(i){document.querySelectorAll('.faq-item').forEach((el,j)=>j===i?el.classList.toggle('open'):el.classList.remove('open'));}
 
-// ═══ WIZARD ═══
+// WIZARD
 function renderWizard(){
-  const stepLabels={tr:['Sektör','Sorun','Ekip','Hacim','İşletme'],en:['Sector','Problem','Team','Volume','Business']};
+  const lbls={tr:['Şirket tipi','Problem alanı','Büyüklük','WhatsApp','Şirket adı'],en:['Company type','Problem area','Size','WhatsApp','Company name']};
   document.getElementById('wsiRow').innerHTML=wzSteps.map((s,i)=>`
     <div class="wsi ${i<wzCurrent?'done':i===wzCurrent?'active':''}">
       <div class="wsi-dot">${i<wzCurrent?'✓':i+1}</div>
-      <span style="display:${window.innerWidth<640?'none':'inline'}">${stepLabels[lang][i]||''}</span>
+      <span style="display:${window.innerWidth<600?'none':'inline'}">${lbls[lang][i]||''}</span>
     </div>${i<wzSteps.length-1?'<div class="wsi-line"></div>':''}`).join('');
 
   document.getElementById('wizardBody').innerHTML=wzSteps.map((s,i)=>{
-    if(s.isText)return`<div class="wz-step ${i===wzCurrent?'active':''}" id="wzs-${i}"><div class="wz-q">${s.q[lang]}</div><div class="wz-hint">${s.hint[lang]}</div><input type="text" class="wz-text-input" id="wztxt-${i}" placeholder="${s.placeholder[lang]}" value="${wzAnswers[i]||''}" oninput="wzTextInput(${i},this.value)"></div>`;
-    return`<div class="wz-step ${i===wzCurrent?'active':''}" id="wzs-${i}"><div class="wz-q">${s.q[lang]}</div><div class="wz-hint">${s.hint[lang]}</div><div class="wz-options">${s.options.map(o=>`<button class="wz-opt ${wzAnswers[i]===o.val?'selected':''}" onclick="wzSelect(${i},'${o.val}')"><div class="wz-opt-icon">${o.icon}</div><div class="wz-opt-label">${o.label[lang]}</div><div class="wz-opt-sub">${o.sub[lang]}</div></button>`).join('')}</div></div>`;
+    if(s.isText) return `<div class="wz-step ${i===wzCurrent?'active':''}" id="wzs-${i}">
+      <div class="wz-q">${s.q[lang]}</div><div class="wz-hint">${s.hint[lang]}</div>
+      <input type="text" class="wz-text-input" placeholder="${s.placeholder[lang]}" value="${wzAnswers[i]||''}" oninput="wzTextInput(${i},this.value)">
+    </div>`;
+    return `<div class="wz-step ${i===wzCurrent?'active':''}" id="wzs-${i}">
+      <div class="wz-q">${s.q[lang]}</div><div class="wz-hint">${s.hint[lang]}</div>
+      <div class="wz-opts">${s.options.map(o=>`<button class="wz-opt ${wzAnswers[i]===o.val?'selected':''}" onclick="wzSelect(${i},'${o.val}')">
+        <div class="wz-opt-icon">${o.icon}</div>
+        <div class="wz-opt-label">${o.label[lang]}</div>
+        <div class="wz-opt-sub">${o.sub[lang]}</div>
+      </button>`).join('')}</div>
+    </div>`;
   }).join('')+`<div class="wz-result ${wzCurrent===wzSteps.length?'active':''}" id="wzResult"></div>`;
-
   updateWzNav();
-  if(wzCurrent===wzSteps.length)renderResult();
+  if(wzCurrent===wzSteps.length) renderResult();
 }
 
 function wzSelect(i,v){wzAnswers[i]=v;renderWizard();}
@@ -887,156 +844,164 @@ function updateWzNav(){
   else{
     next.style.display='flex';
     next.disabled=!wzSteps[wzCurrent]?.isText&&!wzAnswers[wzCurrent];
-    next.innerHTML=wzCurrent===wzSteps.length-1?`🤖 ${lang==='tr'?'İş Planı Oluştur':'Generate Business Plan'}`:`${lang==='tr'?'Devam':'Continue'} →`;
+    next.innerHTML=wzCurrent===wzSteps.length-1?`${lang==='tr'?'Planı Oluştur 🚀':'Generate Plan 🚀'}`:`${lang==='tr'?'Devam':'Continue'} →`;
   }
   back.innerHTML=`← ${lang==='tr'?'Geri':'Back'}`;
 }
 
 async function renderResult(){
-  const sector=wzAnswers[0]||'saglik';
-  const problem=wzAnswers[1]||'iletisim';
-  const size=wzAnswers[2]||'kobi';
-  const volume=wzAnswers[3]||'orta';
+  const tr=lang==='tr';
   const bizName=wzAnswers[4]||'';
-  const prodIdx=productMap[sector]??0;
-  const mainProd=products[prodIdx];
-  const sectorName={saglik:'Özel Sağlık Kliniği',hukuk:'Hukuk Bürosu',muhasebe:'Muhasebe/SMMM Ofisi',insaat:'İnşaat & Proje',lojistik:'Lojistik & Gümrük',egitim:'Özel Okul/Dershane',otel:'Otel & Konaklama',eticaret:'E-Ticaret',uretim:'Üretim & Sanayi',finans:'Finans & Sigorta'};
-  const problemName={iletisim:'İletişim & Müşteri Takibi',belge:'Belge & Evrak Yönetimi',takvim:'Süre & Takvim Yönetimi',rapor:'Raporlama & Veri Analizi'};
-  const sizeName={solo:'Solo/Mikro (1-3 kişi)',kucuk:'Küçük Ekip (4-15)',kobi:'KOBİ (15-50)',buyuk:'Büyük (50+)'};
-  const volName={az:'<100 işlem/ay',orta:'100-500 işlem/ay',yuksek:'500-2000 işlem/ay',cok_yuksek:'2000+ işlem/ay'};
-  const volMap={az:'~₺3.000',orta:'~₺8.500',yuksek:'~₺22.000',cok_yuksek:'~₺55.000'};
-  const timeMap={az:'3 saat',orta:'9 saat',yuksek:'24 saat',cok_yuksek:'60 saat'};
+  const companyType=wzAnswers[0]||'kobi';
+  const problemArea=wzAnswers[1]||'ik';
+  const size=wzAnswers[2]||'kobi';
+  const areaMap={ik:{tr:'İnsan Kaynakları',en:'Human Resources'},mali:{tr:'Mali İşler',en:'Finance'},crm:{tr:'Satış / CRM',en:'Sales / CRM'},saglik:{tr:'Sağlık / Klinik',en:'Health / Clinic'},hukuk:{tr:'Hukuk',en:'Legal'},diger:{tr:'Diğer',en:'Other'}};
+  const areaLabel=areaMap[problemArea]?.[lang]||problemArea;
+  const roiMap={mikro:'₺4.000–₺8.000',kobi:'₺8.000–₺18.000',orta:'₺18.000–₺45.000',buyuk:'₺45.000+'};
 
-  document.getElementById('wzResult').innerHTML=`<div style="text-align:center;padding:48px 0"><div style="font-size:36px;margin-bottom:14px;display:inline-block;animation:spin 1s linear infinite">⚙️</div><div style="font-family:var(--display);font-size:18px;color:var(--white);margin-bottom:6px">${lang==='tr'?'İş planınız hazırlanıyor...':'Generating your business plan...'}</div><div style="font-size:13px;color:rgba(255,255,255,.4)">${lang==='tr'?'Claude AI analiz ediyor — ~15 saniye':'Claude AI analyzing — ~15 seconds'}</div><style>@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}</style></div>`;
+  document.getElementById('wzResult').innerHTML=`<div style="text-align:center;padding:48px 0">
+    <div style="font-size:32px;margin-bottom:12px;animation:spin 1s linear infinite;display:inline-block">⚙️</div>
+    <div style="font-family:var(--display);font-size:18px;color:var(--white);margin-bottom:6px">${tr?'Planınız hazırlanıyor...':'Preparing your plan...'}</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.35)">${tr?'Claude AI analiz ediyor — yaklaşık 15 saniye':'Claude AI analyzing — approximately 15 seconds'}</div>
+    <style>@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}</style>
+  </div>`;
 
-  const prompt=lang==='tr'
-    ?`Sen Türk KOBİ'lere AI otomasyon danışmanlığı yapan bir iş danışmanısın. Şu işletme için kısa, somut, ikna edici bir AI agent iş planı yaz:\n\nİşletme: ${bizName||sectorName[sector]}\nSektör: ${sectorName[sector]}\nAna sorun: ${problemName[problem]}\nBüyüklük: ${sizeName[size]}\nAylık hacim: ${volName[volume]}\nÖnerilen ürün: ${mainProd.name.tr} (${mainProd.price}/ay)\n\nBu HTML bölümleriyle yaz (başlıklar BÜYÜK harf olsun, emoji ile başlasın):\n<h3>🎯 SORUN & FİRSAT</h3>\n<h3>🤖 AGENT NE YAPACAK?</h3>\n<h3>📊 ROI & GERİ ÖDEME</h3>\n<h3>🗓️ 90 GÜNLÜK UYGULAMA PLANI</h3>\n<h3>⚠️ RİSKLER & ÖNLEMLER</h3>\n\nKurallar: Çok somut ve spesifik ol. Rakamları bold yap. Jargon kullanma. Toplam ~350 kelime. Giriş yok, direkt başla.`
-    :`You are a business consultant specializing in AI automation for Turkish SMEs. Write a short, concrete, persuasive AI agent business plan:\n\nBusiness: ${bizName||sectorName[sector]}\nSector: ${sectorName[sector]}\nMain problem: ${problemName[problem]}\nSize: ${sizeName[size]}\nMonthly volume: ${volName[volume]}\nRecommended product: ${mainProd.name.en} (${mainProd.price}/mo)\n\nWrite with these HTML sections:\n<h3>🎯 PROBLEM & OPPORTUNITY</h3>\n<h3>🤖 WHAT WILL THE AGENT DO?</h3>\n<h3>📊 ROI & PAYBACK</h3>\n<h3>🗓️ 90-DAY ROLLOUT PLAN</h3>\n<h3>⚠️ RISKS & MITIGATIONS</h3>\n\nRules: Be very specific. Bold the numbers. No jargon. ~350 words total. No intro, start directly.`;
+  const prompt=tr
+    ?`Sen AgentTR platformu için AI agent danışmanısın. Şu şirket için Türkçe, somut ve ikna edici bir iş planı yaz:
+
+Şirket: ${bizName||'Anonim şirket'}
+Şirket tipi: ${companyType==='kobi'?'KOBİ (sektör odaklı)':companyType==='kurumsal'?'Kurumsal (departman odaklı)':'Hibrit'}
+Öncelikli alan: ${areaLabel}
+Büyüklük: ${size}
+
+HTML bölümleriyle yaz (h3 tag kullan):
+<h3>🎯 MEVCUT SORUN</h3>
+<h3>🤖 ÖNERİLEN AI AGENT ÇÖZÜMÜ</h3>
+<h3>📊 TAHMİNİ ROI</h3>
+<h3>🗓️ 90 GÜNLÜK UYGULAMA PLANI</h3>
+
+Kurallar: WhatsApp entegrasyonunu vurgula. Türk mevzuatı (GİB, UYAP, SGK, KVKK) spesifik olduğunda referans ver. Rakamlar somut olsun. ~300 kelime. Direkt başla.`
+    :`You are an AI agent consultant for AgentTR platform. Write a concrete, persuasive business plan in English:
+
+Company: ${bizName||'Anonymous company'}
+Type: ${companyType==='kobi'?'SME (sector-focused)':companyType==='kurumsal'?'Enterprise (department-focused)':'Hybrid'}
+Priority area: ${areaLabel}
+Size: ${size}
+
+Write with HTML sections (use h3 tags):
+<h3>🎯 CURRENT PROBLEM</h3>
+<h3>🤖 PROPOSED AI AGENT SOLUTION</h3>
+<h3>📊 ESTIMATED ROI</h3>
+<h3>🗓️ 90-DAY IMPLEMENTATION PLAN</h3>
+
+Rules: Emphasize WhatsApp integration. Reference Turkish regulations (GİB, UYAP, SGK, KVKK) when relevant. Use concrete numbers. ~300 words. Start directly.`;
 
   try{
     const res=await fetch('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
     const data=await res.json();
     bizPlanHTML=data.content?.[0]?.text||'';
-  }catch(e){bizPlanHTML=`<h3>🎯 ${lang==='tr'?'SORUN & FIRSAT':'PROBLEM & OPPORTUNITY'}</h3><p>${lang==='tr'?'Analiz tamamlandı. Tam rapor için aşağıdan devam edin.':'Analysis complete. Continue below for full report.'}</p>`;}
-
-  showResultWithPlan(sector,mainProd,bizName,sectorName[sector],volMap[volume]||'~₺8.500',timeMap[volume]||'9 saat');
+  }catch(e){
+    bizPlanHTML=`<h3>🎯 ${tr?'MEVCUT SORUN':'CURRENT PROBLEM'}</h3><p>${tr?`${areaLabel} alanında yüksek manuel iş yükü tespit edildi.`:`High manual workload detected in ${areaLabel} area.`}</p>`;
+  }
+  showResult(bizName,areaLabel,size,roiMap,tr);
 }
 
-function showResultWithPlan(sector,mainProd,bizName,sectorNameStr,roiEst,timeEst){
-  const tr=lang==='tr';
-  const displayName=bizName||sectorNameStr;
+function showResult(bizName,areaLabel,size,roiMap,tr){
+  const displayName=bizName||(tr?'Şirketiniz':'Your Company');
   const sections=bizPlanHTML.split(/<h3>/i).filter(Boolean);
-  const freeHTML=sections[0]?'<h3>'+sections[0]:bizPlanHTML.substring(0,350)+'…';
-  const lockedHTML=sections.slice(1).map(s=>'<h3>'+s).join('');
-  const lockedItems=tr
-    ?['📊 ROI & Geri Ödeme Hesabı','🗓️ 90 Günlük Uygulama Takvimi','⚠️ Risk Analizi & Önlem Stratejileri','🔗 Entegrasyon Haritası (WhatsApp, API, ERP)','💬 İlk Hafta İçin 5 Hazır Agent Talimatı']
-    :['📊 ROI & Payback Calculation','🗓️ 90-Day Rollout Timeline','⚠️ Risk Analysis & Mitigations','🔗 Integration Map (WhatsApp, API, ERP)','💬 5 Ready-Made Agent Instructions for Week 1'];
+  const freeHTML=sections.slice(0,2).map(s=>'<h3>'+s).join('');
+  const lockedHTML=sections.slice(2).map(s=>'<h3>'+s).join('');
+  const gets=tr
+    ?['📊 Tam ROI & geri ödeme analizi','🗓️ 90 günlük uygulama takvimi','🔗 Sistem entegrasyon haritası','⚡ İlk 2 haftada 5 hızlı kazanım','💬 WhatsApp agent şablon seti']
+    :['📊 Full ROI & payback analysis','🗓️ 90-day implementation timeline','🔗 System integration map','⚡ 5 quick wins in first 2 weeks','💬 WhatsApp agent template set'];
 
   document.getElementById('wzResult').innerHTML=`
   <div class="plan-meta-bar">
-    <div class="plan-meta-chip">${mainProd.icon} ${tr?mainProd.name.tr:mainProd.name.en}</div>
-    <div class="plan-meta-title">${displayName} ${tr?'— AI Agent İş Planı':'— AI Agent Business Plan'}</div>
-    <div class="plan-meta-badge">✦ Claude AI</div>
+    <div class="plan-chip">${areaLabel}</div>
+    <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--white);flex:1">${displayName} — ${tr?'AI Agent İş Planı':'AI Agent Business Plan'}</div>
+    <div class="plan-badge">✦ Claude AI</div>
   </div>
-  <div class="plan-free-section">
+  <div class="plan-free">
     <div class="plan-stat-row">
-      <div class="plan-stat"><div class="plan-stat-val">${roiEst}</div><div class="plan-stat-label">${tr?'tahmini aylık tasarruf':'est. monthly saving'}</div></div>
-      <div class="plan-stat"><div class="plan-stat-val">${timeEst}</div><div class="plan-stat-label">${tr?'haftalık kazanılan süre':'weekly time recovered'}</div></div>
-      <div class="plan-stat"><div class="plan-stat-val">${mainProd.price}</div><div class="plan-stat-label">${tr?'agent maliyeti / ay':'agent cost / mo'}</div></div>
+      <div class="plan-stat"><div class="plan-stat-val">${roiMap[size]||'₺8K–₺18K'}</div><div class="plan-stat-lbl">${tr?'tahmini aylık tasarruf':'est. monthly saving'}</div></div>
+      <div class="plan-stat"><div class="plan-stat-val">3 hf</div><div class="plan-stat-lbl">${tr?'canlıya alma':'time to live'}</div></div>
+      <div class="plan-stat"><div class="plan-stat-val">WhatsApp</div><div class="plan-stat-lbl">${tr?'birincil kanal':'primary channel'}</div></div>
     </div>
     ${freeHTML}
   </div>
-  <div class="plan-locked-wrapper">
-    <div class="plan-locked-blur">${lockedHTML}</div>
-  </div>
-  <div class="plan-paywall-outer">
-    <div class="plan-paywall-card" id="planPaywall">
+  ${lockedHTML?`<div class="plan-locked-blur">${lockedHTML}</div>`:''}
+  <div class="pw-gradient">
+    <div class="pw-card">
       <div class="pw-social">
-        <div class="pw-social-item"><span class="pw-stars">★★★★★</span> <strong>4.9/5</strong> ${tr?'müşteri puanı':'customer rating'}</div>
-        <div class="pw-social-item">🏢 <strong>120+</strong> ${tr?'Türk işletmesi kurulum tamamladı':'Turkish businesses deployed'}</div>
-        <div class="pw-social-item">⚡ ${tr?'Ortalama <strong>3 haftada</strong> canlı':'Average <strong>3 weeks</strong> to live'}</div>
+        <div class="pw-social-item">★★★★★ <strong>4.9/5</strong></div>
+        <div class="pw-social-item">💬 <strong>${tr?'WhatsApp\'ta':'on WhatsApp'}</strong> ${tr?'her pakette':'every package'}</div>
+        <div class="pw-social-item">⚡ ${tr?'Ort. <strong>3 haftada</strong> canlı':'Avg <strong>3 weeks</strong> to live'}</div>
       </div>
-      <div class="pw-headline">${tr?`${displayName} için planın geri kalanı kilitli`:`The rest of ${displayName}'s plan is locked`}</div>
-      <div class="pw-sub">${tr?'ROI hesabı, 90 günlük takvim, entegrasyon haritası ve hazır agent talimatlarına erişin. Rakibiniz bu planı zaten uyguluyor olabilir.':'Access the ROI breakdown, 90-day timeline, integration map and ready-made agent instructions. Your competitor may already be running this plan.'}</div>
-      <div class="pw-gets">${lockedItems.map(item=>`<div class="pw-get-item"><div class="pw-get-icon">${item.slice(0,2)}</div><div class="pw-get-text"><strong>${item.slice(3).split(' ').slice(0,3).join(' ')}</strong><span>${item.slice(3).split(' ').slice(3).join(' ')}</span></div></div>`).join('')}</div>
+      <div class="pw-headline">${tr?`${displayName} için planın devamı kilitli`:`The rest of ${displayName}'s plan is locked`}</div>
+      <div class="pw-sub">${tr?'Tam ROI analizi, 90 günlük uygulama takvimi ve sistem entegrasyon haritası aşağıdaki paketlerden birinde.':'Full ROI analysis, 90-day implementation timeline and system integration map in one of the packages below.'}</div>
+      <div class="pw-gets">${gets.map(g=>`<div class="pw-get"><div class="pw-get-icon">${g.slice(0,2)}</div><div class="pw-get-txt"><strong>${g.slice(3).split(' ').slice(0,3).join(' ')}</strong><span>${g.slice(3).split(' ').slice(3).join(' ')}</span></div></div>`).join('')}</div>
       <div class="pw-pricing">
-        <div class="pw-plan" onclick="handlePayment('plan')">
-          <div class="pw-plan-name">${tr?'📄 Sadece İş Planı':'📄 Plan Only'}</div>
-          <div class="pw-plan-price">₺500 <sub>${tr?'tek seferlik':'one-time'}</sub></div>
-          <ul class="pw-plan-includes">
-            <li>${tr?'Tam iş planı PDF':'Full business plan PDF'}</li>
-            <li>${tr?'ROI & geri ödeme analizi':'ROI & payback analysis'}</li>
-            <li>${tr?'90 gün takvimi':'90-day timeline'}</li>
+        <div class="pw-plan" onclick="handlePay('plan')">
+          <div class="pw-plan-name">${tr?'📄 PDF İş Planı':'📄 PDF Business Plan'}</div>
+          <div class="pw-price">₺500 <sub>${tr?'tek seferlik':'one-time'}</sub></div>
+          <ul class="pw-includes">
+            <li>${tr?'Tam plan PDF':'Full plan PDF'}</li>
+            <li>${tr?'ROI analizi':'ROI analysis'}</li>
+            <li>${tr?'Entegrasyon haritası':'Integration map'}</li>
           </ul>
-          <div class="pw-plan-btn">${tr?'Satın Al →':'Purchase →'}</div>
+          <div class="pw-btn">${tr?'Satın Al →':'Purchase →'}</div>
         </div>
-        <div class="pw-plan featured" onclick="handlePayment('pilot')">
-          <div class="pw-plan-tag">${tr?'⚡ EN HIZLI YOL':'⚡ FASTEST ROUTE'}</div>
+        <div class="pw-plan feat" onclick="handlePay('pilot')">
+          <div class="pw-tag">${tr?'⚡ EN HIZLI YOL':'⚡ FASTEST ROUTE'}</div>
           <div class="pw-plan-name">${tr?'🚀 Pilot Paketi':'🚀 Pilot Package'}</div>
-          <div class="pw-plan-price">₺2.500 <sub>${tr?'tek seferlik':'one-time'}</sub></div>
-          <ul class="pw-plan-includes">
-            <li>${tr?'Tam iş planı + tüm ekler':'Full plan + appendices'}</li>
-            <li>${tr?'1 ay ücretsiz kurulum danışmanlığı':'1-month free setup consulting'}</li>
-            <li>${tr?'Salesforce lisans desteği':'Salesforce license support'}</li>
-            <li>${tr?'5 hazır agent talimat seti':'5 ready-made instruction sets'}</li>
-            <li>${tr?'WhatsApp entegrasyon kurulumu':'WhatsApp integration setup'}</li>
-            <li>${tr?'Öncelikli destek (48 saat)':'Priority support (48 hrs)'}</li>
+          <div class="pw-price">₺2.500 <sub>${tr?'tek seferlik':'one-time'}</sub></div>
+          <ul class="pw-includes">
+            <li>${tr?'Tam plan + tüm ekler':'Full plan + appendices'}</li>
+            <li>${tr?'WhatsApp Business API kurulumu':'WhatsApp Business API setup'}</li>
+            <li>${tr?'1 ay ücretsiz danışmanlık':'1-month free consulting'}</li>
+            <li>${tr?'5 hazır agent şablonu':'5 ready agent templates'}</li>
           </ul>
-          <div class="pw-plan-btn">${tr?'Hemen Başla →':'Start Now →'}</div>
+          <div class="pw-btn">${tr?'Hemen Başla →':'Start Now →'}</div>
         </div>
       </div>
       <div class="pw-guarantee">
-        <div class="pw-g-item">🛡️ ${tr?'<strong>7 gün</strong> iade':'<strong>7-day</strong> refund'}</div>
-        <div class="pw-g-item">🔒 ${tr?'KVKK uyumlu':'KVKK compliant'}</div>
-        <div class="pw-g-item">💳 ${tr?'Güvenli ödeme':'Secure payment'}</div>
-        <div class="pw-g-item">📞 ${tr?'İnsan desteği':'Human support'}</div>
+        <div class="pw-g">🛡️ ${tr?'7 gün iade':'7-day refund'}</div>
+        <div class="pw-g">💬 ${tr?'WhatsApp dahil':'WhatsApp included'}</div>
+        <div class="pw-g">🔒 KVKK</div>
+        <div class="pw-g">📞 ${tr?'İnsan desteği':'Human support'}</div>
       </div>
-      <div style="text-align:center;margin-top:12px"><button onclick="unlockPlan()" style="font-size:11px;color:rgba(255,255,255,.2);text-decoration:underline;background:none;border:none;cursor:pointer">${tr?'🔓 Demo: planı önizle':'🔓 Demo: preview plan'}</button></div>
+      <div style="text-align:center;margin-top:12px">
+        <button onclick="unlockPlan()" style="font-size:11px;color:rgba(255,255,255,.2);text-decoration:underline;background:none;border:none;cursor:pointer">${tr?'🔓 Demo: planı önizle':'🔓 Demo: preview plan'}</button>
+      </div>
     </div>
   </div>
-  <div style="text-align:center;margin-top:16px"><button onclick="wzCurrent=0;wzAnswers=[];bizPlanHTML='';renderWizard();" style="font-size:13px;color:rgba(255,255,255,.3);text-decoration:underline;background:none;border:none;cursor:pointer">${tr?'↩ Farklı sektör dene':'↩ Try a different sector'}</button></div>`;
+  <div style="text-align:center;margin-top:14px">
+    <button onclick="wzCurrent=0;wzAnswers=[];bizPlanHTML='';renderWizard();" style="font-size:13px;color:rgba(255,255,255,.3);text-decoration:underline;background:none;border:none;cursor:pointer">${tr?'↩ Farklı senaryo dene':'↩ Try different scenario'}</button>
+  </div>`;
 }
 
-function handlePayment(tier){
-  const tr=lang==='tr';
-  const isFeatured=tier==='pilot';
-  const price=isFeatured?'₺2.500':'₺500';
-  const subject=isFeatured?(tr?'Pilot Paketi':'Pilot Package'):(tr?'İş Planı PDF':'Business Plan PDF');
-  const body=tr?`Merhaba,\n\nPaket: ${isFeatured?'Pilot Paketi (₺2.500)':'İş Planı PDF (₺500)'}\nSektör: ${wzAnswers[0]||'-'}\nİşletme: ${wzAnswers[4]||'-'}\n\nBilgi almak istiyorum.`:`Hello,\n\nPackage: ${isFeatured?'Pilot Package (₺2,500)':'Business Plan PDF (₺500)'}\nSector: ${wzAnswers[0]||'-'}\nBusiness: ${wzAnswers[4]||'-'}\n\nI'd like more information.`;
-  document.getElementById('planPaywall').innerHTML=`
-    <div class="pw-confirm">
-      <div class="pw-confirm-icon">${isFeatured?'🚀':'📄'}</div>
-      <div class="pw-confirm-title">${tr?(isFeatured?'Pilot Paketi seçtiniz':'İş Planı PDF seçtiniz'):(isFeatured?'Pilot Package selected':'Business Plan PDF selected')}</div>
-      <div class="pw-confirm-sub">${tr?`<strong>${price}</strong> — ${isFeatured?'24 saat içinde uzmanımız sizinle iletişime geçer ve kurulum sürecini başlatır.':'PDF planınız 24 saat içinde e-posta ile iletilir.'}`:`<strong>${price}</strong> — ${isFeatured?'Our expert will contact you within 24 hours and start the setup process.':'Your PDF plan will be emailed within 24 hours.'}`}</div>
-      <a href="mailto:info@agenttr.net?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" class="pw-confirm-link">✉️ ${tr?'info@agenttr.net — Şimdi Başlat':'info@agenttr.net — Start Now'}</a>
-      <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,.25)">${tr?'1 iş günü içinde yanıt alırsınız.':'You will receive a response within 1 business day.'}</div>
-      <div style="margin-top:10px"><button onclick="unlockPlan()" style="font-size:11px;color:rgba(255,255,255,.2);text-decoration:underline;background:none;border:none;cursor:pointer">${tr?'🔓 Demo: planı önizle':'🔓 Demo: preview plan'}</button></div>
-    </div>`;
+function handlePay(tier){
+  var tr=lang==='tr';
+  var areaLabel=wzAnswers[1]||'';
+  var subj=tier==='pilot'?(tr?'Pilot Paketi':'Pilot Package'):(tr?'PDF Plan':'Business Plan PDF');
+  var price=tier==='pilot'?'2500 TL':'500 TL';
+  var co=wzAnswers[4]||'-';
+  var bodyStr=tr
+    ?('Merhaba,%0A%0APaket: '+price+'%0AAlan: '+areaLabel+'%0ASirket: '+co+'%0A%0ABilgi almak istiyorum.')
+    :('Hello,%0A%0APackage: '+price+'%0AArea: '+areaLabel+'%0ACompany: '+co+'%0A%0APlease send info.');
+  var iconStr=tier==='pilot'?'🚀':'📄';
+  var titleStr=tr?(tier==='pilot'?'Pilot Paketi secildi':'Is Plani PDF secildi'):(tier==='pilot'?'Pilot Package selected':'Business Plan PDF selected');
+  var descStr=tr?(tier==='pilot'?'24 saat icinde uzmanlarimiz sizinle iletisime gecer.':'PDF planiniz 24 saat icinde iletilir.'):(tier==='pilot'?'Our expert will contact you within 24 hours.':'Your PDF plan will be delivered within 24 hours.');
+  document.querySelector('.pw-card').innerHTML='<div style="text-align:center;padding:28px 16px;background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.2);border-radius:var(--rl)"><div style="font-size:44px;margin-bottom:12px">'+iconStr+'</div><div style="font-family:var(--display);font-size:20px;font-weight:800;color:var(--white);margin-bottom:8px">'+titleStr+'</div><div style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:20px;line-height:1.6"><strong style="color:var(--white)">'+price+'</strong> — '+descStr+'</div><a href="mailto:info@agenttr.net?subject='+subj+'&body='+bodyStr+'" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:var(--white);font-weight:700;padding:13px 26px;border-radius:10px;font-size:14px;text-decoration:none">✉️ info@agenttr.net</a></div>';
 }
 
 function unlockPlan(){
-  const w=document.querySelector('.plan-locked-wrapper');
-  const sections=bizPlanHTML.split(/<h3>/i).filter(Boolean);
-  if(w)w.outerHTML=`<div class="plan-free-section">${sections.slice(1).map(s=>'<h3>'+s).join('')}</div>`;
-  const pw=document.querySelector('.plan-paywall-outer');
-  if(pw)pw.style.display='none';
+  const locked=document.querySelector('.plan-locked-blur');
+  if(locked){locked.style.filter='none';locked.style.maxHeight='none';}
+  const pw=document.querySelector('.pw-gradient');if(pw)pw.style.display='none';
 }
 
-// ═══ SCROLL ═══
-function navTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
-
-// ═══ REVEAL ═══
-const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
-
-// ═══ INIT ═══
-calcROI();
-renderPainGrid();
-renderTestimonials();
-renderCases();
-renderProducts();
-renderFAQ();
-renderWizard();
+renderAll();
 </script>
 </body>
 </html>
